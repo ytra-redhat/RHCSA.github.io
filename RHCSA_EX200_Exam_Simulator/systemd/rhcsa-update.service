@@ -1,0 +1,9 @@
+[Unit]
+Description=Update RHCSA Exam Simulator from configured GitHub fork
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/share/rhcsa/scripts/rhcsa-update --auto
+User=root
