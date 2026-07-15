@@ -1,12 +1,26 @@
 #!/usr/bin/env bash
 # RHCSA EX200 Exam Simulator installer.
-# Run from a checked-out or copied ytra-redhat/RHCSA.github.io repository:
+#
+# Supported execution methods:
 #   sudo ./Install_RHCSA_EX200_Exam_Simulator.sh
+#   curl -fsSL https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/main/Install_RHCSA_EX200_Exam_Simulator.sh | sudo bash
+#
+# The bootstrap source is deliberately locked to the user's own fork.
+BOOTSTRAP_REPOSITORY="ytra-redhat/RHCSA.github.io"
+BOOTSTRAP_BRANCH="main"
+
+# BASH_SOURCE[0] is empty when the script is streamed into `bash`.
+# Determine a local script path only when one actually exists.
+SCRIPT_PATH=""
+SCRIPT_DIR="$PWD"
+if [[ -n "${BASH_SOURCE[0]-}" && -f "${BASH_SOURCE[0]}" ]]; then
+  SCRIPT_PATH="$(readlink -f -- "${BASH_SOURCE[0]}")"
+  SCRIPT_DIR="$(cd -- "$(dirname -- "$SCRIPT_PATH")" && pwd)"
+fi
+
 set -Eeuo pipefail
 umask 022
 
-SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
-SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_PATH")" && pwd)"
 INSTALL_DIR="/usr/local/share/rhcsa"
 BIN_LINK="/usr/bin/rhcsa"
 SERVICE_FILE="/etc/systemd/system/rhcsa-webui.service"
@@ -25,6 +39,13 @@ for arg in "$@"; do
   esac
 done
 
+# Bootstrap defaults allow safe streamed execution. A local or installed
+# repository.env may override operational settings, but the repository and
+# branch are validated below and may never point outside the own fork.
+RHCSA_GITHUB_REPOSITORY="${RHCSA_GITHUB_REPOSITORY:-$BOOTSTRAP_REPOSITORY}"
+RHCSA_GITHUB_BRANCH="${RHCSA_GITHUB_BRANCH:-$BOOTSTRAP_BRANCH}"
+RHCSA_AUTO_UPDATE="${RHCSA_AUTO_UPDATE:-true}"
+
 CONFIG_CANDIDATES=(
   "${SCRIPT_DIR}/config/repository.env"
   "${SCRIPT_DIR}/../config/repository.env"
@@ -36,13 +57,11 @@ for candidate in "${CONFIG_CANDIDATES[@]}"; do
   REPOSITORY_CONFIG="$candidate"
   break
 done
-if [[ -z "$REPOSITORY_CONFIG" ]]; then
-  echo "ERROR: central repository config not found." >&2
-  echo "Run this installer from a complete copy of ytra-redhat/RHCSA.github.io." >&2
-  exit 1
+
+if [[ -n "$REPOSITORY_CONFIG" ]]; then
+  # shellcheck disable=SC1090
+  source "$REPOSITORY_CONFIG"
 fi
-# shellcheck disable=SC1090
-source "$REPOSITORY_CONFIG"
 
 : "${RHCSA_GITHUB_REPOSITORY:?Missing RHCSA_GITHUB_REPOSITORY}"
 : "${RHCSA_GITHUB_BRANCH:?Missing RHCSA_GITHUB_BRANCH}"
@@ -65,11 +84,18 @@ QUESTIONS_API_URL="${GITHUB_API_URL}/contents/RHCSA_EX200_Exam_Simulator/questio
 COMMIT_API_URL="${GITHUB_API_URL}/commits/${RHCSA_GITHUB_BRANCH}"
 
 if [[ $EUID -ne 0 ]]; then
-  if [[ ! -f "$SCRIPT_PATH" ]]; then
-    echo "ERROR: installer must be run from a local file when privilege escalation is needed." >&2
-    exit 1
+  if [[ -n "$SCRIPT_PATH" && -f "$SCRIPT_PATH" ]]; then
+    exec sudo --preserve-env=RHCSA_REPOSITORY_CONFIG bash "$SCRIPT_PATH" "$@"
   fi
-  exec sudo --preserve-env=RHCSA_REPOSITORY_CONFIG bash "$SCRIPT_PATH" "$@"
+
+  # Streamed without sudo: download the same installer only from the locked
+  # own fork and execute that local temporary file with sudo.
+  BOOTSTRAP_INSTALLER_URL="https://raw.githubusercontent.com/${BOOTSTRAP_REPOSITORY}/${BOOTSTRAP_BRANCH}/Install_RHCSA_EX200_Exam_Simulator.sh"
+  BOOTSTRAP_TMP="$(mktemp /tmp/rhcsa-installer.XXXXXX.sh)"
+  trap 'rm -f "$BOOTSTRAP_TMP"' EXIT
+  curl --fail --location --silent --show-error     "$BOOTSTRAP_INSTALLER_URL" -o "$BOOTSTRAP_TMP"
+  chmod 0755 "$BOOTSTRAP_TMP"
+  exec sudo bash "$BOOTSTRAP_TMP" "$@"
 fi
 
 RED=$'\033[31m'
@@ -86,17 +112,62 @@ STAGING_DIR="${INSTALL_DIR}.new.$$"
 BACKUP_DIR="${INSTALL_DIR}.previous.$$"
 PROGRESS_BACKUP="${TMP_DIR}/progress.json"
 LEGACY_PROGRESS_BACKUP="${TMP_DIR}/legacy.progress"
+SYSTEMD_BACKUP_DIR="${TMP_DIR}/systemd-backup"
 INSTALL_ACTIVATED=false
 OLD_INSTALL_MOVED=false
 
+restore_previous_systemd_state() {
+  local unit path backup enabled active
+
+  for unit in rhcsa-webui.service rhcsa-update.service rhcsa-update.timer; do
+    path="/etc/systemd/system/${unit}"
+    rm -rf -- "$path"
+    backup="${SYSTEMD_BACKUP_DIR}/${unit}"
+    if [[ -f "$backup" || -L "$backup" ]]; then
+      cp -a -- "$backup" "$path"
+    fi
+  done
+
+  systemctl daemon-reload >/dev/null 2>&1 || true
+
+  for unit in rhcsa-webui.service rhcsa-update.timer; do
+    enabled="disabled"
+    active="inactive"
+    [[ -f "${SYSTEMD_BACKUP_DIR}/${unit}.enabled" ]] &&       enabled="$(cat "${SYSTEMD_BACKUP_DIR}/${unit}.enabled")"
+    [[ -f "${SYSTEMD_BACKUP_DIR}/${unit}.active" ]] &&       active="$(cat "${SYSTEMD_BACKUP_DIR}/${unit}.active")"
+
+    if [[ "$enabled" == "enabled" ]]; then
+      systemctl enable "$unit" >/dev/null 2>&1 || true
+    else
+      systemctl disable "$unit" >/dev/null 2>&1 || true
+    fi
+    if [[ "$active" == "active" ]]; then
+      systemctl restart "$unit" >/dev/null 2>&1 || true
+    fi
+  done
+}
+
+rollback_activation() {
+  systemctl stop rhcsa-webui.service >/dev/null 2>&1 || true
+  systemctl stop rhcsa-update.timer >/dev/null 2>&1 || true
+
+  if [[ "$INSTALL_ACTIVATED" == "true" && -d "$INSTALL_DIR" ]]; then
+    rm -rf -- "$INSTALL_DIR"
+  fi
+  if [[ "$OLD_INSTALL_MOVED" == "true" && -d "$BACKUP_DIR" ]]; then
+    mv "$BACKUP_DIR" "$INSTALL_DIR" || true
+  fi
+  restore_previous_systemd_state
+}
+
 cleanup() {
   local rc=$?
-  rm -rf "$TMP_DIR" "$STAGING_DIR" 2>/dev/null || true
-  if [[ $rc -ne 0 && "$OLD_INSTALL_MOVED" == "true" && ! -d "$INSTALL_DIR" && -d "$BACKUP_DIR" ]]; then
-    mv "$BACKUP_DIR" "$INSTALL_DIR" || true
-    systemctl daemon-reload >/dev/null 2>&1 || true
-    systemctl restart rhcsa-webui.service >/dev/null 2>&1 || true
+  trap - EXIT
+  if [[ $rc -ne 0 && ( "$INSTALL_ACTIVATED" == "true" || "$OLD_INSTALL_MOVED" == "true" ) ]]; then
+    printf '%sRolling back failed activation...%s\n' "$YELLOW" "$RESET" >&2
+    rollback_activation || true
   fi
+  rm -rf "$TMP_DIR" "$STAGING_DIR" 2>/dev/null || true
   exit "$rc"
 }
 trap cleanup EXIT
@@ -238,6 +309,23 @@ preserve_state() {
   return 0
 }
 
+backup_systemd_state() {
+  local unit path
+  mkdir -p "$SYSTEMD_BACKUP_DIR"
+
+  for unit in rhcsa-webui.service rhcsa-update.service rhcsa-update.timer; do
+    path="/etc/systemd/system/${unit}"
+    if [[ -f "$path" || -L "$path" ]]; then
+      cp -a -- "$path" "${SYSTEMD_BACKUP_DIR}/${unit}"
+    fi
+  done
+
+  for unit in rhcsa-webui.service rhcsa-update.timer; do
+    systemctl is-enabled "$unit" 2>/dev/null       > "${SYSTEMD_BACKUP_DIR}/${unit}.enabled" ||       printf 'disabled\n' > "${SYSTEMD_BACKUP_DIR}/${unit}.enabled"
+    systemctl is-active "$unit" 2>/dev/null       > "${SYSTEMD_BACKUP_DIR}/${unit}.active" ||       printf 'inactive\n' > "${SYSTEMD_BACKUP_DIR}/${unit}.active"
+  done
+}
+
 stage_installation() {
   log_step "Staging validated installation..."
   rm -rf "$STAGING_DIR"
@@ -270,6 +358,7 @@ stage_installation() {
 
 activate_installation() {
   log_step "Activating installation..."
+  backup_systemd_state
   systemctl stop rhcsa-webui.service >/dev/null 2>&1 || true
   systemctl stop rhcsa-update.timer >/dev/null 2>&1 || true
 
@@ -282,20 +371,28 @@ activate_installation() {
   INSTALL_ACTIVATED=true
 
   ln -sfn "${INSTALL_DIR}/rhcsa" "$BIN_LINK"
-  cp -a "${INSTALL_DIR}/webui/rhcsa-webui.service" "$SERVICE_FILE"
-  cp -a "${INSTALL_DIR}/systemd/rhcsa-update.service" "$UPDATE_SERVICE_FILE"
-  cp -a "${INSTALL_DIR}/systemd/rhcsa-update.timer" "$UPDATE_TIMER_FILE"
-  systemctl daemon-reload
 
-  systemctl enable --now rhcsa-webui.service
+  # Install systemd units as regular files. The helper explicitly removes stale
+  # files, symlinks and directories left by earlier installer versions.
+  "${INSTALL_DIR}/scripts/install-systemd-units.sh" --install-only
+
+  systemctl enable rhcsa-webui.service
+  if ! systemctl restart rhcsa-webui.service; then
+    systemctl --no-pager --full status rhcsa-webui.service >&2 || true
+    journalctl -u rhcsa-webui.service -n 80 --no-pager >&2 || true
+    die "rhcsa-webui.service could not be started."
+  fi
+
   if [[ "$RHCSA_AUTO_UPDATE" == "true" ]]; then
-    systemctl enable --now rhcsa-update.timer
+    systemctl enable rhcsa-update.timer
+    systemctl restart rhcsa-update.timer
   else
     systemctl disable --now rhcsa-update.timer >/dev/null 2>&1 || true
   fi
 
-  rm -rf "$BACKUP_DIR"
+  rm -rf "$BACKUP_DIR" "$SYSTEMD_BACKUP_DIR"
   OLD_INSTALL_MOVED=false
+  INSTALL_ACTIVATED=false
   log_ok "Installation activated"
 }
 
@@ -325,8 +422,8 @@ main() {
   download_and_validate
   preserve_state
   stage_installation
-  activate_installation
   configure_host
+  activate_installation
 
   printf '\n%sInstallation complete%s\n' "$GREEN" "$RESET"
   printf 'Installed commit: %s\n' "${LATEST_COMMIT:0:7}"

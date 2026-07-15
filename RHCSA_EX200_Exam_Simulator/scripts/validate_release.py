@@ -44,6 +44,7 @@ def main() -> int:
     repo_root = args.repository_root.resolve()
     simulator = repo_root / "RHCSA_EX200_Exam_Simulator"
     questions = simulator / "questions"
+    installer = repo_root / "Install_RHCSA_EX200_Exam_Simulator.sh"
     errors: list[str] = []
     warnings: list[str] = []
 
@@ -77,6 +78,49 @@ def main() -> int:
                 "RHCSA_GITHUB_BRANCH must be assigned exactly once as main; "
                 f"found: {branch_assignments}"
             )
+
+    required_runtime_files = {
+        simulator / "webui" / "rhcsa-webui.service": (
+            "ExecStart=/usr/local/share/rhcsa/webui/start-webui.sh start"
+        ),
+        simulator / "systemd" / "rhcsa-update.service": (
+            "ExecStart=/usr/local/share/rhcsa/scripts/rhcsa-update --auto"
+        ),
+        simulator / "systemd" / "rhcsa-update.timer": "[Timer]",
+        simulator / "scripts" / "install-systemd-units.sh": "install_unit",
+        simulator / "scripts" / "repair-systemd-units.sh": (
+            "install-systemd-units.sh"
+        ),
+    }
+    for required_file, required_text in required_runtime_files.items():
+        if not required_file.is_file():
+            errors.append(
+                f"missing required runtime file: {required_file.relative_to(repo_root)}"
+            )
+            continue
+        content = required_file.read_text(encoding="utf-8", errors="replace")
+        if required_text not in content:
+            errors.append(
+                f"{required_file.relative_to(repo_root)}: missing required content "
+                f"{required_text!r}"
+            )
+
+    if installer.is_file():
+        installer_text = installer.read_text(encoding="utf-8", errors="replace")
+        if 'install-systemd-units.sh" --install-only' not in installer_text:
+            errors.append(
+                "installer must deploy systemd units through install-systemd-units.sh"
+            )
+        if re.search(
+            r"cp\s+-a\s+[^\n]*(rhcsa-webui\.service|rhcsa-update\.(service|timer))",
+            installer_text,
+        ):
+            errors.append(
+                "installer must not copy systemd units with cp -a; stale destination "
+                "directories and symlinks must be removed first"
+            )
+    else:
+        errors.append("top-level installer is missing")
 
     if not questions.is_dir():
         errors.append("questions directory is missing")
@@ -197,7 +241,7 @@ declare -F cleanup_lab >/dev/null
             errors.append(f"Python compile error in {py_file.relative_to(repo_root)}: {exc}")
 
     text_suffixes = {
-        ".sh", ".py", ".js", ".html", ".md", ".txt", ".service", ".json", ".env"
+        ".sh", ".py", ".js", ".html", ".md", ".txt", ".service", ".timer", ".json", ".env"
     }
     central_assignments = []
     for path in sorted(repo_root.rglob("*")):
