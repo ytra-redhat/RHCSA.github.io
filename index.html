@@ -358,7 +358,7 @@
     <div class="sidebar">
         <table>
             <tr class="image-container">
-                <td><img src="https://github.com/RHCSA/RHCSA.github.io/blob/main/photos/redhat.png?raw=true" alt="RedHat Logo"></td>
+                <td><img src="https://github.com/ytra-redhat/RHCSA.github.io/blob/main/photos/redhat.png?raw=true" alt="RedHat Logo"></td>
             </tr>
             <tr>
                 <td class="redhat">Red Hat</td>
@@ -386,7 +386,7 @@
             <tr class="image-container-bottom">
                 <td>
                     <a href="https://www.youtube.com/@RHCSA_EX200" target="_blank">
-                        <img src="https://github.com/RHCSA/RHCSA.github.io/blob/main/photos/youtube-button.png?raw=true" alt="Youtube Channel">
+                        <img src="https://github.com/ytra-redhat/RHCSA.github.io/blob/main/photos/youtube-button.png?raw=true" alt="Youtube Channel">
                     </a>
                 </td>
             </tr>
@@ -404,7 +404,7 @@
            
             <!-- Demo GIF -->
             <div style="text-align: center; margin: 20px 0;">
-                <img src="https://github.com/RHCSA/RHCSA.github.io/blob/main/photos/demo.gif?raw=true" 
+                <img src="https://github.com/ytra-redhat/RHCSA.github.io/blob/main/photos/demo.gif?raw=true" 
                      alt="RHCSA Exam Simulator Demo" 
                      style="max-width: 100%; max-height: 400px; cursor: pointer; border: 2px solid #cc0000; border-radius: 8px; box-shadow: 0 4px 15px rgba(204, 0, 0, 0.3);" 
                      onclick="openLightbox(this.src)"
@@ -417,7 +417,7 @@
             <p>Requirements: CentOS Stream 10, 2 NICs (Bridge mode), 20GB for / + 4 additional 5GB disks</p>
             
             <div style="display: flex; align-items: center; gap: 15px; margin: 15px 0;">
-                <pre style="background: #1e1e1e; color: #dcdcdc; padding: 15px; border-radius: 5px; margin: 0; flex-grow: 1; white-space: nowrap; overflow-x: auto;"><code id="install-cmd">curl -sL https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/main/Install_RHCSA_EX200_Exam_Simulator.sh | sudo bash</code></pre>
+                <pre style="background: #1e1e1e; color: #dcdcdc; padding: 15px; border-radius: 5px; margin: 0; flex-grow: 1; white-space: nowrap; overflow-x: auto;"><code id="install-cmd">tmp=$(mktemp -d); curl -fsSL https://github.com/ytra-redhat/RHCSA.github.io/archive/refs/heads/main.tar.gz | tar -xz -C "$tmp"; sudo "$tmp/RHCSA.github.io-main/Install_RHCSA_EX200_Exam_Simulator.sh"; rm -rf "$tmp"</code></pre>
                 <button onclick="copyToClipboard()" style="background: #cc0000; color: white; border: none; padding: 15px 25px; border-radius: 5px; cursor: pointer; white-space: nowrap; font-size: 16px; font-weight: bold;">📋 Copy</button>
             </div>
             
@@ -427,14 +427,14 @@
                 <!-- Left column - Donate -->
                 <div style="flex: 1; text-align: center;">
                     <a href="https://www.paypal.com/donate/?business=GT533LD7M3694&no_recurring=1&item_name=Founder+of+RHCSA.GitHub.io&currency_code=CAD" target="_blank" style="display: inline-block;">
-                        <img src="https://github.com/RHCSA/RHCSA.github.io/blob/main/photos/DonateLogo.png?raw=true" alt="Donate" style="max-width: 200px; border-radius: 5px; display: block;">
-                        <img src="https://github.com/RHCSA/RHCSA.github.io/blob/main/photos/DonateQRCode.png?raw=true" alt="Donate QR Code" style="max-width: 200px; border-radius: 5px; display: block;">
+                        <img src="https://github.com/ytra-redhat/RHCSA.github.io/blob/main/photos/DonateLogo.png?raw=true" alt="Donate" style="max-width: 200px; border-radius: 5px; display: block;">
+                        <img src="https://github.com/ytra-redhat/RHCSA.github.io/blob/main/photos/DonateQRCode.png?raw=true" alt="Donate QR Code" style="max-width: 200px; border-radius: 5px; display: block;">
                     </a>
                 </div>
                 <!-- Right column - Certificate -->
                 <div style="flex: 1; text-align: center;">
                     <p style="margin-top: 10px; font-weight: bold; color: #ffc107;">Official RHCSA Certificate</p>
-                    <img src="https://github.com/RHCSA/RHCSA.github.io/blob/main/photos/Red_Hat_Certified_System_Administrator_RHCSA.jpg?raw=true" alt="RHCSA Certificate" style="max-width: 200px; cursor: pointer; border: 1px solid #ccc; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); border-radius: 5px;" onclick="openLightbox(this.src)">
+                    <img src="https://github.com/ytra-redhat/RHCSA.github.io/blob/main/photos/Red_Hat_Certified_System_Administrator_RHCSA.jpg?raw=true" alt="RHCSA Certificate" style="max-width: 200px; cursor: pointer; border: 1px solid #ccc; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); border-radius: 5px;" onclick="openLightbox(this.src)">
                     <p><a href="#" onclick="openContributePopup(); return false;" style="color: #ffc107; font-weight: bold;">Want to contribute?</a></p>
                 </div>
             </div>
@@ -442,7 +442,7 @@
             <hr style="border: 1px solid #444; margin: 20px 0;">
                         
             <script src="https://giscus.app/client.js"
-                    data-repo="RHCSA/RHCSA.github.io"
+                    data-repo="ytra-redhat/RHCSA.github.io"
                     data-repo-id="R_kgDONAJnuw"
                     data-category="Announcements"
                     data-category-id="DIC_kwDONAJnu84C27tX"
@@ -462,17 +462,17 @@
         <div id="chapter1" class="tab-content">
             <h2>Chapter 01: Understand and use essential tools:</h2>
             <div class="gradual-buttons">
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/01-%20Understand%20and%20use%20essential%20tools/01-Access-Shell-Prompt-Issue-Commands.md', 'chapter1')">01- Access a shell prompt and issue commands with correct syntax</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/01-%20Understand%20and%20use%20essential%20tools/02-Input-Output-Redirection.md', 'chapter1')">02- Use input-output redirection</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/01-%20Understand%20and%20use%20essential%20tools/03-Grep-Regular-Expressions.md', 'chapter1')">03- Use grep and regular expressions to analyze text</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/01-%20Understand%20and%20use%20essential%20tools/04-Access-Remote-Systems-SSH.md', 'chapter1')">04- Access remote systems using SSH</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/01-%20Understand%20and%20use%20essential%20tools/05-Login-Switch-Users-Multiuser-Targets.md', 'chapter1')">05- Log in and switch users in multiuser targets</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/01-%20Understand%20and%20use%20essential%20tools/06-Archive-Compress-Unpack-Files.md', 'chapter1')">06- Archive, compress, unpack, and uncompress files using tar, gzip, and bzip2</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/01-%20Understand%20and%20use%20essential%20tools/07-Create-Edit-Text-Files.md', 'chapter1')">07- Create and edit text files</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/01-%20Understand%20and%20use%20essential%20tools/08-Create-Delete-Copy-Move-Files-Directories.md', 'chapter1')">08- Create, delete, copy, and move files and directories</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/01-%20Understand%20and%20use%20essential%20tools/09-Create-Hard-Soft-Links.md', 'chapter1')">09- Create hard and soft links</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/01-%20Understand%20and%20use%20essential%20tools/10-List-Set-Change-Permissions.md', 'chapter1')">10- List, set, and change standard ugo rwx permissions</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/01-%20Understand%20and%20use%20essential%20tools/11-Locate-Read-Use-System-Documentation.md', 'chapter1')">11- Locate, read, and use system documentation including man, info, and files in usr share doc</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/01-%20Understand%20and%20use%20essential%20tools/01-Access-Shell-Prompt-Issue-Commands.md', 'chapter1')">01- Access a shell prompt and issue commands with correct syntax</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/01-%20Understand%20and%20use%20essential%20tools/02-Input-Output-Redirection.md', 'chapter1')">02- Use input-output redirection</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/01-%20Understand%20and%20use%20essential%20tools/03-Grep-Regular-Expressions.md', 'chapter1')">03- Use grep and regular expressions to analyze text</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/01-%20Understand%20and%20use%20essential%20tools/04-Access-Remote-Systems-SSH.md', 'chapter1')">04- Access remote systems using SSH</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/01-%20Understand%20and%20use%20essential%20tools/05-Login-Switch-Users-Multiuser-Targets.md', 'chapter1')">05- Log in and switch users in multiuser targets</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/01-%20Understand%20and%20use%20essential%20tools/06-Archive-Compress-Unpack-Files.md', 'chapter1')">06- Archive, compress, unpack, and uncompress files using tar, gzip, and bzip2</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/01-%20Understand%20and%20use%20essential%20tools/07-Create-Edit-Text-Files.md', 'chapter1')">07- Create and edit text files</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/01-%20Understand%20and%20use%20essential%20tools/08-Create-Delete-Copy-Move-Files-Directories.md', 'chapter1')">08- Create, delete, copy, and move files and directories</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/01-%20Understand%20and%20use%20essential%20tools/09-Create-Hard-Soft-Links.md', 'chapter1')">09- Create hard and soft links</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/01-%20Understand%20and%20use%20essential%20tools/10-List-Set-Change-Permissions.md', 'chapter1')">10- List, set, and change standard ugo rwx permissions</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/01-%20Understand%20and%20use%20essential%20tools/11-Locate-Read-Use-System-Documentation.md', 'chapter1')">11- Locate, read, and use system documentation including man, info, and files in usr share doc</button>
             </div>
             <div class="markdown-container">
                 <div class="text-content"></div>
@@ -483,10 +483,10 @@
         <div id="chapter2" class="tab-content">
             <h2>Chapter 02: Manage software:</h2>
             <div class="gradual-buttons">
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/02-%20Manage%20software/01-Configure-Access-RPM-Repositories.md', 'chapter2')">01- Configure and manage access to RPM repositories</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/02-%20Manage%20software/02-Install-Remove-RPM-Packages.md', 'chapter2')">02- Install and remove RPM packages using DNF</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/02-%20Manage%20software/03-Configure-Access-Flatpak-Repositories.md', 'chapter2')">03- Configure and manage access to Flatpak repositories</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/02-%20Manage%20software/04-Install-Remove-Flatpak-Packages.md', 'chapter2')">04- Install and remove Flatpak packages</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/02-%20Manage%20software/01-Configure-Access-RPM-Repositories.md', 'chapter2')">01- Configure and manage access to RPM repositories</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/02-%20Manage%20software/02-Install-Remove-RPM-Packages.md', 'chapter2')">02- Install and remove RPM packages using DNF</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/02-%20Manage%20software/03-Configure-Access-Flatpak-Repositories.md', 'chapter2')">03- Configure and manage access to Flatpak repositories</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/02-%20Manage%20software/04-Install-Remove-Flatpak-Packages.md', 'chapter2')">04- Install and remove Flatpak packages</button>
             </div>
             <div class="markdown-container">
                 <div class="text-content"></div>
@@ -497,10 +497,10 @@
         <div id="chapter3" class="tab-content">
             <h2>Chapter 03: Create simple shell scripts:</h2>
             <div class="gradual-buttons">
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/03-%20Create%20simple%20shell%20scripts/01-Conditionally-Execute-Code.md', 'chapter3')">01- Conditionally execute code (use of if, test, [], etc.)</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/03-%20Create%20simple%20shell%20scripts/02-Use-Looping-Constructs.md', 'chapter3')">02- Use looping constructs (for, etc.) to process file and command line input</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/03-%20Create%20simple%20shell%20scripts/03-Process-Script-Inputs.md', 'chapter3')">03- Process script inputs ($1, $2, etc.)</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/03-%20Create%20simple%20shell%20scripts/04-Process-Command-Output.md', 'chapter3')">04- Processing output of shell commands within a script</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/03-%20Create%20simple%20shell%20scripts/01-Conditionally-Execute-Code.md', 'chapter3')">01- Conditionally execute code (use of if, test, [], etc.)</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/03-%20Create%20simple%20shell%20scripts/02-Use-Looping-Constructs.md', 'chapter3')">02- Use looping constructs (for, etc.) to process file and command line input</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/03-%20Create%20simple%20shell%20scripts/03-Process-Script-Inputs.md', 'chapter3')">03- Process script inputs ($1, $2, etc.)</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/03-%20Create%20simple%20shell%20scripts/04-Process-Command-Output.md', 'chapter3')">04- Processing output of shell commands within a script</button>
             </div>
             <div class="markdown-container">
                 <div class="text-content"></div>
@@ -511,16 +511,16 @@
         <div id="chapter4" class="tab-content">
             <h2>Chapter 04: Operate running systems:</h2>
             <div class="gradual-buttons">
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/04-%20Operate%20running%20systems/01-Boot-Reboot-Shutdown-System.md', 'chapter4')">01- Boot, reboot, and shut down a system normally</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/04-%20Operate%20running%20systems/02-Boot-Systems-Different-Targets.md', 'chapter4')">02- Boot systems into different targets manually</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/04-%20Operate%20running%20systems/03-Interrupt-Boot-Process-Gain-Access.md', 'chapter4')">03- Interrupt the boot process in order to gain access to a system</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/04-%20Operate%20running%20systems/04-Identify-Kill-Processes.md', 'chapter4')">04- Identify CPU and memory intensive processes and kill processes</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/04-%20Operate%20running%20systems/05-Adjust-Process-Scheduling.md', 'chapter4')">05- Adjust process scheduling</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/04-%20Operate%20running%20systems/06-Manage-Tuning-Profiles.md', 'chapter4')">06- Manage tuning profiles</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/04-%20Operate%20running%20systems/07-Locate-Interpret-Logs-Journals.md', 'chapter4')">07- Locate and interpret system log files and journals</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/04-%20Operate%20running%20systems/08-Preserve-System-Journals.md', 'chapter4')">08- Preserve system journals</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/04-%20Operate%20running%20systems/09-Start-Stop-Check-Network-Services.md', 'chapter4')">09- Start, stop, and check the status of network services</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/04-%20Operate%20running%20systems/10-Securely-Transfer-Files.md', 'chapter4')">10- Securely transfer files between systems</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/04-%20Operate%20running%20systems/01-Boot-Reboot-Shutdown-System.md', 'chapter4')">01- Boot, reboot, and shut down a system normally</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/04-%20Operate%20running%20systems/02-Boot-Systems-Different-Targets.md', 'chapter4')">02- Boot systems into different targets manually</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/04-%20Operate%20running%20systems/03-Interrupt-Boot-Process-Gain-Access.md', 'chapter4')">03- Interrupt the boot process in order to gain access to a system</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/04-%20Operate%20running%20systems/04-Identify-Kill-Processes.md', 'chapter4')">04- Identify CPU and memory intensive processes and kill processes</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/04-%20Operate%20running%20systems/05-Adjust-Process-Scheduling.md', 'chapter4')">05- Adjust process scheduling</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/04-%20Operate%20running%20systems/06-Manage-Tuning-Profiles.md', 'chapter4')">06- Manage tuning profiles</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/04-%20Operate%20running%20systems/07-Locate-Interpret-Logs-Journals.md', 'chapter4')">07- Locate and interpret system log files and journals</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/04-%20Operate%20running%20systems/08-Preserve-System-Journals.md', 'chapter4')">08- Preserve system journals</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/04-%20Operate%20running%20systems/09-Start-Stop-Check-Network-Services.md', 'chapter4')">09- Start, stop, and check the status of network services</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/04-%20Operate%20running%20systems/10-Securely-Transfer-Files.md', 'chapter4')">10- Securely transfer files between systems</button>
             </div>
             <div class="markdown-container">
                 <div class="text-content"></div>
@@ -531,12 +531,12 @@
         <div id="chapter5" class="tab-content">
             <h2>Chapter 05: Configure local storage:</h2>
             <div class="gradual-buttons">
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/05-%20Configure%20local%20storage/01-GPT-Partitions.md', 'chapter5')">01- List, create, delete partitions on MBR and GPT disks</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/05-%20Configure%20local%20storage/02-Physical-Volumes.md', 'chapter5')">02- Create and remove physical volumes</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/05-%20Configure%20local%20storage/03-Volume-Groups.md', 'chapter5')">03- Assign physical volumes to volume groups</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/05-%20Configure%20local%20storage/04-Logical-Volumes.md', 'chapter5')">04- Create and delete logical volumes</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/05-%20Configure%20local%20storage/05-Mount-UUID-Label.md', 'chapter5')">05- Configure systems to mount file systems at boot by UUID or label</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/05-%20Configure%20local%20storage/06-Add-Partitions-LV-Swap.md', 'chapter5')">06- Add new partitions, logical volumes, and swap non-destructively</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/05-%20Configure%20local%20storage/01-GPT-Partitions.md', 'chapter5')">01- List, create, delete partitions on MBR and GPT disks</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/05-%20Configure%20local%20storage/02-Physical-Volumes.md', 'chapter5')">02- Create and remove physical volumes</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/05-%20Configure%20local%20storage/03-Volume-Groups.md', 'chapter5')">03- Assign physical volumes to volume groups</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/05-%20Configure%20local%20storage/04-Logical-Volumes.md', 'chapter5')">04- Create and delete logical volumes</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/05-%20Configure%20local%20storage/05-Mount-UUID-Label.md', 'chapter5')">05- Configure systems to mount file systems at boot by UUID or label</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/05-%20Configure%20local%20storage/06-Add-Partitions-LV-Swap.md', 'chapter5')">06- Add new partitions, logical volumes, and swap non-destructively</button>
             </div>
             <div class="markdown-container">
                 <div class="text-content"></div>
@@ -547,11 +547,11 @@
         <div id="chapter6" class="tab-content">
             <h2>Chapter 06: Create and configure file systems:</h2>
             <div class="gradual-buttons">
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/06-%20Create%20and%20configure%20file%20systems/01-VFAT-ext4-XFS-Filesystems.md', 'chapter6')">01- Create, mount, unmount, and use vfat, ext4, and xfs file systems</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/06-%20Create%20and%20configure%20file%20systems/02-NFS-Mount.md', 'chapter6')">02- Mount and unmount network file systems using NFS</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/06-%20Create%20and%20configure%20file%20systems/03-Configure-Autofs.md', 'chapter6')">03- Configure autofs</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/06-%20Create%20and%20configure%20file%20systems/04-Extend-Logical-Volumes.md', 'chapter6')">04- Extend existing logical volumes</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/06-%20Create%20and%20configure%20file%20systems/05-File-Permission-Problems.md', 'chapter6')">05- Diagnose and correct file permission problems</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/06-%20Create%20and%20configure%20file%20systems/01-VFAT-ext4-XFS-Filesystems.md', 'chapter6')">01- Create, mount, unmount, and use vfat, ext4, and xfs file systems</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/06-%20Create%20and%20configure%20file%20systems/02-NFS-Mount.md', 'chapter6')">02- Mount and unmount network file systems using NFS</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/06-%20Create%20and%20configure%20file%20systems/03-Configure-Autofs.md', 'chapter6')">03- Configure autofs</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/06-%20Create%20and%20configure%20file%20systems/04-Extend-Logical-Volumes.md', 'chapter6')">04- Extend existing logical volumes</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/06-%20Create%20and%20configure%20file%20systems/05-File-Permission-Problems.md', 'chapter6')">05- Diagnose and correct file permission problems</button>
             </div>
             <div class="markdown-container">
                 <div class="text-content"></div>
@@ -562,12 +562,12 @@
         <div id="chapter7" class="tab-content">
             <h2>Chapter 07: Deploy, configure, and maintain systems:</h2>
             <div class="gradual-buttons">
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/07-%20Deploy%2C%20configure%2C%20and%20maintain%20systems/01-Schedule-Tasks.md', 'chapter7')">01- Schedule tasks using at and cron</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/07-%20Deploy%2C%20configure%2C%20and%20maintain%20systems/02-Start-Stop-Services.md', 'chapter7')">02- Start and stop services and configure services to start automatically at boot</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/07-%20Deploy%2C%20configure%2C%20and%20maintain%20systems/03-Boot-Target.md', 'chapter7')">03- Configure systems to boot into a specific target automatically</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/07-%20Deploy%2C%20configure%2C%20and%20maintain%20systems/04-Time-Service-Clients.md', 'chapter7')">04- Configure time service clients</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/07-%20Deploy%2C%20configure%2C%20and%20maintain%20systems/05-Software-Packages.md', 'chapter7')">05- Install and update software packages from Red Hat Network or remote repository</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/07-%20Deploy%2C%20configure%2C%20and%20maintain%20systems/06-System-Bootloader.md', 'chapter7')">06- Modify the system bootloader</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/07-%20Deploy%2C%20configure%2C%20and%20maintain%20systems/01-Schedule-Tasks.md', 'chapter7')">01- Schedule tasks using at and cron</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/07-%20Deploy%2C%20configure%2C%20and%20maintain%20systems/02-Start-Stop-Services.md', 'chapter7')">02- Start and stop services and configure services to start automatically at boot</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/07-%20Deploy%2C%20configure%2C%20and%20maintain%20systems/03-Boot-Target.md', 'chapter7')">03- Configure systems to boot into a specific target automatically</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/07-%20Deploy%2C%20configure%2C%20and%20maintain%20systems/04-Time-Service-Clients.md', 'chapter7')">04- Configure time service clients</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/07-%20Deploy%2C%20configure%2C%20and%20maintain%20systems/05-Software-Packages.md', 'chapter7')">05- Install and update software packages from Red Hat Network or remote repository</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/07-%20Deploy%2C%20configure%2C%20and%20maintain%20systems/06-System-Bootloader.md', 'chapter7')">06- Modify the system bootloader</button>
             </div>
             <div class="markdown-container">
                 <div class="text-content"></div>
@@ -578,10 +578,10 @@
         <div id="chapter8" class="tab-content">
             <h2>Chapter 08: Manage basic networking:</h2>
             <div class="gradual-buttons">
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/08-%20Manage%20basic%20networking/01-Configure-IPv4-IPv6-Addresses.md', 'chapter8')">01- Configure IPv4 and IPv6 addresses</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/08-%20Manage%20basic%20networking/02-Configure-Hostname-Resolution.md', 'chapter8')">02- Configure hostname resolution</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/08-%20Manage%20basic%20networking/03-Configure-Network-Services-Boot.md', 'chapter8')">03- Configure network services to start automatically at boot</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/08-%20Manage%20basic%20networking/04-Restrict-Network-Access-Firewalld.md', 'chapter8')">04- Restrict network access using firewall-cmd/firewalld</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/08-%20Manage%20basic%20networking/01-Configure-IPv4-IPv6-Addresses.md', 'chapter8')">01- Configure IPv4 and IPv6 addresses</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/08-%20Manage%20basic%20networking/02-Configure-Hostname-Resolution.md', 'chapter8')">02- Configure hostname resolution</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/08-%20Manage%20basic%20networking/03-Configure-Network-Services-Boot.md', 'chapter8')">03- Configure network services to start automatically at boot</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/08-%20Manage%20basic%20networking/04-Restrict-Network-Access-Firewalld.md', 'chapter8')">04- Restrict network access using firewall-cmd/firewalld</button>
             </div>
             <div class="markdown-container">
                 <div class="text-content"></div>
@@ -592,10 +592,10 @@
         <div id="chapter9" class="tab-content">
             <h2>Chapter 09: Manage users and groups:</h2>
             <div class="gradual-buttons">
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/09-%20Manage%20users%20and%20groups/01-Create-Delete-Modify-Users.md', 'chapter9')">01- Create, delete, and modify local user accounts</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/09-%20Manage%20users%20and%20groups/02-Password-Aging.md', 'chapter9')">02- Change passwords and adjust password aging for local user accounts</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/09-%20Manage%20users%20and%20groups/03-Groups-Memberships.md', 'chapter9')">03- Create, delete, and modify local groups and group memberships</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/09-%20Manage%20users%20and%20groups/04-Configure-Privileged-Access.md', 'chapter9')">04- Configure superuser access</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/09-%20Manage%20users%20and%20groups/01-Create-Delete-Modify-Users.md', 'chapter9')">01- Create, delete, and modify local user accounts</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/09-%20Manage%20users%20and%20groups/02-Password-Aging.md', 'chapter9')">02- Change passwords and adjust password aging for local user accounts</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/09-%20Manage%20users%20and%20groups/03-Groups-Memberships.md', 'chapter9')">03- Create, delete, and modify local groups and group memberships</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/09-%20Manage%20users%20and%20groups/04-Configure-Privileged-Access.md', 'chapter9')">04- Configure superuser access</button>
             </div>
             <div class="markdown-container">
                 <div class="text-content"></div>
@@ -606,14 +606,14 @@
         <div id="chapter10" class="tab-content">
             <h2>Chapter 10: Manage security:</h2>
             <div class="gradual-buttons">
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/10-%20Manage%20security/01-Configure-Firewall-Settings.md', 'chapter10')">01- Configure firewall settings using firewall-cmd/firewalld</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/10-%20Manage%20security/02-Default-File-Permissions.md', 'chapter10')">02- Manage default file permissions</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/10-%20Manage%20security/03-SSH-Key-Authentication.md', 'chapter10')">03- Configure key-based authentication for SSH</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/10-%20Manage%20security/04-SELinux-Modes.md', 'chapter10')">04- Set enforcing and permissive modes for SELinux</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/10-%20Manage%20security/05-SELinux-Context.md', 'chapter10')">05- List and identify SELinux file and process context</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/10-%20Manage%20security/06-Restore-File-Contexts.md', 'chapter10')">06- Restore default file contexts</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/10-%20Manage%20security/07-SELinux-Port-Labels.md', 'chapter10')">07- Manage SELinux port labels</button>
-                <button onclick="loadMarkdown('https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/refs/heads/main/contents/10-%20Manage%20security/08-SELinux-Booleans.md', 'chapter10')">08- Use boolean settings to modify system SELinux settings</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/10-%20Manage%20security/01-Configure-Firewall-Settings.md', 'chapter10')">01- Configure firewall settings using firewall-cmd/firewalld</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/10-%20Manage%20security/02-Default-File-Permissions.md', 'chapter10')">02- Manage default file permissions</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/10-%20Manage%20security/03-SSH-Key-Authentication.md', 'chapter10')">03- Configure key-based authentication for SSH</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/10-%20Manage%20security/04-SELinux-Modes.md', 'chapter10')">04- Set enforcing and permissive modes for SELinux</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/10-%20Manage%20security/05-SELinux-Context.md', 'chapter10')">05- List and identify SELinux file and process context</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/10-%20Manage%20security/06-Restore-File-Contexts.md', 'chapter10')">06- Restore default file contexts</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/10-%20Manage%20security/07-SELinux-Port-Labels.md', 'chapter10')">07- Manage SELinux port labels</button>
+                <button onclick="loadMarkdown('https://raw.githubusercontent.com/ytra-redhat/RHCSA.github.io/refs/heads/main/contents/10-%20Manage%20security/08-SELinux-Booleans.md', 'chapter10')">08- Use boolean settings to modify system SELinux settings</button>
             </div>
             <div class="markdown-container">
                 <div class="text-content"></div>
@@ -667,7 +667,7 @@
         function openContributePopup() {
             const overlay = document.createElement('div');
             overlay.className = 'lightbox-overlay active';
-            overlay.innerHTML = '<span class="lightbox-close">&times;</span><div style="background: #1a1a1a; padding: 30px; border-radius: 10px; max-width: 500px; text-align: center;"><h3 style="color: #ffc107; margin-bottom: 15px;">Want to Contribute?</h3><p style="color: #eaeaea;">You can do your contribution in a feature branch and make a Pull Request to this repo:</p><p><a href="https://github.com/RHCSA/RHCSA.github.io" target="_blank" style="color: #cc0000; font-weight: bold;">https://github.com/RHCSA/RHCSA.github.io</a></p></div>';
+            overlay.innerHTML = '<span class="lightbox-close">&times;</span><div style="background: #1a1a1a; padding: 30px; border-radius: 10px; max-width: 500px; text-align: center;"><h3 style="color: #ffc107; margin-bottom: 15px;">Want to Contribute?</h3><p style="color: #eaeaea;">You can do your contribution in a feature branch and make a Pull Request to this repo:</p><p><a href="https://github.com/ytra-redhat/RHCSA.github.io" target="_blank" style="color: #cc0000; font-weight: bold;">https://github.com/ytra-redhat/RHCSA.github.io</a></p></div>';
             overlay.onclick = function(e) { if (e.target === overlay || e.target.className === 'lightbox-close') document.body.removeChild(overlay); };
             document.body.appendChild(overlay);
         }

@@ -68,9 +68,10 @@ SCRIPT_PATH="$(readlink -f "$0")"
 SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 QUESTIONS_DIR="${SCRIPT_DIR}/questions"
 
-# Progress tracking file (stores completed lab filenames)
-# Stored in install directory to persist across updates
-PROGRESS_FILE="${SCRIPT_DIR}/.progress"
+# Shared persistent progress store. CLI and Web UI both use LAB_ID keys.
+PROGRESS_FILE="${SCRIPT_DIR}/progress.json"
+PROGRESSCTL="${SCRIPT_DIR}/scripts/progressctl.py"
+LEGACY_PROGRESS_FILE="${SCRIPT_DIR}/.progress"
 
 # Lab mode variables (set when running as lab monitor pane)
 LAB_OBJ_IDX=""
@@ -82,7 +83,10 @@ declare -a LOADED_ANSWERS        # Answers
 declare -a LOADED_HINTS          # Hints
 declare -a LOADED_FILES          # File paths for each question
 declare -a LOADED_IS_LAB         # Whether it's a lab (true/false)
+declare -a LOADED_LAB_IDS        # Stable LAB_ID values
+declare -a LOADED_LAB_VERSIONS   # LAB_VERSION values
 declare -a LOADED_COMPLETION_STATUS  # Completion status emojis for display
+declare -A COMPLETED_LABS
 
 # Flag to track if we should clear screen on exit (don't clear on errors)
 CLEAR_ON_EXIT=false
@@ -131,19 +135,54 @@ print_banner() {
     echo ""
 }
 
-# Main Objectives
-declare -a OBJECTIVES=(
-    "Understand and use essential tools"
-    "Manage software"
-    "Create simple shell scripts"
-    "Operate running systems"
-    "Configure local storage"
-    "Create and configure file systems"
-    "Deploy, configure, and maintain systems"
-    "Manage basic networking"
-    "Manage users and groups"
-    "Manage security"
-)
+# Objectives are discovered dynamically from numeric questions/<chapter>/ folders.
+declare -a OBJECTIVES=()
+declare -a OBJECTIVE_IDS=()
+
+load_objectives() {
+    OBJECTIVES=()
+    OBJECTIVE_IDS=()
+
+    local titles_file="${SCRIPT_DIR}/objective_titles.json"
+    local chapter_dir chapter_id title
+    declare -A objective_titles=()
+
+    # Parse the title catalog once. Starting Python separately for every chapter
+    # made startup unnecessarily slow on small training VMs.
+    if [[ -f "$titles_file" ]] && command -v python3 >/dev/null 2>&1; then
+        while IFS=$'\t' read -r chapter_id title; do
+            [[ "$chapter_id" =~ ^[0-9]+$ ]] || continue
+            objective_titles["$chapter_id"]="$title"
+        done < <(
+            python3 - "$titles_file" <<'END_PY'
+import json
+import sys
+try:
+    with open(sys.argv[1], encoding="utf-8") as handle:
+        data = json.load(handle)
+    for key in sorted(data, key=lambda value: int(value) if str(value).isdigit() else 10**9):
+        if str(key).isdigit():
+            print(f"{key}\t{data[key]}")
+except Exception:
+    pass
+END_PY
+        )
+    fi
+
+    while IFS= read -r chapter_dir; do
+        chapter_id="$(basename "$chapter_dir")"
+        [[ "$chapter_id" =~ ^[0-9]+$ ]] || continue
+        find "$chapter_dir" -maxdepth 1 -type f -name 'lab_*.sh' -print -quit |
+            grep -q . || continue
+
+        title="${objective_titles[$chapter_id]:-Chapter ${chapter_id}}"
+        OBJECTIVE_IDS+=("$chapter_id")
+        OBJECTIVES+=("$title")
+    done < <(
+        find "$QUESTIONS_DIR" -mindepth 1 -maxdepth 1 -type d -printf '%p\n' |
+            sort -V
+    )
+}
 
 # ============================================================================
 # WEB INTERFACE SUPPORT
@@ -202,10 +241,11 @@ print_webui_url() {
 # Load questions for a specific objective from the questions directory
 # Usage: load_questions_for_objective <obj_idx>
 # Populates: LOADED_QUESTIONS, LOADED_ANSWERS, LOADED_HINTS, LOADED_FILES, LOADED_IS_LAB
-# Note: obj_idx is 0-based internally, but directories are 1-10
+# obj_idx is a menu index; OBJECTIVE_IDS maps it to the actual chapter directory.
 load_questions_for_objective() {
     local obj_idx=$1
-    local obj_num=$((obj_idx + 1))  # Convert to 1-based for directory
+    local obj_num="${OBJECTIVE_IDS[$obj_idx]:-}"
+    [[ -n "$obj_num" ]] || return 1
     local obj_dir="${QUESTIONS_DIR}/${obj_num}"
     
     # Clear arrays
@@ -214,6 +254,8 @@ load_questions_for_objective() {
     LOADED_HINTS=()
     LOADED_FILES=()
     LOADED_IS_LAB=()
+    LOADED_LAB_IDS=()
+    LOADED_LAB_VERSIONS=()
     
     # Check if directory exists
     if [[ ! -d "$obj_dir" ]]; then
@@ -224,7 +266,10 @@ load_questions_for_objective() {
     local files=()
     while IFS= read -r -d '' file; do
         files+=("$file")
-    done < <(find "$obj_dir" -maxdepth 1 -name "*.sh" -print0 2>/dev/null | sort -z)
+    done < <(
+        find "$obj_dir" -maxdepth 1 -type f -name 'lab_*.sh' -print0 2>/dev/null |
+            sort -zV
+    )
     
     # Load each question file
     for file in "${files[@]}"; do
@@ -235,13 +280,11 @@ load_questions_for_objective() {
         IS_LAB=""
         LAB_TASK_COUNT=0
         
-        # Clear TASK variables from previous files to prevent hint pollution
-        for i in {1..10}; do
-            unset "TASK_${i}_QUESTION" "TASK_${i}_HINT"
-            for j in {1..5}; do
-                unset "TASK_${i}_COMMAND_${j}"
-            done
-        done
+        # Clear all task metadata from the previously sourced lab.
+        while IFS= read -r variable; do
+            unset "$variable"
+        done < <(compgen -A variable | grep -E '^TASK_[0-9]+_' || true)
+        unset LAB_ID LAB_VERSION DIFFICULTY OBJECTIVE_TAG
         
         # Source the file to load variables
         source "$file"
@@ -252,6 +295,8 @@ load_questions_for_objective() {
         LOADED_HINTS+=("$HINT")
         LOADED_FILES+=("$file")
         LOADED_IS_LAB+=("${IS_LAB:-false}")
+        LOADED_LAB_IDS+=("${LAB_ID:-}")
+        LOADED_LAB_VERSIONS+=("${LAB_VERSION:-}")
     done
     
     return 0
@@ -298,56 +343,70 @@ is_question_lab() {
 # PROGRESS TRACKING SYSTEM - Track completed labs with emoji indicators
 # ============================================================================
 
-# Initialize progress file (create if doesn't exist)
+# Initialize and migrate the shared progress store.
 init_progress_file() {
-    if [[ ! -f "$PROGRESS_FILE" ]]; then
-        touch "$PROGRESS_FILE" 2>/dev/null
-    fi
+    [[ -x "$PROGRESSCTL" ]] || {
+        echo "ERROR: progress manager not found: $PROGRESSCTL" >&2
+        return 1
+    }
+    python3 "$PROGRESSCTL" migrate \
+        --legacy "$LEGACY_PROGRESS_FILE" \
+        --legacy "/tmp/.rhcsa_progress" >/dev/null
+    load_progress_cache
 }
 
-# Get lab filename (used as unique identifier - won't change if questions reordered)
-get_lab_filename() {
-    local full_path="$1"
-    basename "$full_path"
+load_progress_cache() {
+    COMPLETED_LABS=()
+    local lab_id
+    while IFS= read -r lab_id; do
+        [[ -n "$lab_id" ]] && COMPLETED_LABS["$lab_id"]=1
+    done < <(python3 "$PROGRESSCTL" list --plain 2>/dev/null || true)
 }
 
-# Check if a lab is completed (by filename)
+get_lab_id_from_file() {
+    local lab_path="$1"
+    sed -nE 's/^[[:space:]]*LAB_ID=["'"'"']([^"'"'"']+)["'"'"'][[:space:]]*$/\1/p' \
+        "$lab_path" | head -1
+}
+
+get_lab_version_from_file() {
+    local lab_path="$1"
+    sed -nE 's/^[[:space:]]*LAB_VERSION=["'"'"']([^"'"'"']+)["'"'"'][[:space:]]*$/\1/p' \
+        "$lab_path" | head -1
+}
+
 is_lab_completed() {
     local lab_path="$1"
-    local lab_name=$(get_lab_filename "$lab_path")
-    
-    if [[ -f "$PROGRESS_FILE" ]]; then
-        grep -qxF "$lab_name" "$PROGRESS_FILE" 2>/dev/null
-        return $?
-    fi
-    return 1
+    local lab_id
+    lab_id="$(get_lab_id_from_file "$lab_path")"
+    [[ -n "$lab_id" && -n "${COMPLETED_LABS[$lab_id]+x}" ]]
 }
 
-# Mark a lab as completed (saves filename to progress file)
 mark_lab_completed() {
     local lab_path="$1"
-    local lab_name=$(get_lab_filename "$lab_path")
-    
-    # Ensure progress file exists
-    init_progress_file
-    
-    # Only add if not already marked
-    if ! grep -qxF "$lab_name" "$PROGRESS_FILE" 2>/dev/null; then
-        echo "$lab_name" >> "$PROGRESS_FILE"
-    fi
+    local lab_id lab_version chapter filename
+    lab_id="$(get_lab_id_from_file "$lab_path")"
+    lab_version="$(get_lab_version_from_file "$lab_path")"
+    chapter="$(basename "$(dirname "$lab_path")")"
+    filename="$(basename "$lab_path")"
+    [[ -n "$lab_id" ]] || return 1
+
+    python3 "$PROGRESSCTL" mark "$lab_id" \
+        --lab-version "$lab_version" \
+        --chapter "$chapter" \
+        --filename "$filename"
+    COMPLETED_LABS["$lab_id"]=1
 }
 
-# Get completion status for all loaded questions (returns array of emojis)
-# Populates LOADED_COMPLETION_STATUS array with ⬜ or ✅
 get_completion_status() {
     LOADED_COMPLETION_STATUS=()
     local count=${#LOADED_FILES[@]}
-    
+
     for ((i=0; i<count; i++)); do
-        local file_path="${LOADED_FILES[$i]}"
         local is_lab="${LOADED_IS_LAB[$i]}"
-        
-        if [[ "$is_lab" == "true" ]] && is_lab_completed "$file_path"; then
+        local lab_id="${LOADED_LAB_IDS[$i]}"
+        if [[ "$is_lab" == "true" && -n "$lab_id" &&
+              -n "${COMPLETED_LABS[$lab_id]+x}" ]]; then
             LOADED_COMPLETION_STATUS+=("✅")
         else
             LOADED_COMPLETION_STATUS+=("⬜")
@@ -591,14 +650,11 @@ load_lab_file() {
         return 1
     fi
     
-    # Clear previous lab's TASK variables to prevent hint pollution
-    unset LAB_TASK_COUNT HINT QUESTION LAB_ID IS_LAB
-    for i in {1..10}; do
-        unset "TASK_${i}_QUESTION" "TASK_${i}_HINT"
-        for j in {1..5}; do
-            unset "TASK_${i}_COMMAND_${j}"
-        done
-    done
+    # Clear previous lab metadata to prevent hint pollution.
+    unset LAB_TASK_COUNT HINT QUESTION LAB_ID LAB_VERSION IS_LAB DIFFICULTY OBJECTIVE_TAG
+    while IFS= read -r variable; do
+        unset "$variable"
+    done < <(compgen -A variable | grep -E '^TASK_[0-9]+_' || true)
     
     # Source the lab file to load its functions
     source "$CURRENT_LAB_FILE"
@@ -1227,13 +1283,6 @@ navigate_questions() {
     
     # Load questions for this objective from files
     if ! load_questions_for_objective "$obj_idx"; then
-        clear_screen
-        print_banner
-        echo -e "  ${YELLOW}No questions available for this topic yet.${RESET}"
-        echo -e "  ${DIM}Add .sh files to: ${QUESTIONS_DIR}/$((obj_idx + 1))/${RESET}"
-        echo ""
-        echo -e "  ${DIM}Press any key to go back...${RESET}"
-        read_key
         return
     fi
     
@@ -1241,13 +1290,6 @@ navigate_questions() {
     local total=${#items[@]}
     
     if [[ $total -eq 0 ]]; then
-        clear_screen
-        print_banner
-        echo -e "  ${YELLOW}No questions available for this topic yet.${RESET}"
-        echo -e "  ${DIM}Add .sh files to: ${QUESTIONS_DIR}/$((obj_idx + 1))/${RESET}"
-        echo ""
-        echo -e "  ${DIM}Press any key to go back...${RESET}"
-        read_key
         return
     fi
     
@@ -1368,59 +1410,27 @@ navigate_objectives() {
     done
 }
 
-# Version check configuration
-VERSION_FILE="/usr/local/share/rhcsa/.version"
-GITHUB_REPO_API="https://api.github.com/repos/RHCSA/RHCSA.github.io/commits/main"
-INSTALLER_URL="https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/main/Install_RHCSA_EX200_Exam_Simulator.sh"
+# Update checks use the installed shared repository configuration.
+VERSION_FILE="${SCRIPT_DIR}/.version"
+UPDATER="${SCRIPT_DIR}/scripts/rhcsa-update"
 
-# Check for updates on startup
 check_for_update() {
-    # Only check if version file exists (installed via installer)
-    if [[ ! -f "$VERSION_FILE" ]]; then
-        return 0
-    fi
-    
-    # Check if we have internet connectivity
-    if ! curl -sI https://github.com --connect-timeout 3 &>/dev/null; then
-        return 0  # Skip update check if offline
-    fi
-    
-    local installed_commit=$(cat "$VERSION_FILE" 2>/dev/null)
-    local latest_commit=$(curl -sL "$GITHUB_REPO_API" 2>/dev/null | grep '"sha"' | head -1 | sed 's/.*"sha": "\([^"]*\)".*/\1/')
-    
-    if [[ -n "$latest_commit" ]] && [[ "$installed_commit" != "$latest_commit" ]]; then
-        clear_screen
-        echo ""
-        echo -e "  ${CYAN}${BOLD}╔════════════════════════════════════════════════════════════╗${RESET}"
-        echo -e "  ${CYAN}${BOLD}║                  Update Available!                          ║${RESET}"
-        echo -e "  ${CYAN}${BOLD}╚════════════════════════════════════════════════════════════╝${RESET}"
-        echo ""
-        echo -e "  A new version of RHCSA Exam Simulator is available."
-        echo ""
-        echo -e "  Installed: ${YELLOW}${installed_commit:0:7}${RESET}"
-        echo -e "  Latest:    ${GREEN}${latest_commit:0:7}${RESET}"
-        echo ""
-        echo -ne "  Do you want to update now? (y/n): "
-        read -n 1 -r reply
-        echo ""
-        
-        if [[ $reply =~ ^[Yy]$ ]]; then
-            echo ""
-            echo -e "  ${CYAN}Downloading and running installer...${RESET}"
-            echo ""
-            show_cursor
-            # Download installer to temp file and run with --force flag
-            local tmp_installer="/tmp/rhcsa_update_$$.sh"
-            curl -sL "$INSTALLER_URL" -o "$tmp_installer"
-            chmod +x "$tmp_installer"
-            # Run installer with --force to skip prompts, then cleanup and exit
-            exec bash "$tmp_installer" --force
-        else
-            echo ""
-            echo -e "  ${YELLOW}Update skipped. Run 'rhcsa' again to update later.${RESET}"
-            echo ""
-            sleep 2
-        fi
+    [[ -x "$UPDATER" && -f "$VERSION_FILE" ]] || return 0
+    "$UPDATER" --check --quiet >/dev/null 2>&1
+    local result=$?
+    [[ $result -eq 10 ]] || return 0
+
+    clear_screen
+    echo ""
+    echo -e "  ${CYAN}${BOLD}A newer simulator version is available.${RESET}"
+    echo -e "  ${DIM}Automatic updates are also handled by rhcsa-update.timer.${RESET}"
+    echo ""
+    echo -ne "  Update now? (y/n): "
+    read -n 1 -r reply
+    echo ""
+    if [[ $reply =~ ^[Yy]$ ]]; then
+        show_cursor
+        exec "$UPDATER" --force
     fi
 }
 
@@ -1546,6 +1556,25 @@ EOF
 
 # Main entry point
 main() {
+    if [[ "${1:-}" == "--list-objectives" ]]; then
+        load_objectives
+        for ((i=0; i<${#OBJECTIVES[@]}; i++)); do
+            printf '%s\t%s\n' "${OBJECTIVE_IDS[$i]}" "${OBJECTIVES[$i]}"
+        done
+        exit 0
+    fi
+
+    if [[ "${1:-}" == "--validate" ]]; then
+        exec python3 "${SCRIPT_DIR}/scripts/validate_release.py" "${SCRIPT_DIR}/.."
+    fi
+
+    # Every runtime mode uses the same dynamically discovered chapter set.
+    load_objectives
+    if [[ ${#OBJECTIVES[@]} -eq 0 ]]; then
+        echo "ERROR: no valid question chapters found in $QUESTIONS_DIR" >&2
+        exit 1
+    fi
+
     # Check for special lab monitor mode (called from tmux)
     if [[ "$1" == "--lab-monitor" ]] && [[ -n "$2" ]] && [[ -n "$3" ]]; then
         LAB_OBJ_IDX="$2"
@@ -1556,7 +1585,7 @@ main() {
         exit 0
     fi
     
-    # Initialize progress tracking file
+    # Initialize shared progress after dynamic chapter discovery.
     init_progress_file
     
     # Check for updates (only if not running in special modes)

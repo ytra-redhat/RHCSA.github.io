@@ -758,7 +758,7 @@
     <!-- Header -->
     <div class="header">
         <div class="header-left">
-            <img src="https://github.com/RHCSA/RHCSA.github.io/blob/main/photos/redhat.png?raw=true" alt="Red Hat Logo" class="header-logo">
+            <img id="headerLogo" src="" alt="Red Hat Logo" class="header-logo">
             <h1>Red Hat Certified System Administrator (RHCSA) EX200 Exam Simulator</h1>
         </div>
         <a href="#" onclick="openWebsites(); return false;" class="header-link">WWW.RHCSA.GITHUB.IO</a>
@@ -876,19 +876,9 @@
             send: `<svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>`
         };
 
-        // Objectives data
-        const objectivesData = [
-            { id: 1, title: "Understand and use essential tools" },
-            { id: 2, title: "Manage software" },
-            { id: 3, title: "Create simple shell scripts" },
-            { id: 4, title: "Operate running systems" },
-            { id: 5, title: "Configure local storage" },
-            { id: 6, title: "Create and configure file systems" },
-            { id: 7, title: "Deploy, configure, and maintain systems" },
-            { id: 8, title: "Manage basic networking" },
-            { id: 9, title: "Manage users and groups" },
-            { id: 10, title: "Manage security" }
-        ];
+        // Objectives are loaded dynamically from the API.
+        let objectivesData = [];
+        let repositoryConfig = null;
 
         // Version check variables
         let updateAvailable = false;
@@ -971,40 +961,77 @@
         }
 
         // Open both websites
-        function openWebsites() {
-            // Open first window immediately
-            window.open('https://github.com/RHCSA/RHCSA.github.io', '_blank');
-            // Open second window with small delay to avoid popup blocker
-            setTimeout(() => {
-                window.open('https://rhcsa.github.io', '_blank');
-            }, 100);
+        async function openWebsites() {
+            if (!repositoryConfig) {
+                await loadRepositoryConfig();
+            }
+            if (repositoryConfig && repositoryConfig.web_url) {
+                window.open(repositoryConfig.web_url, '_blank');
+            }
+        }
+
+        async function loadRepositoryConfig() {
+            try {
+                const response = await fetch(`${API_BASE}/config/repository?ts=${Date.now()}`, {
+                    cache: 'no-store'
+                });
+                if (!response.ok) return;
+                repositoryConfig = await response.json();
+                const logo = document.getElementById('headerLogo');
+                if (logo && repositoryConfig.raw_url) {
+                    logo.src = `${repositoryConfig.raw_url}/photos/redhat.png`;
+                }
+            } catch (error) {
+                console.error('Error loading repository configuration:', error);
+            }
         }
 
         // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            loadObjectives();
-            loadCompletedLabs();
+        document.addEventListener('DOMContentLoaded', async () => {
             initResizer();
-            // Check for updates (non-blocking)
+            await loadRepositoryConfig();
+            await loadCompletedLabs();
+            await loadObjectives();
+            // Check for updates after the UI is fully reconciled.
             checkForUpdate();
         });
 
-        // Load objectives and questions
+        // Load objectives and questions dynamically.
         async function loadObjectives() {
             const container = document.getElementById('menuView');
             container.innerHTML = '';
 
+            try {
+                const response = await fetch(`${API_BASE}/objectives?ts=${Date.now()}`, {
+                    cache: 'no-store'
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                objectivesData = await response.json();
+            } catch (error) {
+                console.error('Error loading objectives:', error);
+                objectivesData = [];
+                return;
+            }
+
             for (const obj of objectivesData) {
                 const questions = await fetchQuestions(obj.id);
+                if (!Array.isArray(questions) || questions.length === 0) {
+                    continue;
+                }
                 const objElement = createObjectiveElement(obj, questions);
                 container.appendChild(objElement);
             }
+
+            // Questions now exist in the DOM; reconcile stored progress again.
+            updateCompletionStatus();
         }
 
         // Fetch questions for an objective
         async function fetchQuestions(objId) {
             try {
-                const response = await fetch(`${API_BASE}/questions/${objId}`);
+                const response = await fetch(`${API_BASE}/questions/${objId}?ts=${Date.now()}`, { cache: 'no-store' });
                 if (response.ok) {
                     return await response.json();
                 }
@@ -1017,7 +1044,7 @@
         // Load completed labs from server
         async function loadCompletedLabs() {
             try {
-                const response = await fetch(`${API_BASE}/progress`);
+                const response = await fetch(`${API_BASE}/progress?ts=${Date.now()}`, { cache: 'no-store' });
                 if (response.ok) {
                     const data = await response.json();
                     completedLabs = new Set(data.completed || []);
@@ -1049,7 +1076,7 @@
         // Create objective element
         function createObjectiveElement(obj, questions) {
             // Calculate completion percentage
-            const completed = questions.filter(q => completedLabs.has(q.file)).length;
+            const completed = questions.filter(q => completedLabs.has(q.lab_id)).length;
             const total = questions.length;
             const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
             
@@ -1064,10 +1091,10 @@
                 </div>
                 <div class="questions-list" id="questions-${obj.id}">
                     ${questions.map((q, idx) => `
-                        <div class="question-item" data-obj="${obj.id}" data-idx="${idx}" data-file="${q.file}" onclick="selectQuestion(${obj.id}, ${idx}, '${q.file}')">
+                        <div class="question-item" data-obj="${obj.id}" data-idx="${idx}" data-file="${q.file}" data-lab-id="${q.lab_id}" onclick="selectQuestion(${obj.id}, ${idx}, '${q.file}')">
                             ${icons.terminal}
                             <span class="question-text">${q.question}</span>
-                            <span class="completion-status" data-file="${q.file}">${icons.incomplete}</span>
+                            <span class="completion-status" data-lab-id="${q.lab_id}">${completedLabs.has(q.lab_id) ? icons.complete : icons.incomplete}</span>
                         </div>
                     `).join('')}
                 </div>
@@ -1088,8 +1115,8 @@
         function updateCompletionStatus() {
             // Update individual question status icons
             document.querySelectorAll('.completion-status').forEach(el => {
-                const file = el.dataset.file;
-                if (file && completedLabs.has(file)) {
+                const labId = el.dataset.labId;
+                if (labId && completedLabs.has(labId)) {
                     el.innerHTML = icons.complete;
                 } else {
                     el.innerHTML = icons.incomplete;
@@ -1104,8 +1131,8 @@
                 let completed = 0;
                 
                 questions.forEach(q => {
-                    const file = q.dataset.file;
-                    if (file && completedLabs.has(file)) {
+                    const labId = q.dataset.labId;
+                    if (labId && completedLabs.has(labId)) {
                         completed++;
                     }
                 });
@@ -1277,7 +1304,7 @@
                     if (result.allComplete) {
                         document.getElementById('successMessage').classList.add('show');
                         document.getElementById('labControls').classList.add('finish-mode');
-                        completedLabs.add(currentLab.file);
+                        completedLabs.add(result.lab_id || currentLab.lab_id);
                         updateCompletionStatus();
                         allTasksComplete = true;
                     }

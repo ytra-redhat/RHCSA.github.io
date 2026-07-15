@@ -1,357 +1,337 @@
-#!/bin/bash
-# RHCSA EX200 Exam Simulator - One-Line Installer
-# Usage: curl -sL https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/main/Install_RHCSA_EX200_Exam_Simulator.sh | sudo bash
-# Usage with force (skip prompts): curl -sL ... | sudo bash -s -- --force
+#!/usr/bin/env bash
+# RHCSA EX200 Exam Simulator installer.
+# Run from a checked-out or copied ytra-redhat/RHCSA.github.io repository:
+#   sudo ./Install_RHCSA_EX200_Exam_Simulator.sh
+set -Eeuo pipefail
+umask 022
 
-# Parse arguments
-FORCE_UPDATE=false
-for arg in "$@"; do
-    case $arg in
-        --force|-f)
-            FORCE_UPDATE=true
-            ;;
-    esac
-done
-
-# Check if running as root - if not, re-run with sudo
-if [[ $EUID -ne 0 ]]; then
-    # Save the script to a temp file and re-execute with sudo
-    SCRIPT_TMP="/tmp/rhcsa_installer_$$.sh"
-    # Download the script again and run with sudo
-    echo "Root privileges required. Re-running with sudo..."
-    curl -sL https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/main/Install_RHCSA_EX200_Exam_Simulator.sh -o "$SCRIPT_TMP"
-    chmod +x "$SCRIPT_TMP"
-    sudo bash "$SCRIPT_TMP"
-    rm -f "$SCRIPT_TMP"
-    exit $?
-fi
-
-clear
-set -e
-
-# ============================================================================
-# CONFIGURATION
-# ============================================================================
-GITHUB_RAW_BASE="https://raw.githubusercontent.com/RHCSA/RHCSA.github.io/main/RHCSA_EX200_Exam_Simulator"
-GITHUB_API_URL="https://api.github.com/repos/RHCSA/RHCSA.github.io/contents/RHCSA_EX200_Exam_Simulator"
-GITHUB_REPO_API="https://api.github.com/repos/RHCSA/RHCSA.github.io/commits/main"
-VERSION_FILE="/usr/local/share/rhcsa/.version"
-# ============================================================================
-
-# Colors
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-CYAN='\033[0;36m'
-NC='\033[0m'
-BOLD='\033[1m'
-
-# Installation paths
+SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
+SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_PATH")" && pwd)"
 INSTALL_DIR="/usr/local/share/rhcsa"
 BIN_LINK="/usr/bin/rhcsa"
-TMP_DIR="/tmp/rhcsa_install_$$"
+SERVICE_FILE="/etc/systemd/system/rhcsa-webui.service"
+UPDATE_SERVICE_FILE="/etc/systemd/system/rhcsa-update.service"
+UPDATE_TIMER_FILE="/etc/systemd/system/rhcsa-update.timer"
+FORCE=false
+NON_INTERACTIVE=false
+AUTO_UPDATE_RUN=false
 
-echo ""
-echo -e "${YELLOW}${BOLD}╔════════════════════════════════════════════════════════════╗${NC}"
-echo -e "${YELLOW}${BOLD}║         RHCSA EX200 Exam Simulator - Installer             ║${NC}"
-echo -e "${YELLOW}${BOLD}╚════════════════════════════════════════════════════════════╝${NC}"
-echo ""
+for arg in "$@"; do
+  case "$arg" in
+    --force|-f) FORCE=true ;;
+    --non-interactive) NON_INTERACTIVE=true ;;
+    --auto-update) AUTO_UPDATE_RUN=true; NON_INTERACTIVE=true; FORCE=true ;;
+    *) echo "Unknown argument: $arg" >&2; exit 2 ;;
+  esac
+done
 
-# Cleanup function
+CONFIG_CANDIDATES=(
+  "${SCRIPT_DIR}/config/repository.env"
+  "${SCRIPT_DIR}/../config/repository.env"
+  "${INSTALL_DIR}/config/repository.env"
+)
+REPOSITORY_CONFIG=""
+for candidate in "${CONFIG_CANDIDATES[@]}"; do
+  [[ -f "$candidate" ]] || continue
+  REPOSITORY_CONFIG="$candidate"
+  break
+done
+if [[ -z "$REPOSITORY_CONFIG" ]]; then
+  echo "ERROR: central repository config not found." >&2
+  echo "Run this installer from a complete copy of ytra-redhat/RHCSA.github.io." >&2
+  exit 1
+fi
+# shellcheck disable=SC1090
+source "$REPOSITORY_CONFIG"
+
+: "${RHCSA_GITHUB_REPOSITORY:?Missing RHCSA_GITHUB_REPOSITORY}"
+: "${RHCSA_GITHUB_BRANCH:?Missing RHCSA_GITHUB_BRANCH}"
+: "${RHCSA_AUTO_UPDATE:=true}"
+
+if [[ "$RHCSA_GITHUB_REPOSITORY" != "ytra-redhat/RHCSA.github.io" ]]; then
+  echo "ERROR: this release is locked to ytra-redhat/RHCSA.github.io." >&2
+  echo "Configured value: $RHCSA_GITHUB_REPOSITORY" >&2
+  exit 1
+fi
+if [[ "$RHCSA_GITHUB_BRANCH" != "main" ]]; then
+  echo "ERROR: this release requires branch main." >&2
+  exit 1
+fi
+
+GITHUB_WEB_URL="https://github.com/${RHCSA_GITHUB_REPOSITORY}"
+GITHUB_API_URL="https://api.github.com/repos/${RHCSA_GITHUB_REPOSITORY}"
+GITHUB_ARCHIVE_URL="${GITHUB_WEB_URL}/archive/refs/heads/${RHCSA_GITHUB_BRANCH}.tar.gz"
+QUESTIONS_API_URL="${GITHUB_API_URL}/contents/RHCSA_EX200_Exam_Simulator/questions?ref=${RHCSA_GITHUB_BRANCH}"
+COMMIT_API_URL="${GITHUB_API_URL}/commits/${RHCSA_GITHUB_BRANCH}"
+
+if [[ $EUID -ne 0 ]]; then
+  if [[ ! -f "$SCRIPT_PATH" ]]; then
+    echo "ERROR: installer must be run from a local file when privilege escalation is needed." >&2
+    exit 1
+  fi
+  exec sudo --preserve-env=RHCSA_REPOSITORY_CONFIG bash "$SCRIPT_PATH" "$@"
+fi
+
+RED=$'\033[31m'
+GREEN=$'\033[32m'
+YELLOW=$'\033[33m'
+CYAN=$'\033[36m'
+RESET=$'\033[0m'
+BOLD=$'\033[1m'
+
+TMP_DIR="$(mktemp -d /tmp/rhcsa-install.XXXXXX)"
+ARCHIVE_FILE="${TMP_DIR}/repository.tar.gz"
+EXTRACT_DIR="${TMP_DIR}/extract"
+STAGING_DIR="${INSTALL_DIR}.new.$$"
+BACKUP_DIR="${INSTALL_DIR}.previous.$$"
+PROGRESS_BACKUP="${TMP_DIR}/progress.json"
+LEGACY_PROGRESS_BACKUP="${TMP_DIR}/legacy.progress"
+INSTALL_ACTIVATED=false
+OLD_INSTALL_MOVED=false
+
 cleanup() {
-    rm -rf "$TMP_DIR" 2>/dev/null || true
+  local rc=$?
+  rm -rf "$TMP_DIR" "$STAGING_DIR" 2>/dev/null || true
+  if [[ $rc -ne 0 && "$OLD_INSTALL_MOVED" == "true" && ! -d "$INSTALL_DIR" && -d "$BACKUP_DIR" ]]; then
+    mv "$BACKUP_DIR" "$INSTALL_DIR" || true
+    systemctl daemon-reload >/dev/null 2>&1 || true
+    systemctl restart rhcsa-webui.service >/dev/null 2>&1 || true
+  fi
+  exit "$rc"
 }
 trap cleanup EXIT
 
-# Check for updates if already installed
-check_for_update() {
-    # Skip if force update flag is set
-    if [[ "$FORCE_UPDATE" == "true" ]]; then
-        echo -e "${GREEN}Force update requested, proceeding with installation...${NC}"
-        echo ""
-        return 0
-    fi
-    
-    if [[ -f "$VERSION_FILE" ]]; then
-        INSTALLED_COMMIT=$(cat "$VERSION_FILE" 2>/dev/null)
-        LATEST_COMMIT=$(curl -sL "$GITHUB_REPO_API" 2>/dev/null | grep '"sha"' | head -1 | sed 's/.*"sha": "\([^"]*\)".*/\1/')
-        
-        if [[ -n "$LATEST_COMMIT" ]] && [[ "$INSTALLED_COMMIT" != "$LATEST_COMMIT" ]]; then
-            echo ""
-            echo -e "${CYAN}${BOLD}╔════════════════════════════════════════════════════════════╗${NC}"
-            echo -e "${CYAN}${BOLD}║              Update Available!                              ║${NC}"
-            echo -e "${CYAN}${BOLD}╚════════════════════════════════════════════════════════════╝${NC}"
-            echo ""
-            echo -e "  Installed: ${YELLOW}${INSTALLED_COMMIT:0:7}${NC}"
-            echo -e "  Latest:    ${GREEN}${LATEST_COMMIT:0:7}${NC}"
-            echo ""
-            read -p "  Do you want to update now? (y/n): " -n 1 -r
-            echo ""
-            if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-                echo ""
-                echo -e "${YELLOW}Update skipped. Run the installer again to update later.${NC}"
-                echo ""
-                exit 0
-            fi
-            echo ""
-            echo -e "${GREEN}Proceeding with update...${NC}"
-            echo ""
-        elif [[ -n "$LATEST_COMMIT" ]] && [[ "$INSTALLED_COMMIT" == "$LATEST_COMMIT" ]]; then
-            echo ""
-            echo -e "${GREEN}${BOLD}╔════════════════════════════════════════════════════════════╗${NC}"
-            echo -e "${GREEN}${BOLD}║              Already up to date!                           ║${NC}"
-            echo -e "${GREEN}${BOLD}╚════════════════════════════════════════════════════════════╝${NC}"
-            echo ""
-            echo -e "  Version: ${GREEN}${INSTALLED_COMMIT:0:7}${NC}"
-            echo ""
-            read -p "  Do you want to reinstall anyway? (y/n): " -n 1 -r
-            echo ""
-            if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-                echo ""
-                exit 0
-            fi
-            echo ""
-        fi
-    fi
+log_step() { printf '%s%s%s\n' "$CYAN" "$1" "$RESET"; }
+log_ok() { printf '%s✓ %s%s\n' "$GREEN" "$1" "$RESET"; }
+die() { printf '%sERROR: %s%s\n' "$RED" "$1" "$RESET" >&2; exit 1; }
+
+install_packages() {
+  local packages=("$@")
+  if command -v dnf >/dev/null 2>&1; then
+    dnf install -y "${packages[@]}"
+  elif command -v yum >/dev/null 2>&1; then
+    yum install -y "${packages[@]}"
+  else
+    die "dnf or yum is required on the RHCSA practice VM."
+  fi
 }
 
-# Check for updates before proceeding
-check_for_update
+ensure_dependencies() {
+  log_step "Checking installer dependencies..."
+  command -v curl >/dev/null 2>&1 || install_packages curl
+  command -v python3 >/dev/null 2>&1 || install_packages python3
+  command -v tar >/dev/null 2>&1 || install_packages tar
+  command -v tmux >/dev/null 2>&1 || install_packages tmux
 
-# Step 1: Check internet connectivity
-echo -e "  ${YELLOW}[1/5]${NC} Checking internet connectivity..."
-if ! ping -c 1 github.com &>/dev/null && ! curl -sI https://github.com &>/dev/null; then
-    echo -e "        ${RED}✗ No internet connection detected${NC}"
-    echo ""
-    echo -e "${YELLOW}${BOLD}Please configure your VM for internet access:${NC}"
-    echo ""
-    echo -e "  ${CYAN}1. Shut down the VM${NC}"
-    echo -e "  ${CYAN}2. In VM settings, set Network Adapter to 'Bridged' or 'NAT'${NC}"
-    echo -e "  ${CYAN}3. Start the VM${NC}"
-    echo -e "  ${CYAN}4. Run: nmcli device status${NC}"
-    echo -e "  ${CYAN}5. If interface is disconnected, run: nmcli connection up <connection-name>${NC}"
-    echo -e "  ${CYAN}6. Verify with: ping -c 3 google.com${NC}"
-    echo ""
-    echo -e "${YELLOW}Then re-run this installer.${NC}"
-    echo ""
-    exit 1
-fi
-echo -e "        ${GREEN}✓${NC} Internet connection available"
+  if ! command -v ttyd >/dev/null 2>&1; then
+    # No download from another GitHub repository is permitted.
+    install_packages epel-release >/dev/null 2>&1 || true
+    install_packages ttyd >/dev/null 2>&1 || true
+  fi
+  command -v ttyd >/dev/null 2>&1 || die \
+    "ttyd is unavailable from configured RPM repositories. Install ttyd from an approved RPM repository and rerun."
+  log_ok "Dependencies available"
+}
 
-# Step 2: Check for required tools
-echo -e "  ${YELLOW}[2/7]${NC} Checking requirements..."
-if ! command -v curl &>/dev/null; then
-    echo -e "        ${CYAN}Installing curl...${NC}"
-    dnf install -y curl &>/dev/null || yum install -y curl &>/dev/null
-fi
-if ! command -v tmux &>/dev/null; then
-    echo -e "        ${CYAN}Installing tmux...${NC}"
-    dnf install -y tmux &>/dev/null || yum install -y tmux &>/dev/null
-fi
-if ! command -v python3 &>/dev/null; then
-    echo -e "        ${CYAN}Installing python3...${NC}"
-    dnf install -y python3 &>/dev/null || yum install -y python3 &>/dev/null
-fi
-if ! command -v ttyd &>/dev/null; then
-    echo -e "        ${CYAN}Installing ttyd for web terminal...${NC}"
-    # Try EPEL first
-    dnf install -y epel-release &>/dev/null || yum install -y epel-release &>/dev/null || true
-    dnf install -y ttyd &>/dev/null || yum install -y ttyd &>/dev/null || {
-        # If package not available, download binary
-        echo -e "        ${CYAN}Downloading ttyd binary...${NC}"
-        curl -sL https://github.com/tsl0922/ttyd/releases/latest/download/ttyd.x86_64 -o /usr/local/bin/ttyd
-        chmod +x /usr/local/bin/ttyd
-    }
-fi
-echo -e "        ${GREEN}✓${NC} Requirements satisfied (curl, tmux, python3, ttyd)"
+github_get() {
+  local url="$1"
+  curl --fail --location --silent --show-error \
+    -H 'Accept: application/vnd.github+json' \
+    -H 'User-Agent: RHCSA-Exam-Simulator' \
+    "$url"
+}
 
-# Step 3: Create temp directory and download files
-echo -e "  ${YELLOW}[3/7]${NC} Downloading RHCSA Exam Simulator files..."
-mkdir -p "$TMP_DIR/RHCSA_EX200_Exam_Simulator/questions"
-mkdir -p "$TMP_DIR/RHCSA_EX200_Exam_Simulator/webui"
+discover_remote_chapters() {
+  log_step "Discovering chapters from ${RHCSA_GITHUB_REPOSITORY}/${RHCSA_GITHUB_BRANCH}..." >&2
+  local response="${TMP_DIR}/questions.json"
+  github_get "$QUESTIONS_API_URL" > "$response"
+  python3 - "$response" <<'PY'
+import json
+import sys
+from pathlib import Path
+data = json.loads(Path(sys.argv[1]).read_text())
+chapters = sorted(
+    (item["name"] for item in data
+     if item.get("type") == "dir" and str(item.get("name", "")).isdigit()),
+    key=int,
+)
+if not chapters:
+    raise SystemExit("No numeric question chapters found in configured repository")
+print("\n".join(chapters))
+PY
+}
 
-# Download main rhcsa executable
-echo -e "        ${CYAN}↓${NC} Downloading main executable..."
-curl -sL "${GITHUB_RAW_BASE}/rhcsa" -o "$TMP_DIR/RHCSA_EX200_Exam_Simulator/rhcsa"
+get_latest_commit() {
+  github_get "$COMMIT_API_URL" |
+    python3 -c 'import json,sys; print(json.load(sys.stdin).get("sha",""))'
+}
 
-# Download questions - iterate through question directories (1-10)
-for i in {1..10}; do
-    echo -ne "        ${CYAN}↓${NC} Downloading Chapter $i questions...     \r"
-    mkdir -p "$TMP_DIR/RHCSA_EX200_Exam_Simulator/questions/$i"
-    
-    # Get list of files in the question directory using GitHub API
-    files=$(curl -sL "https://api.github.com/repos/RHCSA/RHCSA.github.io/contents/RHCSA_EX200_Exam_Simulator/questions/$i" 2>/dev/null | grep '"name"' | sed 's/.*"name": "\([^"]*\)".*/\1/')
-    
-    # If API fails, try common file patterns
-    if [[ -z "$files" ]]; then
-        # Try downloading numbered question files
-        for q in {1..20}; do
-            curl -sL "${GITHUB_RAW_BASE}/questions/$i/q${q}.sh" -o "$TMP_DIR/RHCSA_EX200_Exam_Simulator/questions/$i/q${q}.sh" 2>/dev/null || true
-            curl -sL "${GITHUB_RAW_BASE}/questions/$i/question${q}.sh" -o "$TMP_DIR/RHCSA_EX200_Exam_Simulator/questions/$i/question${q}.sh" 2>/dev/null || true
-        done
-    else
-        file_count=0
-        for file in $files; do
-            curl -sL "${GITHUB_RAW_BASE}/questions/$i/$file" -o "$TMP_DIR/RHCSA_EX200_Exam_Simulator/questions/$i/$file" 2>/dev/null || true
-            file_count=$((file_count + 1))
-            echo -ne "        ${CYAN}↓${NC} Chapter $i: Downloaded $file_count files...     \r"
-        done
+download_and_validate() {
+  mapfile -t REMOTE_CHAPTERS < <(discover_remote_chapters)
+  [[ ${#REMOTE_CHAPTERS[@]} -gt 0 ]] || die "No remote chapters discovered."
+  printf '  Remote chapters: %s\n' "${REMOTE_CHAPTERS[*]}"
+
+  LATEST_COMMIT="$(get_latest_commit)"
+  [[ "$LATEST_COMMIT" =~ ^[0-9a-fA-F]{40}$ ]] || die "Could not determine latest commit."
+
+  if [[ -f "${INSTALL_DIR}/.version" && "$FORCE" == "false" ]]; then
+    local installed
+    installed="$(tr -d '[:space:]' < "${INSTALL_DIR}/.version")"
+    if [[ "$installed" == "$LATEST_COMMIT" ]]; then
+      if "$NON_INTERACTIVE"; then
+        log_ok "Already up to date (${LATEST_COMMIT:0:7})"
+        exit 0
+      fi
+      read -r -p "Already up to date. Reinstall anyway? [y/N] " reply
+      [[ "$reply" =~ ^[Yy]$ ]] || exit 0
     fi
-    echo -e "        ${GREEN}✓${NC} Chapter $i questions downloaded          "
-done
+  fi
 
-# Download README if exists
-curl -sL "${GITHUB_RAW_BASE}/questions/README.md" -o "$TMP_DIR/RHCSA_EX200_Exam_Simulator/questions/README.md" 2>/dev/null || true
+  log_step "Downloading complete main branch archive from ${RHCSA_GITHUB_REPOSITORY}..."
+  curl --fail --location --silent --show-error "$GITHUB_ARCHIVE_URL" -o "$ARCHIVE_FILE"
+  mkdir -p "$EXTRACT_DIR"
+  tar -xzf "$ARCHIVE_FILE" -C "$EXTRACT_DIR"
 
-# Download Web UI files
-echo -e "        ${CYAN}↓${NC} Downloading Web Interface files..."
-curl -sL "${GITHUB_RAW_BASE}/webui/index.html" -o "$TMP_DIR/RHCSA_EX200_Exam_Simulator/webui/index.html" 2>/dev/null || true
-curl -sL "${GITHUB_RAW_BASE}/webui/server.py" -o "$TMP_DIR/RHCSA_EX200_Exam_Simulator/webui/server.py" 2>/dev/null || true
-curl -sL "${GITHUB_RAW_BASE}/webui/start-webui.sh" -o "$TMP_DIR/RHCSA_EX200_Exam_Simulator/webui/start-webui.sh" 2>/dev/null || true
-curl -sL "${GITHUB_RAW_BASE}/webui/rhcsa-webui.service" -o "$TMP_DIR/RHCSA_EX200_Exam_Simulator/webui/rhcsa-webui.service" 2>/dev/null || true
-echo -e "        ${GREEN}✓${NC} Web Interface files downloaded"
+  SOURCE_REPOSITORY="$(
+    find "$EXTRACT_DIR" -mindepth 1 -maxdepth 1 -type d -print -quit
+  )"
+  [[ -n "$SOURCE_REPOSITORY" ]] || die "Downloaded archive has no repository root."
+  SOURCE_SIMULATOR="${SOURCE_REPOSITORY}/RHCSA_EX200_Exam_Simulator"
+  SOURCE_CONFIG="${SOURCE_REPOSITORY}/config/repository.env"
+  SOURCE_INSTALLER="${SOURCE_REPOSITORY}/Install_RHCSA_EX200_Exam_Simulator.sh"
+  [[ -d "$SOURCE_SIMULATOR" ]] || die "Simulator directory missing in downloaded archive."
+  [[ -f "$SOURCE_CONFIG" ]] || die "Central repository config missing in downloaded archive."
+  [[ -f "$SOURCE_INSTALLER" ]] || die "Installer missing in downloaded archive."
 
-# Remove empty files
-find "$TMP_DIR" -type f -empty -delete 2>/dev/null || true
+  mapfile -t LOCAL_CHAPTERS < <(
+    find "${SOURCE_SIMULATOR}/questions" -mindepth 1 -maxdepth 1 -type d -printf '%f\n' |
+      awk '/^[0-9]+$/' |
+      sort -n
+  )
+  [[ "${REMOTE_CHAPTERS[*]}" == "${LOCAL_CHAPTERS[*]}" ]] || die \
+    "Remote chapter discovery and downloaded archive differ."
 
-echo -e "        ${GREEN}✓${NC} All files downloaded"
+  for chapter in "${LOCAL_CHAPTERS[@]}"; do
+    find "${SOURCE_SIMULATOR}/questions/${chapter}" -maxdepth 1 \
+      -type f -name 'lab_*.sh' -print -quit | grep -q . ||
+      die "Chapter ${chapter} contains no active lab_*.sh files."
+  done
 
-# Step 4: Install
-echo -e "  ${YELLOW}[4/7]${NC} Installing to ${INSTALL_DIR}..."
+  log_step "Running complete release validation..."
+  python3 "${SOURCE_SIMULATOR}/scripts/validate_release.py" "$SOURCE_REPOSITORY" \
+    > "${TMP_DIR}/validation.json"
+  log_ok "Release validation passed"
 
-# Preserve progress file from previous installation
-PROGRESS_FILE="${INSTALL_DIR}/.progress"
-PROGRESS_BACKUP="/tmp/.rhcsa_progress_backup_$$"
-if [[ -f "$PROGRESS_FILE" ]]; then
-    cp "$PROGRESS_FILE" "$PROGRESS_BACKUP" 2>/dev/null
-    echo -e "        ${CYAN}ℹ${NC} Preserving previous progress..."
-fi
-# Also check legacy location
-if [[ -f "/tmp/.rhcsa_progress" ]] && [[ ! -f "$PROGRESS_BACKUP" ]]; then
-    cp "/tmp/.rhcsa_progress" "$PROGRESS_BACKUP" 2>/dev/null
-    echo -e "        ${CYAN}ℹ${NC} Migrating progress from legacy location..."
-fi
+  SOURCE_REPOSITORY="$SOURCE_REPOSITORY"
+  SOURCE_SIMULATOR="$SOURCE_SIMULATOR"
+  SOURCE_CONFIG="$SOURCE_CONFIG"
+  SOURCE_INSTALLER="$SOURCE_INSTALLER"
+}
 
-# Remove previous installation
-rm -rf "$INSTALL_DIR" 2>/dev/null || true
-mkdir -p "$INSTALL_DIR"
-cp -r "$TMP_DIR/RHCSA_EX200_Exam_Simulator/"* "$INSTALL_DIR/"
+preserve_state() {
+  if [[ -f "${INSTALL_DIR}/progress.json" ]]; then
+    cp -a "${INSTALL_DIR}/progress.json" "$PROGRESS_BACKUP"
+  fi
+  if [[ -f "${INSTALL_DIR}/.progress" ]]; then
+    cp -a "${INSTALL_DIR}/.progress" "$LEGACY_PROGRESS_BACKUP"
+  fi
+  return 0
+}
 
-# Restore progress file
-if [[ -f "$PROGRESS_BACKUP" ]]; then
-    cp "$PROGRESS_BACKUP" "$PROGRESS_FILE" 2>/dev/null
-    rm -f "$PROGRESS_BACKUP" 2>/dev/null
-    echo -e "        ${GREEN}✓${NC} Progress restored"
-fi
+stage_installation() {
+  log_step "Staging validated installation..."
+  rm -rf "$STAGING_DIR"
+  mkdir -p "$STAGING_DIR"
+  cp -a "${SOURCE_SIMULATOR}/." "$STAGING_DIR/"
+  mkdir -p "${STAGING_DIR}/config" "${STAGING_DIR}/installer"
+  cp -a "$SOURCE_CONFIG" "${STAGING_DIR}/config/repository.env"
+  cp -a "$SOURCE_INSTALLER" "${STAGING_DIR}/installer/Install_RHCSA_EX200_Exam_Simulator.sh"
+  printf '%s\n' "$LATEST_COMMIT" > "${STAGING_DIR}/.version"
 
-# Convert Windows line endings to Unix (CRLF -> LF)
-find "$INSTALL_DIR" -type f -name "*.sh" -exec sed -i 's/\r$//' {} \; 2>/dev/null || true
-sed -i 's/\r$//' "$INSTALL_DIR/rhcsa" 2>/dev/null || true
+  if [[ -f "$PROGRESS_BACKUP" ]]; then
+    cp -a "$PROGRESS_BACKUP" "${STAGING_DIR}/progress.json"
+  fi
+  if [[ -f "$LEGACY_PROGRESS_BACKUP" ]]; then
+    cp -a "$LEGACY_PROGRESS_BACKUP" "${STAGING_DIR}/.progress"
+  fi
 
-chmod +x "$INSTALL_DIR/rhcsa"
-chmod +x "$INSTALL_DIR"/*.sh 2>/dev/null || true
-chmod +x "$INSTALL_DIR/webui"/*.sh 2>/dev/null || true
-chmod +x "$INSTALL_DIR/webui"/*.py 2>/dev/null || true
-find "$INSTALL_DIR/questions" -name "*.sh" -exec chmod +x {} \; 2>/dev/null || true
-echo -e "        ${GREEN}✓${NC} Files installed"
+  find "$STAGING_DIR" -type f -name '*.sh' -exec sed -i 's/\r$//' {} +
+  sed -i 's/\r$//' "${STAGING_DIR}/rhcsa"
+  chmod 0755 "${STAGING_DIR}/rhcsa"
+  chmod 0755 "${STAGING_DIR}/installer/Install_RHCSA_EX200_Exam_Simulator.sh"
+  find "${STAGING_DIR}/scripts" -maxdepth 1 -type f -exec chmod 0755 {} +
+  find "${STAGING_DIR}/webui" -maxdepth 1 -type f -name '*.sh' -exec chmod 0755 {} +
+  find "${STAGING_DIR}/questions" -type f -name 'lab_*.sh' -exec chmod 0755 {} +
 
-# Step 5: Create command
-echo -e "  ${YELLOW}[5/7]${NC} Creating 'rhcsa' command..."
-ln -sf "$INSTALL_DIR/rhcsa" "$BIN_LINK"
-echo -e "        ${GREEN}✓${NC} Command created"
+  python3 "${STAGING_DIR}/scripts/progressctl.py" migrate \
+    --legacy "${STAGING_DIR}/.progress" >/dev/null
+  log_ok "Staging complete"
+}
 
-# Step 6: Configure firewall and SELinux
-echo -e "  ${YELLOW}[6/7]${NC} Configuring firewall and SELinux..."
-WEBUI_PORT=8080
-TERMINAL_PORT=7682
+activate_installation() {
+  log_step "Activating installation..."
+  systemctl stop rhcsa-webui.service >/dev/null 2>&1 || true
+  systemctl stop rhcsa-update.timer >/dev/null 2>&1 || true
 
-# Configure firewall
-if command -v firewall-cmd &>/dev/null; then
-    if systemctl is-active firewalld &>/dev/null; then
-        firewall-cmd --permanent --add-port=${WEBUI_PORT}/tcp 2>/dev/null || true
-        firewall-cmd --permanent --add-port=${TERMINAL_PORT}/tcp 2>/dev/null || true
-        firewall-cmd --reload 2>/dev/null || true
-        echo -e "        ${GREEN}✓${NC} Firewall rules added (ports ${WEBUI_PORT}, ${TERMINAL_PORT})"
-    else
-        echo -e "        ${YELLOW}ℹ${NC} Firewalld not running, skipping firewall configuration"
-    fi
-else
-    echo -e "        ${YELLOW}ℹ${NC} firewall-cmd not found, skipping firewall configuration"
-fi
+  rm -rf "$BACKUP_DIR"
+  if [[ -d "$INSTALL_DIR" ]]; then
+    mv "$INSTALL_DIR" "$BACKUP_DIR"
+    OLD_INSTALL_MOVED=true
+  fi
+  mv "$STAGING_DIR" "$INSTALL_DIR"
+  INSTALL_ACTIVATED=true
 
-# Configure SELinux
-if command -v semanage &>/dev/null; then
-    semanage port -a -t http_port_t -p tcp $WEBUI_PORT 2>/dev/null || true
-    semanage port -a -t http_port_t -p tcp $TERMINAL_PORT 2>/dev/null || true
-    echo -e "        ${GREEN}✓${NC} SELinux configured"
-else
-    if command -v dnf &>/dev/null; then
-        dnf install -y policycoreutils-python-utils &>/dev/null || true
-        if command -v semanage &>/dev/null; then
-            semanage port -a -t http_port_t -p tcp $WEBUI_PORT 2>/dev/null || true
-            semanage port -a -t http_port_t -p tcp $TERMINAL_PORT 2>/dev/null || true
-            echo -e "        ${GREEN}✓${NC} SELinux configured"
-        fi
-    fi
-fi
+  ln -sfn "${INSTALL_DIR}/rhcsa" "$BIN_LINK"
+  cp -a "${INSTALL_DIR}/webui/rhcsa-webui.service" "$SERVICE_FILE"
+  cp -a "${INSTALL_DIR}/systemd/rhcsa-update.service" "$UPDATE_SERVICE_FILE"
+  cp -a "${INSTALL_DIR}/systemd/rhcsa-update.timer" "$UPDATE_TIMER_FILE"
+  systemctl daemon-reload
 
-# Step 7: Set up web interface service
-echo -e "  ${YELLOW}[7/7]${NC} Setting up Web Interface service..."
-if [[ -f "$INSTALL_DIR/webui/rhcsa-webui.service" ]]; then
-    cp "$INSTALL_DIR/webui/rhcsa-webui.service" /etc/systemd/system/
-    systemctl daemon-reload
-    systemctl enable rhcsa-webui &>/dev/null || true
-    
-    # Start the service and verify it's running
-    systemctl start rhcsa-webui
-    sleep 2
-    
-    if systemctl is-active rhcsa-webui &>/dev/null; then
-        echo -e "        ${GREEN}✓${NC} Web Interface service installed and running"
-    else
-        echo -e "        ${YELLOW}ℹ${NC} Web Interface service installed (may need manual start)"
-        echo -e "        ${YELLOW}ℹ${NC} Run: systemctl start rhcsa-webui"
-    fi
-else
-    echo -e "        ${YELLOW}ℹ${NC} Web Interface service file not found, skipping"
-fi
+  systemctl enable --now rhcsa-webui.service
+  if [[ "$RHCSA_AUTO_UPDATE" == "true" ]]; then
+    systemctl enable --now rhcsa-update.timer
+  else
+    systemctl disable --now rhcsa-update.timer >/dev/null 2>&1 || true
+  fi
 
-# Step 8: Save version (commit hash) for update checking
-echo -e "  ${YELLOW}[8/8]${NC} Saving version information..."
-LATEST_COMMIT=$(curl -sL "$GITHUB_REPO_API" 2>/dev/null | grep '"sha"' | head -1 | sed 's/.*"sha": "\([^"]*\)".*/\1/')
-if [[ -n "$LATEST_COMMIT" ]]; then
-    echo "$LATEST_COMMIT" > "$VERSION_FILE"
-    echo -e "        ${GREEN}✓${NC} Version saved (${LATEST_COMMIT:0:7})"
-else
-    echo -e "        ${YELLOW}ℹ${NC} Could not fetch version info"
-fi
+  rm -rf "$BACKUP_DIR"
+  OLD_INSTALL_MOVED=false
+  log_ok "Installation activated"
+}
 
-# Verify
-echo ""
-if [[ -x "$BIN_LINK" ]] && [[ -f "$INSTALL_DIR/rhcsa" ]]; then
-    echo -e "${GREEN}${BOLD}════════════════════════════════════════════════════════════${NC}"
-    echo -e "${GREEN}${BOLD}  ✓ Installation successful!${NC}"
-    echo -e "${GREEN}${BOLD}════════════════════════════════════════════════════════════${NC}"
-    echo ""
-    echo -e "  ${BOLD}Terminal Interface:${NC}"
-    echo -e "    Run the simulator with: ${CYAN}rhcsa${NC}"
-    echo ""
-    echo -e "  ${BOLD}Web Interface:${NC}"
-    # Get server IPs
-    SERVER_IPS=$(ip -4 addr show 2>/dev/null | grep -oP '(?<=inet\s)\d+(\.\d+){3}' | grep -v '127.0.0.1')
-    if [[ -n "$SERVER_IPS" ]]; then
-        for ip in $SERVER_IPS; do
-            echo -e "    ${CYAN}http://${ip}:${WEBUI_PORT}${NC}"
-        done
-    else
-        echo -e "    ${CYAN}http://localhost:${WEBUI_PORT}${NC}"
-    fi
-    echo ""
-    echo -e "  ${YELLOW}[root@server ~]#${NC} rhcsa"
-    echo ""
-    echo -e "  ${YELLOW}Note: You must run as root for the labs to work.${NC}"
-    echo ""
-else
-    echo -e "${RED}Installation failed. Please check errors above.${NC}"
-    exit 1
-fi
+configure_host() {
+  local web_port=8080 terminal_port=7682
+  if command -v firewall-cmd >/dev/null 2>&1 &&
+     systemctl is-active --quiet firewalld; then
+    firewall-cmd --permanent --add-port="${web_port}/tcp" >/dev/null
+    firewall-cmd --permanent --add-port="${terminal_port}/tcp" >/dev/null
+    firewall-cmd --reload >/dev/null
+  fi
+  if ! command -v semanage >/dev/null 2>&1; then
+    install_packages policycoreutils-python-utils >/dev/null 2>&1 || true
+  fi
+  if command -v semanage >/dev/null 2>&1; then
+    semanage port -a -t http_port_t -p tcp "$web_port" 2>/dev/null ||
+      semanage port -m -t http_port_t -p tcp "$web_port" 2>/dev/null || true
+    semanage port -a -t http_port_t -p tcp "$terminal_port" 2>/dev/null ||
+      semanage port -m -t http_port_t -p tcp "$terminal_port" 2>/dev/null || true
+  fi
+}
+
+main() {
+  printf '\n%s%sRHCSA EX200 Exam Simulator installer%s\n\n' "$YELLOW" "$BOLD" "$RESET"
+  printf 'Repository: %s\nBranch: %s\n\n' "$RHCSA_GITHUB_REPOSITORY" "$RHCSA_GITHUB_BRANCH"
+  ensure_dependencies
+  download_and_validate
+  preserve_state
+  stage_installation
+  activate_installation
+  configure_host
+
+  printf '\n%sInstallation complete%s\n' "$GREEN" "$RESET"
+  printf 'Installed commit: %s\n' "${LATEST_COMMIT:0:7}"
+  printf 'Chapters installed: %s\n' "${LOCAL_CHAPTERS[*]}"
+  printf 'CLI: rhcsa\nWeb UI: http://<vm-ip>:8080\n'
+}
+
+main "$@"
