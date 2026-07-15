@@ -42,9 +42,13 @@ done
 # Bootstrap defaults allow safe streamed execution. A local or installed
 # repository.env may override operational settings, but the repository and
 # branch are validated below and may never point outside the own fork.
-RHCSA_GITHUB_REPOSITORY="${RHCSA_GITHUB_REPOSITORY:-$BOOTSTRAP_REPOSITORY}"
-RHCSA_GITHUB_BRANCH="${RHCSA_GITHUB_BRANCH:-$BOOTSTRAP_BRANCH}"
-RHCSA_AUTO_UPDATE="${RHCSA_AUTO_UPDATE:-true}"
+if [[ -z "${RHCSA_GITHUB_REPOSITORY-}" ]]; then
+  printf -v RHCSA_GITHUB_REPOSITORY '%s' "$BOOTSTRAP_REPOSITORY"
+fi
+if [[ -z "${RHCSA_GITHUB_BRANCH-}" ]]; then
+  printf -v RHCSA_GITHUB_BRANCH '%s' "$BOOTSTRAP_BRANCH"
+fi
+: "${RHCSA_AUTO_UPDATE:=true}"
 
 CONFIG_CANDIDATES=(
   "${SCRIPT_DIR}/config/repository.env"
@@ -90,7 +94,7 @@ if [[ $EUID -ne 0 ]]; then
 
   # Streamed without sudo: download the same installer only from the locked
   # own fork and execute that local temporary file with sudo.
-  BOOTSTRAP_INSTALLER_URL="https://raw.githubusercontent.com/${BOOTSTRAP_REPOSITORY}/${BOOTSTRAP_BRANCH}/Install_RHCSA_EX200_Exam_Simulator.sh"
+  BOOTSTRAP_INSTALLER_URL="https://raw.githubusercontent.com/${RHCSA_GITHUB_REPOSITORY}/${RHCSA_GITHUB_BRANCH}/Install_RHCSA_EX200_Exam_Simulator.sh"
   BOOTSTRAP_TMP="$(mktemp /tmp/rhcsa-installer.XXXXXX.sh)"
   trap 'rm -f "$BOOTSTRAP_TMP"' EXIT
   curl --fail --location --silent --show-error     "$BOOTSTRAP_INSTALLER_URL" -o "$BOOTSTRAP_TMP"
@@ -289,8 +293,12 @@ download_and_validate() {
   done
 
   log_step "Running complete release validation..."
-  python3 "${SOURCE_SIMULATOR}/scripts/validate_release.py" "$SOURCE_REPOSITORY" \
-    > "${TMP_DIR}/validation.json"
+  if ! python3 "${SOURCE_SIMULATOR}/scripts/validate_release.py" "$SOURCE_REPOSITORY" \
+      > "${TMP_DIR}/validation.json"; then
+    printf '\nRelease validation failed:\n' >&2
+    cat "${TMP_DIR}/validation.json" >&2
+    die "Downloaded release did not pass validation."
+  fi
   log_ok "Release validation passed"
 
   SOURCE_REPOSITORY="$SOURCE_REPOSITORY"
