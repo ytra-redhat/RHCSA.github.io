@@ -253,6 +253,18 @@ def get_progress() -> dict:
     return {"completed": sorted(PROGRESS.list_completed())}
 
 
+def get_health() -> dict:
+    objectives = discover_objectives()
+    terminal = ensure_terminal_session()
+    return {
+        "success": bool(objectives) and terminal.get("success", False),
+        "chapter_count": len(objectives),
+        "chapters": [item["id"] for item in objectives],
+        "question_count": sum(item.get("question_count", 0) for item in objectives),
+        "terminal_session": terminal,
+    }
+
+
 def shell_prelude() -> str:
     return r'''
 RESET=$'\e[0m'
@@ -321,29 +333,86 @@ done
     return status
 
 
-def reset_terminal() -> None:
+def ensure_terminal_session() -> dict:
+    """Ensure the shared tmux session exists before the API uses it."""
+    try:
+        check = subprocess.run(
+            ["tmux", "has-session", "-t", TMUX_SESSION],
+            capture_output=True,
+            text=True,
+        )
+        if check.returncode == 0:
+            return {"success": True}
+
+        create = subprocess.run(
+            ["tmux", "new-session", "-d", "-s", TMUX_SESSION, "-c", "/tmp"],
+            capture_output=True,
+            text=True,
+        )
+        if create.returncode:
+            return {
+                "success": False,
+                "error": create.stderr.strip() or create.stdout.strip()
+                or "Unable to create terminal session",
+            }
+        return {"success": True}
+    except OSError as exc:
+        return {"success": False, "error": str(exc)}
+
+
+def reset_terminal() -> dict:
+    """Reset the original shared terminal session to a predictable state."""
+    session = ensure_terminal_session()
+    if not session["success"]:
+        return session
+
     subprocess.run(
         ["tmux", "send-keys", "-t", TMUX_SESSION, "C-c"],
         capture_output=True,
     )
-    subprocess.run(
+    result = subprocess.run(
         ["tmux", "send-keys", "-t", TMUX_SESSION, "clear; cd /tmp", "Enter"],
         capture_output=True,
+        text=True,
     )
+    if result.returncode:
+        return {
+            "success": False,
+            "error": result.stderr.strip() or result.stdout.strip()
+            or "Unable to reset terminal session",
+        }
+    return {"success": True}
 
 
 def start_lab(data: dict) -> dict:
+    """Start a lab using the original simulator's non-blocking setup flow."""
     try:
         filepath = resolve_lab_path(data.get("objective"), data.get("file"))
     except (ValueError, OSError) as exc:
         return {"error": str(exc)}
+
     metadata = parse_lab_file(filepath)
     if not metadata:
         return {"error": "Invalid lab metadata"}
-    reset_terminal()
+
+    terminal = reset_terminal()
+    if not terminal["success"]:
+        return {"error": terminal.get("error", "Terminal session unavailable")}
+
+    # The original simulator did not reject the lab when prepare_lab returned
+    # non-zero. Keep setup warnings non-fatal on reused practice VMs.
     preparation = run_lab_function(filepath, "prepare_lab")
+    metadata["terminal_ready"] = True
     if not preparation["success"]:
-        return {"error": preparation.get("error", "Lab preparation failed")}
+        metadata["preparation_warning"] = preparation.get(
+            "error", "Lab preparation returned a non-zero status"
+        )
+        print(
+            f"Non-fatal prepare_lab warning for {filepath.name}: "
+            f"{metadata['preparation_warning']}",
+            file=sys.stderr,
+            flush=True,
+        )
     return metadata
 
 
@@ -394,12 +463,15 @@ def send_to_terminal(data: dict) -> dict:
         return {"error": "No command provided", "success": False}
     if "\x00" in command:
         return {"error": "Invalid command", "success": False}
+
+    session = ensure_terminal_session()
+    if not session["success"]:
+        return {
+            "error": session.get("error", "Terminal session not found"),
+            "success": False,
+        }
+
     try:
-        if subprocess.run(
-            ["tmux", "has-session", "-t", TMUX_SESSION],
-            capture_output=True,
-        ).returncode:
-            return {"error": "Terminal session not found", "success": False}
         subprocess.run(
             ["tmux", "send-keys", "-t", TMUX_SESSION, "-l", command],
             check=True,
@@ -487,6 +559,8 @@ class RHCSAAPIHandler(SimpleHTTPRequestHandler):
             self.send_json(get_questions(path.rsplit("/", 1)[-1]))
         elif path == "/api/progress":
             self.send_json(get_progress())
+        elif path == "/api/health":
+            self.send_json(get_health())
         elif path == "/api/version/check":
             self.send_json(check_version())
         elif path == "/api/config/repository":

@@ -428,10 +428,16 @@ show_access_urls() {
   [[ "$found" == true ]] || printf 'Web UI: no non-loopback IPv4 address detected; check `ip -4 addr`.\n'
 }
 wait_for_runtime() {
-  local attempt objectives
+  local attempt objectives actual_chapters
   for attempt in $(seq 1 30); do
-    if systemctl is-active --quiet rhcsa-webui.service && systemctl is-active --quiet rhcsa-terminal.service && objectives="$(curl -fsS --max-time 2 http://127.0.0.1:8080/api/objectives 2>/dev/null)" && python3 -c 'import json,sys; d=json.load(sys.stdin); raise SystemExit(0 if isinstance(d,list) and d else 1)' <<<"$objectives" && ss -ltn 2>/dev/null | grep -q ':7682[[:space:]]'; then
-      log_ok "Web UI and terminal are reachable"
+    if systemctl is-active --quiet rhcsa-webui.service &&
+       systemctl is-active --quiet rhcsa-terminal.service &&
+       tmux has-session -t rhcsa-terminal 2>/dev/null &&
+       objectives="$(curl -fsS --max-time 2 http://127.0.0.1:8080/api/objectives 2>/dev/null)" &&
+       actual_chapters="$(python3 -c 'import json,sys; print(" ".join(str(x["id"]) for x in json.load(sys.stdin)))' <<<"$objectives" 2>/dev/null)" &&
+       [[ "$actual_chapters" == "${LOCAL_CHAPTERS[*]}" ]] &&
+       ss -ltn 2>/dev/null | grep -q ':7682[[:space:]]'; then
+      log_ok "Web UI, all ${#LOCAL_CHAPTERS[@]} chapters and terminal are reachable"
       return 0
     fi
     sleep 1

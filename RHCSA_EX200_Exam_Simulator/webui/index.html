@@ -108,6 +108,42 @@
             display: none;
         }
 
+        .menu-summary {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            margin: -10px -10px 10px -10px;
+            padding: 9px 14px;
+            background-color: #181818;
+            border-bottom: 1px solid #3a3a3a;
+            color: #bbb;
+            font-size: 0.82em;
+        }
+
+        .menu-summary strong { color: #ffc107; }
+
+        .objective-load-error {
+            padding: 10px 12px;
+            margin: 4px 0;
+            background: #321b1b;
+            color: #ffb3b3;
+            border-radius: 6px;
+            font-size: 0.82em;
+        }
+
+        .preparation-warning {
+            display: none;
+            margin-top: 10px;
+            padding: 8px 10px;
+            border-left: 3px solid #ffc107;
+            background: #332b16;
+            color: #ffd86b;
+            font-size: 0.82em;
+            white-space: pre-wrap;
+        }
+
+        .preparation-warning.show { display: block; }
+
         /* Objectives List */
         .objective-item {
             background-color: #282424;
@@ -779,6 +815,7 @@
                 <div class="lab-content">
                     <div class="lab-header">
                         <div class="lab-question" id="labQuestion">Question</div>
+                        <div class="preparation-warning" id="preparationWarning"></div>
                     </div>
                     <div class="lab-tasks">
                         <div class="tasks-title">Tasks</div>
@@ -1005,26 +1042,34 @@
                 const response = await fetch(`${API_BASE}/objectives?ts=${Date.now()}`, {
                     cache: 'no-store'
                 });
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 objectivesData = await response.json();
+                if (!Array.isArray(objectivesData)) throw new Error('Invalid objective response');
             } catch (error) {
                 console.error('Error loading objectives:', error);
+                container.innerHTML = `<div class="objective-load-error">Unable to load chapters: ${escapeHtml(error.message)}</div>`;
                 objectivesData = [];
                 return;
             }
 
-            for (const obj of objectivesData) {
-                const questions = await fetchQuestions(obj.id);
-                if (!Array.isArray(questions) || questions.length === 0) {
-                    continue;
-                }
-                const objElement = createObjectiveElement(obj, questions);
-                container.appendChild(objElement);
-            }
+            const questionSets = await Promise.all(
+                objectivesData.map(obj => fetchQuestions(obj.id))
+            );
+            const totalQuestions = questionSets.reduce(
+                (total, questions) => total + (Array.isArray(questions) ? questions.length : 0),
+                0
+            );
 
-            // Questions now exist in the DOM; reconcile stored progress again.
+            const summary = document.createElement('div');
+            summary.className = 'menu-summary';
+            summary.innerHTML = `<strong>${objectivesData.length}</strong> chapters loaded · <strong>${totalQuestions}</strong> labs`;
+            container.appendChild(summary);
+
+            objectivesData.forEach((obj, index) => {
+                const questions = Array.isArray(questionSets[index]) ? questionSets[index] : [];
+                container.appendChild(createObjectiveElement(obj, questions));
+            });
+
             updateCompletionStatus();
         }
 
@@ -1090,13 +1135,13 @@
                     <div class="objective-progress" id="progress-${obj.id}">${createProgressCircle(percent)}</div>
                 </div>
                 <div class="questions-list" id="questions-${obj.id}">
-                    ${questions.map((q, idx) => `
+                    ${questions.length > 0 ? questions.map((q, idx) => `
                         <div class="question-item" data-obj="${obj.id}" data-idx="${idx}" data-file="${q.file}" data-lab-id="${q.lab_id}" onclick="selectQuestion(${obj.id}, ${idx}, '${q.file}')">
                             ${icons.terminal}
                             <span class="question-text">${q.question}</span>
                             <span class="completion-status" data-lab-id="${q.lab_id}">${completedLabs.has(q.lab_id) ? icons.complete : icons.incomplete}</span>
                         </div>
-                    `).join('')}
+                    `).join('') : '<div class="objective-load-error">Chapter is present, but its questions could not be loaded.</div>'}
                 </div>
             `;
             return div;
@@ -1174,16 +1219,17 @@
                     body: JSON.stringify({ objective: objId, index: idx, file: file })
                 });
                 
-                if (response.ok) {
-                    const labData = await response.json();
+                const labData = await response.json().catch(() => ({}));
+                if (response.ok && !labData.error) {
                     currentLab = { objId, idx, file, ...labData };
-                    
-                    // Also fetch hints
                     await loadHints();
-                    
                     showLabInterface(labData);
+                    if (labData.preparation_warning) {
+                        console.warn('Non-fatal lab preparation warning:', labData.preparation_warning);
+                    }
                 } else {
-                    alert('Failed to start lab');
+                    const message = labData.error || `HTTP ${response.status}`;
+                    alert('Failed to start lab: ' + message);
                 }
             } catch (e) {
                 console.error('Error starting lab:', e);
@@ -1230,6 +1276,14 @@
             
             // Populate lab content
             document.getElementById('labQuestion').textContent = labData.question;
+            const preparationWarning = document.getElementById('preparationWarning');
+            if (labData.preparation_warning) {
+                preparationWarning.textContent = 'Lab setup warning (non-fatal): ' + labData.preparation_warning;
+                preparationWarning.classList.add('show');
+            } else {
+                preparationWarning.textContent = '';
+                preparationWarning.classList.remove('show');
+            }
             
             // Build tasks list with inline hint areas
             const tasksContainer = document.getElementById('labTasks');
@@ -1277,7 +1331,7 @@
             
             // Load terminal
             const terminalFrame = document.getElementById('terminalFrame');
-            terminalFrame.src = `http://${window.location.hostname}:${TERMINAL_PORT}`;
+            terminalFrame.src = `http://${window.location.hostname}:${TERMINAL_PORT}/?ts=${Date.now()}`;
         }
 
         // Check tasks

@@ -88,7 +88,7 @@ def main() -> int:
             "ExecStart=/usr/bin/python3 /usr/local/share/rhcsa/webui/server.py"
         ),
         simulator / "systemd" / "rhcsa-terminal.service": (
-            "ExecStart=/usr/bin/ttyd"
+            "ExecStartPre=/usr/bin/tmux new-session -d -s rhcsa-terminal -c /tmp"
         ),
         simulator / "systemd" / "rhcsa-update.service": (
             "ExecStart=/usr/local/share/rhcsa/scripts/rhcsa-update --auto"
@@ -367,6 +367,45 @@ declare -F cleanup_lab >/dev/null
                 except subprocess.TimeoutExpired:
                     process.kill()
                     process.wait(timeout=3)
+
+
+    expected_content_chapters = {"11", "12"}
+    found_content_chapters = {
+        match.group(1)
+        for path in (repo_root / "contents").iterdir()
+        if path.is_dir() and (match := re.match(r"^(\d+)-", path.name))
+    } if (repo_root / "contents").is_dir() else set()
+    missing_content = sorted(expected_content_chapters - found_content_chapters)
+    if missing_content:
+        errors.append(f"missing contents chapters: {missing_content}")
+
+    web_index = simulator / "webui" / "index.html"
+    if web_index.is_file():
+        web_text = web_index.read_text(encoding="utf-8", errors="replace")
+        if "chapters loaded" not in web_text:
+            errors.append("Web UI must display the dynamically loaded chapter count")
+        if "questions.length > 0 ?" not in web_text:
+            errors.append("Web UI must render every discovered objective even if question loading fails")
+        if "Failed to start lab: " not in web_text:
+            errors.append("Web UI must show the concrete lab start error")
+
+    terminal_unit = simulator / "systemd" / "rhcsa-terminal.service"
+    if terminal_unit.is_file():
+        terminal_text = terminal_unit.read_text(encoding="utf-8", errors="replace")
+        for required in (
+            "ExecStartPre=/usr/bin/tmux new-session -d -s rhcsa-terminal -c /tmp",
+            "/usr/bin/tmux attach-session -t rhcsa-terminal",
+        ):
+            if required not in terminal_text:
+                errors.append(f"terminal service missing original tmux lifecycle: {required}")
+
+    server_file = simulator / "webui" / "server.py"
+    if server_file.is_file():
+        server_text = server_file.read_text(encoding="utf-8", errors="replace")
+        if "def ensure_terminal_session()" not in server_text:
+            errors.append("server must recover a missing tmux session")
+        if 'metadata["preparation_warning"]' not in server_text:
+            errors.append("prepare_lab failures must be non-fatal as in the original simulator")
 
     summary = {
         "repository": expected_repo,

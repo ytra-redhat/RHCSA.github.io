@@ -1,6 +1,7 @@
 [Unit]
 Description=RHCSA Exam Simulator Web Interface
-After=network-online.target
+Requires=rhcsa-terminal.service
+After=network-online.target rhcsa-terminal.service
 Wants=network-online.target
 
 [Service]
