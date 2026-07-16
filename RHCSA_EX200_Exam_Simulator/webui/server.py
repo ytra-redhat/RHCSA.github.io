@@ -23,6 +23,8 @@ WEBUI_DIR = INSTALL_DIR / "webui"
 QUESTIONS_DIR = INSTALL_DIR / "questions"
 PROGRESS_FILE = INSTALL_DIR / "progress.json"
 VERSION_FILE = INSTALL_DIR / ".version"
+UPDATE_STATE_FILE = Path("/var/lib/rhcsa/update-state.json")
+UPDATE_LOG_FILE = Path("/var/log/rhcsa/update.log")
 TMUX_SESSION = "rhcsa-terminal"
 WEBUI_PORT = int(os.environ.get("RHCSA_WEBUI_PORT", "8080"))
 
@@ -495,44 +497,88 @@ def send_to_terminal(data: dict) -> dict:
         return {"error": str(exc), "success": False}
 
 
+def get_update_status(refresh: bool = True) -> dict:
+    updater = INSTALL_DIR / "scripts" / "rhcsa-update"
+    if refresh and updater.is_file():
+        try:
+            result = subprocess.run(
+                [str(updater), "--status", "--json", "--quiet"],
+                capture_output=True,
+                text=True,
+                timeout=45,
+            )
+            if result.returncode == 0 and result.stdout.strip():
+                return json.loads(result.stdout)
+        except (OSError, subprocess.TimeoutExpired, json.JSONDecodeError):
+            pass
+    try:
+        return json.loads(UPDATE_STATE_FILE.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError, TypeError):
+        return {
+            "update_available": False,
+            "installed_commit": VERSION_FILE.read_text(encoding="utf-8").strip()
+            if VERSION_FILE.is_file() else "",
+            "latest_commit": "",
+            "changed_files": [],
+            "result": "unknown",
+        }
+
+
 def check_version() -> dict:
     try:
-        config = load_repository_config()
-        installed = VERSION_FILE.read_text(encoding="utf-8").strip()
-        request = urllib.request.Request(
-            f"{config['api_url']}/commits/{config['branch']}",
-            headers={
-                "Accept": "application/vnd.github+json",
-                "User-Agent": "RHCSA-Exam-Simulator",
-            },
-        )
-        with urllib.request.urlopen(request, timeout=8) as response:
-            latest = json.loads(response.read().decode("utf-8")).get("sha", "")
+        state = get_update_status(refresh=True)
+        installed = str(state.get("installed_commit", ""))
+        latest = str(state.get("latest_commit", ""))
         return {
-            "updateAvailable": bool(latest and installed != latest),
+            "updateAvailable": bool(state.get("update_available", False)),
             "installed": installed[:7] or "unknown",
             "latest": latest[:7] or "unknown",
-            "repository": config["repository"],
-            "branch": config["branch"],
+            "repository": state.get("repository", "ytra-redhat/RHCSA.github.io"),
+            "branch": state.get("branch", "main"),
+            "changedFiles": state.get("changed_files", []),
+            "commitCount": state.get("commit_count", 0),
+            "latestMessage": state.get("latest_commit_message", ""),
+            "result": state.get("result", "unknown"),
+            "error": state.get("error", ""),
         }
     except Exception as exc:
         return {"updateAvailable": False, "error": str(exc)}
+
+
+def get_update_log() -> dict:
+    try:
+        lines = UPDATE_LOG_FILE.read_text(encoding="utf-8", errors="replace").splitlines()
+        return {"lines": lines[-120:]}
+    except OSError:
+        return {"lines": []}
 
 
 def run_update() -> dict:
     updater = INSTALL_DIR / "scripts" / "rhcsa-update"
     if not updater.is_file():
         return {"success": False, "error": "Updater is not installed"}
-    log_file = Path("/var/log/rhcsa/update.log")
-    log_file.parent.mkdir(parents=True, exist_ok=True)
-    handle = log_file.open("ab")
-    subprocess.Popen(
-        [str(updater), "--force"],
-        stdout=handle,
-        stderr=subprocess.STDOUT,
-        start_new_session=True,
-    )
-    return {"success": True, "message": "Update started"}
+    try:
+        # The systemd service provides locking, logging and a stable parent
+        # process while the Web UI itself is replaced and restarted.
+        result = subprocess.run(
+            ["systemctl", "start", "--no-block", "rhcsa-update.service"],
+            capture_output=True,
+            text=True,
+            timeout=10,
+        )
+        if result.returncode:
+            return {
+                "success": False,
+                "error": result.stderr.strip() or result.stdout.strip()
+                or "Could not start rhcsa-update.service",
+            }
+        return {
+            "success": True,
+            "message": "Update service started",
+            "status": get_update_status(refresh=False),
+        }
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        return {"success": False, "error": str(exc)}
 
 
 class RHCSAAPIHandler(SimpleHTTPRequestHandler):
@@ -570,6 +616,10 @@ class RHCSAAPIHandler(SimpleHTTPRequestHandler):
             self.send_json(get_health())
         elif path == "/api/version/check":
             self.send_json(check_version())
+        elif path == "/api/update/status":
+            self.send_json(get_update_status(refresh=False))
+        elif path == "/api/update/log":
+            self.send_json(get_update_log())
         elif path == "/api/config/repository":
             try:
                 self.send_json(load_repository_config())

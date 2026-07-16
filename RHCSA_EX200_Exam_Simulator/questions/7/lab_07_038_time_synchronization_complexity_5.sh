@@ -11,12 +11,12 @@ OBJECTIVE_TAG="time clients"
 QUESTION="Time synchronization - complexity 5"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Save timedatectl in /tmp/exam/ch07_38_time.txt"
-TASK_1_HINT="Use timedatectl"
+TASK_1_QUESTION="Run timedatectl and write the complete standard output to /tmp/exam/ch07_38_time.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_1_HINT="Suggested command: timedatectl > /tmp/exam/ch07_38_time.txt. Explanation: > overwrites the destination with standard output."
 TASK_1_COMMAND_1="timedatectl > /tmp/exam/ch07_38_time.txt"
 
-TASK_2_QUESTION="Save chrony sources in /tmp/exam/ch07_38_chrony.txt"
-TASK_2_HINT="Use chronyc sources"
+TASK_2_QUESTION="Run chronyc sources and write both standard output and standard error to /tmp/exam/ch07_38_chrony.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_2_HINT="Suggested command: chronyc sources > /tmp/exam/ch07_38_chrony.txt 2>&1. Explanation: 2>&1 merges standard error into the standard-output stream before it is written. > overwrites the destination with standard output."
 TASK_2_COMMAND_1="chronyc sources > /tmp/exam/ch07_38_chrony.txt 2>&1"
 
 HINT=$(_build_hint)

@@ -783,7 +783,8 @@
                     <span class="latest" id="latestVersion">loading...</span>
                 </div>
             </div>
-            <p style="font-size: 0.85em; color: #888;">Update includes bug fixes and new features.</p>
+            <p id="updateSummary" style="font-size: 0.85em; color: #aaa;">Checking changed files...</p>
+            <div id="updateChanges" style="max-height: 140px; overflow:auto; text-align:left; font-size:0.78em; color:#888; background:#181818; border-radius:6px; padding:8px; display:none;"></div>
             <div class="update-modal-buttons">
                 <button class="btn-update-later" onclick="dismissUpdate()">Later</button>
                 <button class="btn-update-now" onclick="runUpdate()">Update Now</button>
@@ -930,6 +931,15 @@
                         updateAvailable = true;
                         document.getElementById('installedVersion').textContent = data.installed || 'unknown';
                         document.getElementById('latestVersion').textContent = data.latest || 'unknown';
+                        const changed = Array.isArray(data.changedFiles) ? data.changedFiles : [];
+                        const summary = document.getElementById('updateSummary');
+                        summary.textContent = `${data.commitCount || 1} commit(s), ${changed.length} changed file(s). ${data.latestMessage || ''}`;
+                        const changes = document.getElementById('updateChanges');
+                        if (changed.length) {
+                            changes.style.display = 'block';
+                            changes.textContent = changed.slice(0, 50).join('\n') + (changed.length > 50 ? `\n... and ${changed.length - 50} more` : '');
+                            changes.style.whiteSpace = 'pre-wrap';
+                        }
                         document.getElementById('updateModal').classList.add('show');
                     }
                 }
@@ -943,57 +953,62 @@
             document.getElementById('updateModal').classList.remove('show');
         }
 
-        // Run the update
+        // Run the update through the systemd update service and poll its state.
         async function runUpdate() {
+            const overlay = document.getElementById('updateModal');
+            overlay.innerHTML = `
+                <div class="update-modal">
+                    <div class="update-modal-icon">⏳</div>
+                    <h2>Updating...</h2>
+                    <p>The validated update is being installed from your GitHub fork.</p>
+                    <p id="updateProgress" style="color:#888;">Starting rhcsa-update.service...</p>
+                </div>`;
             try {
-                document.getElementById('updateModal').innerHTML = `
-                    <div class="update-modal">
-                        <div class="update-modal-icon">⏳</div>
-                        <h2>Updating...</h2>
-                        <p>Downloading and installing the latest version.</p>
-                        <p style="color: #888;">This may take a moment...</p>
-                    </div>
-                `;
-                
                 const response = await fetch(`${API_BASE}/update/run`, { method: 'POST' });
                 const data = await response.json();
-                
-                if (data.success) {
-                    document.getElementById('updateModal').innerHTML = `
-                        <div class="update-modal">
-                            <div class="update-modal-icon">✅</div>
-                            <h2>Update Complete!</h2>
-                            <p>The simulator has been updated successfully.</p>
-                            <p style="color: #4caf50;">Please refresh the page to use the new version.</p>
-                            <div class="update-modal-buttons">
-                                <button class="btn-update-now" onclick="location.reload()">Refresh Now</button>
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    document.getElementById('updateModal').innerHTML = `
-                        <div class="update-modal">
-                            <div class="update-modal-icon">❌</div>
-                            <h2>Update Failed</h2>
-                            <p>${data.error || 'Unknown error occurred'}</p>
-                            <div class="update-modal-buttons">
-                                <button class="btn-update-later" onclick="dismissUpdate()">Close</button>
-                            </div>
-                        </div>
-                    `;
+                if (!response.ok || !data.success) {
+                    throw new Error(data.error || 'Could not start the update service');
                 }
-            } catch (e) {
-                console.error('Update failed:', e);
-                document.getElementById('updateModal').innerHTML = `
+                const progress = document.getElementById('updateProgress');
+                for (let attempt = 0; attempt < 120; attempt++) {
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    try {
+                        const statusResponse = await fetch(`${API_BASE}/update/status?ts=${Date.now()}`, {cache:'no-store'});
+                        if (!statusResponse.ok) continue;
+                        const status = await statusResponse.json();
+                        progress.textContent = `State: ${status.result || 'running'} · ${String(status.installed_commit || '').slice(0,7)} → ${String(status.latest_commit || '').slice(0,7)}`;
+                        if (status.result === 'failed') {
+                            throw new Error(status.error || 'Update failed; inspect /var/log/rhcsa/update.log');
+                        }
+                        if (status.result === 'updated' || (status.result === 'current' && !status.update_available)) {
+                            overlay.innerHTML = `
+                                <div class="update-modal">
+                                    <div class="update-modal-icon">✅</div>
+                                    <h2>Update Complete</h2>
+                                    <p>The simulator and questions were updated successfully.</p>
+                                    <div class="update-modal-buttons">
+                                        <button class="btn-update-now" onclick="location.reload()">Reload</button>
+                                    </div>
+                                </div>`;
+                            return;
+                        }
+                    } catch (pollError) {
+                        // The Web UI is restarted during an update. Temporary connection
+                        // failures are expected; continue polling until it returns.
+                        if (attempt > 100) throw pollError;
+                    }
+                }
+                throw new Error('Update status timed out. Inspect /var/log/rhcsa/update.log');
+            } catch (error) {
+                overlay.innerHTML = `
                     <div class="update-modal">
                         <div class="update-modal-icon">❌</div>
                         <h2>Update Failed</h2>
-                        <p>Could not connect to update server.</p>
+                        <p>${error.message}</p>
                         <div class="update-modal-buttons">
-                            <button class="btn-update-later" onclick="dismissUpdate()">Close</button>
+                            <button class="btn-update-later" onclick="location.reload()">Close</button>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             }
         }
 

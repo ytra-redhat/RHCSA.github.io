@@ -11,12 +11,12 @@ OBJECTIVE_TAG="mounting"
 QUESTION="Autofs maps - complexity 4"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Create master map /tmp/exam/ch06_28_master"
-TASK_1_HINT="Write /shares /tmp/exam/ch06_28_map"
+TASK_1_QUESTION="Create or overwrite /tmp/exam/ch06_28_master with the following exact line(s): \"/shares /tmp/exam/ch06_28_map\"."
+TASK_1_HINT="Suggested command: printf '/shares /tmp/exam/ch06_28_map\\n' > /tmp/exam/ch06_28_master. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
 TASK_1_COMMAND_1="printf '/shares /tmp/exam/ch06_28_map\\n' > /tmp/exam/ch06_28_master"
 
-TASK_2_QUESTION="Create indirect map /tmp/exam/ch06_28_map"
-TASK_2_HINT="Write docs -fstype=nfs server:/docs"
+TASK_2_QUESTION="Create or overwrite /tmp/exam/ch06_28_map with the following exact line(s): \"docs -fstype=nfs server:/docs\"."
+TASK_2_HINT="Suggested command: printf 'docs -fstype=nfs server:/docs\\n' > /tmp/exam/ch06_28_map. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
 TASK_2_COMMAND_1="printf 'docs -fstype=nfs server:/docs\\n' > /tmp/exam/ch06_28_map"
 
 HINT=$(_build_hint)

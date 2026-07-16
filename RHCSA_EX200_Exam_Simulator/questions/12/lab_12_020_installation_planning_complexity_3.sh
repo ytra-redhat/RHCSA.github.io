@@ -11,12 +11,12 @@ OBJECTIVE_TAG="legacy storage"
 QUESTION="Installation planning - complexity 3"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Save block labels in /tmp/exam/ch12_20_labels.txt"
-TASK_1_HINT="Use lsblk -o NAME,LABEL,FSTYPE,SIZE"
+TASK_1_QUESTION="Run lsblk -o NAME,LABEL,FSTYPE,SIZE and write the complete standard output to /tmp/exam/ch12_20_labels.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_1_HINT="Suggested command: lsblk -o NAME,LABEL,FSTYPE,SIZE > /tmp/exam/ch12_20_labels.txt. Explanation: > overwrites the destination with standard output."
 TASK_1_COMMAND_1="lsblk -o NAME,LABEL,FSTYPE,SIZE > /tmp/exam/ch12_20_labels.txt"
 
-TASK_2_QUESTION="Create installation checklist in /tmp/exam/ch12_20_checklist.txt"
-TASK_2_HINT="Include boot media, network, storage, root password"
+TASK_2_QUESTION="Create or overwrite /tmp/exam/ch12_20_checklist.txt with the following exact line(s): \"boot media\"; \"network\"; \"storage\"; \"root password\"."
+TASK_2_HINT="Suggested command: printf 'boot media\\nnetwork\\nstorage\\nroot password\\n' > /tmp/exam/ch12_20_checklist.txt. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
 TASK_2_COMMAND_1="printf 'boot media\\nnetwork\\nstorage\\nroot password\\n' > /tmp/exam/ch12_20_checklist.txt"
 
 HINT=$(_build_hint)

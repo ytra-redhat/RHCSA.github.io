@@ -11,12 +11,12 @@ OBJECTIVE_TAG="troubleshooting"
 QUESTION="Container volume and port plan - complexity 1"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Create volume directory /tmp/exam/ch11_08_volume mode 775"
-TASK_1_HINT="Use install -d -m 775"
+TASK_1_QUESTION="Create directory /tmp/exam/ch11_08_volume, including missing parent directories, and set its numeric mode to exactly 775."
+TASK_1_HINT="Suggested command: install -d -m 775 /tmp/exam/ch11_08_volume. Explanation: install -d creates directories while -m applies the requested mode atomically."
 TASK_1_COMMAND_1="install -d -m 775 /tmp/exam/ch11_08_volume"
 
-TASK_2_QUESTION="Create run command artifact /tmp/exam/ch11_08_run.txt"
-TASK_2_HINT="Include port 8080:80 and :Z volume"
+TASK_2_QUESTION="Create or overwrite /tmp/exam/ch11_08_run.txt with the following exact line(s): \"podman run -d -p 8080:80 -v /tmp/exam/ch11_08_volume:/data:Z IMAGE\"."
+TASK_2_HINT="Suggested command: printf 'podman run -d -p 8080:80 -v /tmp/exam/ch11_08_volume:/data:Z IMAGE\\n' > /tmp/exam/ch11_08_run.txt. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
 TASK_2_COMMAND_1="printf 'podman run -d -p 8080:80 -v /tmp/exam/ch11_08_volume:/data:Z IMAGE\\n' > /tmp/exam/ch11_08_run.txt"
 
 HINT=$(_build_hint)

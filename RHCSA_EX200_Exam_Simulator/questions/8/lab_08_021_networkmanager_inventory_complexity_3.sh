@@ -11,12 +11,12 @@ OBJECTIVE_TAG="firewalld"
 QUESTION="NetworkManager inventory - complexity 3"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Save connections in /tmp/exam/ch08_21_connections.txt"
-TASK_1_HINT="Use nmcli -t connection show"
+TASK_1_QUESTION="Run nmcli -t connection show and write the complete standard output to /tmp/exam/ch08_21_connections.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_1_HINT="Suggested command: nmcli -t connection show > /tmp/exam/ch08_21_connections.txt. Explanation: > overwrites the destination with standard output. nmcli reads NetworkManager's connection and device state."
 TASK_1_COMMAND_1="nmcli -t connection show > /tmp/exam/ch08_21_connections.txt"
 
-TASK_2_QUESTION="Save device status in /tmp/exam/ch08_21_devices.txt"
-TASK_2_HINT="Use nmcli device status"
+TASK_2_QUESTION="Run nmcli device status and write the complete standard output to /tmp/exam/ch08_21_devices.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_2_HINT="Suggested command: nmcli device status > /tmp/exam/ch08_21_devices.txt. Explanation: > overwrites the destination with standard output. nmcli reads NetworkManager's connection and device state."
 TASK_2_COMMAND_1="nmcli device status > /tmp/exam/ch08_21_devices.txt"
 
 HINT=$(_build_hint)

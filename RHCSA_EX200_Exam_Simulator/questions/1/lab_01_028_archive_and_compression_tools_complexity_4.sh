@@ -11,12 +11,12 @@ OBJECTIVE_TAG="redirection"
 QUESTION="Archive and compression tools - complexity 4"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Create /tmp/exam/ch01_28.tar.gz containing /etc/hosts"
-TASK_1_HINT="Use tar -czf /tmp/exam/ch01_28.tar.gz /etc/hosts"
+TASK_1_QUESTION="Create archive /tmp/exam/ch01_28.tar.gz using gzip compression and include /etc/hosts."
+TASK_1_HINT="Suggested command: tar -czf /tmp/exam/ch01_28.tar.gz /etc/hosts. Explanation: -c creates the archive, -z enables gzip and -f names the output file."
 TASK_1_COMMAND_1="tar -czf /tmp/exam/ch01_28.tar.gz /etc/hosts"
 
-TASK_2_QUESTION="Create /tmp/exam/ch01_28.tar.bz2 containing /etc/services"
-TASK_2_HINT="Use tar -cjf /tmp/exam/ch01_28.tar.bz2 /etc/services"
+TASK_2_QUESTION="Create archive /tmp/exam/ch01_28.tar.bz2 using bzip2 compression and include /etc/services."
+TASK_2_HINT="Suggested command: tar -cjf /tmp/exam/ch01_28.tar.bz2 /etc/services. Explanation: -c creates the archive, -j enables bzip2 and -f names the output file."
 TASK_2_COMMAND_1="tar -cjf /tmp/exam/ch01_28.tar.bz2 /etc/services"
 
 HINT=$(_build_hint)

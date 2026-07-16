@@ -1554,6 +1554,35 @@ set -g default-terminal "screen-256color"
 EOF
 }
 
+# Command-line update interface. The updater compares the installed commit with
+# the latest commit on the configured GitHub branch and delegates installation
+# to the same validated, transactional installer used for fresh installs.
+handle_update_command() {
+    local action="${1:-apply}"
+    case "$action" in
+        apply|--apply) exec "$UPDATER" --apply ;;
+        check|--check) exec "$UPDATER" --check ;;
+        status|--status) exec "$UPDATER" --status ;;
+        changes|--changes) exec "$UPDATER" --changes ;;
+        force|--force) exec "$UPDATER" --force ;;
+        -h|--help|help)
+            cat <<'EOF'
+Usage:
+  rhcsa update              Apply an available update
+  rhcsa update --check      Check whether GitHub has a newer commit
+  rhcsa update --status     Show installed and remote update state
+  rhcsa update --changes    List files changed in the newer commit(s)
+  rhcsa update --force      Reinstall the latest validated commit
+EOF
+            exit 0
+            ;;
+        *)
+            echo "Unknown update action: $action" >&2
+            exit 2
+            ;;
+    esac
+}
+
 # Main entry point
 main() {
     case "${1:-}" in
@@ -1565,6 +1594,16 @@ main() {
             fi
             ;;
     esac
+    if [[ "${1:-}" == "update" ]]; then
+        shift
+        handle_update_command "${1:-apply}"
+    fi
+
+    if [[ "${1:-}" == "version" || "${1:-}" == "--version" ]]; then
+        printf 'Installed commit: %s\n' "$(cat "$VERSION_FILE" 2>/dev/null || echo unknown)"
+        exit 0
+    fi
+
     if [[ "${1:-}" == "--list-objectives" ]]; then
         load_objectives
         for ((i=0; i<${#OBJECTIVES[@]}; i++)); do

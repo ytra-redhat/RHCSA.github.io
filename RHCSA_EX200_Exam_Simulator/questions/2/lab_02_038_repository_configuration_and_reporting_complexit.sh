@@ -11,12 +11,12 @@ OBJECTIVE_TAG="RPM packages"
 QUESTION="Repository configuration and reporting - complexity 5"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Create a repository definition in /tmp/exam/ch02_38.repo"
-TASK_1_HINT="Create a repo with id lab38, file baseurl, enabled=1 and gpgcheck=0"
+TASK_1_QUESTION="Create or overwrite /tmp/exam/ch02_38.repo with the following exact line(s): \"[lab38]\"; \"name=Lab 38\"; \"baseurl=file:///tmp/repo38\"; \"enabled=1\"; \"gpgcheck=0\"."
+TASK_1_HINT="Suggested command: printf '[lab38]\\nname=Lab 38\\nbaseurl=file:///tmp/repo38\\nenabled=1\\ngpgcheck=0\\n' > /tmp/exam/ch02_38.repo. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
 TASK_1_COMMAND_1="printf '[lab38]\\nname=Lab 38\\nbaseurl=file:///tmp/repo38\\nenabled=1\\ngpgcheck=0\\n' > /tmp/exam/ch02_38.repo"
 
-TASK_2_QUESTION="Save enabled repositories in /tmp/exam/ch02_38_repos.txt"
-TASK_2_HINT="Use dnf repolist enabled"
+TASK_2_QUESTION="Run dnf repolist enabled and write both standard output and standard error to /tmp/exam/ch02_38_repos.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_2_HINT="Suggested command: dnf repolist enabled > /tmp/exam/ch02_38_repos.txt 2>&1. Explanation: 2>&1 merges standard error into the standard-output stream before it is written. > overwrites the destination with standard output."
 TASK_2_COMMAND_1="dnf repolist enabled > /tmp/exam/ch02_38_repos.txt 2>&1"
 
 HINT=$(_build_hint)

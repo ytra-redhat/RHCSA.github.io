@@ -11,12 +11,12 @@ OBJECTIVE_TAG="GPT partitions"
 QUESTION="LVM inventory - complexity 5"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Save pvs output in /tmp/exam/ch05_43_pvs.txt"
-TASK_1_HINT="Use pvs"
+TASK_1_QUESTION="Run pvs and write both standard output and standard error to /tmp/exam/ch05_43_pvs.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_1_HINT="Suggested command: pvs > /tmp/exam/ch05_43_pvs.txt 2>&1. Explanation: 2>&1 merges standard error into the standard-output stream before it is written. > overwrites the destination with standard output."
 TASK_1_COMMAND_1="pvs > /tmp/exam/ch05_43_pvs.txt 2>&1"
 
-TASK_2_QUESTION="Save lvs output in /tmp/exam/ch05_43_lvs.txt"
-TASK_2_HINT="Use lvs"
+TASK_2_QUESTION="Run lvs and write both standard output and standard error to /tmp/exam/ch05_43_lvs.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_2_HINT="Suggested command: lvs > /tmp/exam/ch05_43_lvs.txt 2>&1. Explanation: 2>&1 merges standard error into the standard-output stream before it is written. > overwrites the destination with standard output."
 TASK_2_COMMAND_1="lvs > /tmp/exam/ch05_43_lvs.txt 2>&1"
 
 HINT=$(_build_hint)

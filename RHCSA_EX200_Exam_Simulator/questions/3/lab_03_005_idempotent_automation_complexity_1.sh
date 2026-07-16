@@ -11,12 +11,12 @@ OBJECTIVE_TAG="text processing"
 QUESTION="Idempotent automation - complexity 1"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Create /usr/local/bin/rhcsa_05.sh that ensures /tmp/rhcsa_05 exists"
-TASK_1_HINT="Use mkdir -p"
+TASK_1_QUESTION="Create /usr/local/bin/rhcsa_05.sh that ensures /tmp/rhcsa_05 exists. Make /usr/local/bin/rhcsa_05.sh executable. The task is complete only when running that exact script produces the behavior and output stated above."
+TASK_1_HINT="Suggested command: printf '#!/bin/bash\\nmkdir -p /tmp/rhcsa_05\\necho ready\\n' > /usr/local/bin/rhcsa_05.sh; chmod +x /usr/local/bin/rhcsa_05.sh. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
 TASK_1_COMMAND_1="printf '#!/bin/bash\\nmkdir -p /tmp/rhcsa_05\\necho ready\\n' > /usr/local/bin/rhcsa_05.sh; chmod +x /usr/local/bin/rhcsa_05.sh"
 
-TASK_2_QUESTION="Run it twice and save second output in /tmp/exam/ch03_05_second.txt"
-TASK_2_HINT="Execute twice"
+TASK_2_QUESTION="Execute /usr/local/bin/rhcsa_05.sh twice. Discard the first run's output and redirect the second run's standard output to /tmp/exam/ch03_05_second.txt. The file must contain the output from only the second execution."
+TASK_2_HINT="Suggested command: /usr/local/bin/rhcsa_05.sh >/dev/null; /usr/local/bin/rhcsa_05.sh > /tmp/exam/ch03_05_second.txt. Explanation: > overwrites the destination with standard output."
 TASK_2_COMMAND_1="/usr/local/bin/rhcsa_05.sh >/dev/null; /usr/local/bin/rhcsa_05.sh > /tmp/exam/ch03_05_second.txt"
 
 HINT=$(_build_hint)

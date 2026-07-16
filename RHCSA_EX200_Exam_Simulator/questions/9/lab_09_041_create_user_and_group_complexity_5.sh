@@ -11,12 +11,12 @@ OBJECTIVE_TAG="account modification"
 QUESTION="Create user and group - complexity 5"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Create user rhcsa_u41 with home"
-TASK_1_HINT="Use useradd -m rhcsa_u41"
+TASK_1_QUESTION="Create the local user account rhcsa_u41, create its home directory. The account and its home directory must both be present."
+TASK_1_HINT="Suggested command: useradd -m rhcsa_u41. Explanation: useradd -m creates the account and its home directory."
 TASK_1_COMMAND_1="useradd -m rhcsa_u41"
 
-TASK_2_QUESTION="Create group rhcsa_g41"
-TASK_2_HINT="Use groupadd rhcsa_g41"
+TASK_2_QUESTION="Create the local group rhcsa_g41. The group must exist in the local group database."
+TASK_2_HINT="Suggested command: groupadd rhcsa_g41. Explanation: groupadd creates a local group entry with the exact name supplied."
 TASK_2_COMMAND_1="groupadd rhcsa_g41"
 
 HINT=$(_build_hint)

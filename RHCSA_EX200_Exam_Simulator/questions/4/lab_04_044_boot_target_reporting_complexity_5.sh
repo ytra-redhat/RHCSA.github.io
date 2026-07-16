@@ -11,12 +11,12 @@ OBJECTIVE_TAG="services"
 QUESTION="Boot target reporting - complexity 5"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Save default target in /tmp/exam/ch04_44_target.txt"
-TASK_1_HINT="Use systemctl get-default"
+TASK_1_QUESTION="Run systemctl get-default and write the complete standard output to /tmp/exam/ch04_44_target.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_1_HINT="Suggested command: systemctl get-default > /tmp/exam/ch04_44_target.txt. Explanation: > overwrites the destination with standard output. systemctl get-default reports the boot target selected as default."
 TASK_1_COMMAND_1="systemctl get-default > /tmp/exam/ch04_44_target.txt"
 
-TASK_2_QUESTION="Save target unit files in /tmp/exam/ch04_44_targets.txt"
-TASK_2_HINT="Use systemctl list-unit-files --type=target"
+TASK_2_QUESTION="Run systemctl list-unit-files --type=target --no-pager and write the complete standard output to /tmp/exam/ch04_44_targets.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_2_HINT="Suggested command: systemctl list-unit-files --type=target --no-pager > /tmp/exam/ch04_44_targets.txt. Explanation: > overwrites the destination with standard output. systemctl queries systemd's current unit state."
 TASK_2_COMMAND_1="systemctl list-unit-files --type=target --no-pager > /tmp/exam/ch04_44_targets.txt"
 
 HINT=$(_build_hint)

@@ -11,12 +11,12 @@ OBJECTIVE_TAG="logical volumes"
 QUESTION="Swap and capacity - complexity 3"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Save swap inventory in /tmp/exam/ch05_25_swap.txt"
-TASK_1_HINT="Use swapon --show"
+TASK_1_QUESTION="Run swapon --show and write the complete standard output to /tmp/exam/ch05_25_swap.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_1_HINT="Suggested command: swapon --show > /tmp/exam/ch05_25_swap.txt. Explanation: > overwrites the destination with standard output."
 TASK_1_COMMAND_1="swapon --show > /tmp/exam/ch05_25_swap.txt"
 
-TASK_2_QUESTION="Save filesystem capacity in /tmp/exam/ch05_25_df.txt"
-TASK_2_HINT="Use df -hT"
+TASK_2_QUESTION="Run df -hT and write the complete standard output to /tmp/exam/ch05_25_df.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_2_HINT="Suggested command: df -hT > /tmp/exam/ch05_25_df.txt. Explanation: > overwrites the destination with standard output."
 TASK_2_COMMAND_1="df -hT > /tmp/exam/ch05_25_df.txt"
 
 HINT=$(_build_hint)

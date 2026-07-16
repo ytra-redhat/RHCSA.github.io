@@ -11,12 +11,12 @@ OBJECTIVE_TAG="autofs"
 QUESTION="NFS mount design - complexity 3"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Create an NFS fstab line in /tmp/exam/ch06_22_nfs.txt"
-TASK_1_HINT="Write server:/share /mnt/share22 nfs defaults,_netdev 0 0"
+TASK_1_QUESTION="Create or overwrite /tmp/exam/ch06_22_nfs.txt with the following exact line(s): \"server:/share /mnt/share22 nfs defaults,_netdev 0 0\"."
+TASK_1_HINT="Suggested command: printf 'server:/share /mnt/share22 nfs defaults,_netdev 0 0\\n' > /tmp/exam/ch06_22_nfs.txt. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
 TASK_1_COMMAND_1="printf 'server:/share /mnt/share22 nfs defaults,_netdev 0 0\\n' > /tmp/exam/ch06_22_nfs.txt"
 
-TASK_2_QUESTION="Create mountpoint /tmp/rhcsa_22 mode 755"
-TASK_2_HINT="Use install -d -m 755"
+TASK_2_QUESTION="Create directory /tmp/rhcsa_22, including missing parent directories, and set its numeric mode to exactly 755."
+TASK_2_HINT="Suggested command: install -d -m 755 /tmp/rhcsa_22. Explanation: install -d creates directories while -m applies the requested mode atomically."
 TASK_2_COMMAND_1="install -d -m 755 /tmp/rhcsa_22"
 
 HINT=$(_build_hint)

@@ -11,12 +11,12 @@ OBJECTIVE_TAG="positional parameters"
 QUESTION="Positional parameters - complexity 1"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Create /usr/local/bin/rhcsa_03.sh that prints first=\$1 and second=\$2"
-TASK_1_HINT="Use positional parameters"
+TASK_1_QUESTION="Create /usr/local/bin/rhcsa_03.sh that prints first=\$1 and second=\$2. Make /usr/local/bin/rhcsa_03.sh executable. The task is complete only when running that exact script produces the behavior and output stated above."
+TASK_1_HINT="Suggested command: printf '#!/bin/bash\\necho first=\\\$1\\necho second=\\\$2\\n' > /usr/local/bin/rhcsa_03.sh; chmod +x /usr/local/bin/rhcsa_03.sh. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
 TASK_1_COMMAND_1="printf '#!/bin/bash\\necho first=\\\$1\\necho second=\\\$2\\n' > /usr/local/bin/rhcsa_03.sh; chmod +x /usr/local/bin/rhcsa_03.sh"
 
-TASK_2_QUESTION="Run /usr/local/bin/rhcsa_03.sh with alpha beta into /tmp/exam/ch03_03_args.txt"
-TASK_2_HINT="Use /usr/local/bin/rhcsa_03.sh alpha beta"
+TASK_2_QUESTION="Run /usr/local/bin/rhcsa_03.sh alpha beta and write the complete standard output to /tmp/exam/ch03_03_args.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_2_HINT="Suggested command: /usr/local/bin/rhcsa_03.sh alpha beta > /tmp/exam/ch03_03_args.txt. Explanation: > overwrites the destination with standard output."
 TASK_2_COMMAND_1="/usr/local/bin/rhcsa_03.sh alpha beta > /tmp/exam/ch03_03_args.txt"
 
 HINT=$(_build_hint)

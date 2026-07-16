@@ -11,12 +11,12 @@ OBJECTIVE_TAG="ext4"
 QUESTION="Mount reporting - complexity 2"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Save current mounts in /tmp/exam/ch06_10_mounts.txt"
-TASK_1_HINT="Use findmnt"
+TASK_1_QUESTION="Run findmnt and write the complete standard output to /tmp/exam/ch06_10_mounts.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_1_HINT="Suggested command: findmnt > /tmp/exam/ch06_10_mounts.txt. Explanation: > overwrites the destination with standard output. findmnt reports the currently mounted filesystem topology."
 TASK_1_COMMAND_1="findmnt > /tmp/exam/ch06_10_mounts.txt"
 
-TASK_2_QUESTION="Save XFS information or lsblk fallback in /tmp/exam/ch06_10_xfs.txt"
-TASK_2_HINT="Use xfs_info / or lsblk -f"
+TASK_2_QUESTION="Run (xfs_info / 2>/dev/null || lsblk -f) and write the complete standard output to /tmp/exam/ch06_10_xfs.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_2_HINT="Suggested command: (xfs_info / 2>/dev/null || lsblk -f) > /tmp/exam/ch06_10_xfs.txt. Explanation: 2> redirects only standard error, leaving standard output unchanged. > overwrites the destination with standard output."
 TASK_2_COMMAND_1="(xfs_info / 2>/dev/null || lsblk -f) > /tmp/exam/ch06_10_xfs.txt"
 
 HINT=$(_build_hint)

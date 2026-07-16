@@ -11,12 +11,12 @@ OBJECTIVE_TAG="umask"
 QUESTION="Firewall runtime and permanent - complexity 2"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Save runtime services in /tmp/exam/ch10_10_runtime.txt"
-TASK_1_HINT="Use firewall-cmd --zone=public --list-services"
+TASK_1_QUESTION="Run firewall-cmd --zone=public --list-services and write both standard output and standard error to /tmp/exam/ch10_10_runtime.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_1_HINT="Suggested command: firewall-cmd --zone=public --list-services > /tmp/exam/ch10_10_runtime.txt 2>&1. Explanation: 2>&1 merges standard error into the standard-output stream before it is written. > overwrites the destination with standard output. without --permanent, firewall-cmd queries the current runtime configuration."
 TASK_1_COMMAND_1="firewall-cmd --zone=public --list-services > /tmp/exam/ch10_10_runtime.txt 2>&1"
 
-TASK_2_QUESTION="Save permanent services in /tmp/exam/ch10_10_permanent.txt"
-TASK_2_HINT="Use firewall-cmd --permanent --zone=public --list-services"
+TASK_2_QUESTION="Run firewall-cmd --permanent --zone=public --list-services and write both standard output and standard error to /tmp/exam/ch10_10_permanent.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_2_HINT="Suggested command: firewall-cmd --permanent --zone=public --list-services > /tmp/exam/ch10_10_permanent.txt 2>&1. Explanation: 2>&1 merges standard error into the standard-output stream before it is written. > overwrites the destination with standard output. --permanent reads firewalld's saved configuration rather than the current runtime state."
 TASK_2_COMMAND_1="firewall-cmd --permanent --zone=public --list-services > /tmp/exam/ch10_10_permanent.txt 2>&1"
 
 HINT=$(_build_hint)

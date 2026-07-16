@@ -1,11 +1,13 @@
 [Unit]
-Description=Periodic RHCSA Exam Simulator update check
+Description=Periodic RHCSA simulator update detection
 
 [Timer]
-OnBootSec=5min
-OnUnitActiveSec=1h
-RandomizedDelaySec=5min
+OnBootSec=3min
+OnUnitActiveSec=30min
+RandomizedDelaySec=3min
+AccuracySec=1min
 Persistent=true
+Unit=rhcsa-update.service
 
 [Install]
 WantedBy=timers.target

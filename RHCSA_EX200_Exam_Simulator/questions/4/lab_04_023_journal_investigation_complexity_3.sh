@@ -11,12 +11,12 @@ OBJECTIVE_TAG="tuned"
 QUESTION="Journal investigation - complexity 3"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Save current boot warnings in /tmp/exam/ch04_23_warnings.txt"
-TASK_1_HINT="Use journalctl -b -p warning --no-pager"
+TASK_1_QUESTION="Run journalctl -b -p warning --no-pager and write the complete standard output to /tmp/exam/ch04_23_warnings.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_1_HINT="Suggested command: journalctl -b -p warning --no-pager > /tmp/exam/ch04_23_warnings.txt. Explanation: > overwrites the destination with standard output. -b limits results to the current boot and -p warning selects warning-or-higher priorities."
 TASK_1_COMMAND_1="journalctl -b -p warning --no-pager > /tmp/exam/ch04_23_warnings.txt"
 
-TASK_2_QUESTION="Save sshd journal entries in /tmp/exam/ch04_23_sshd.txt"
-TASK_2_HINT="Use journalctl -u sshd --no-pager"
+TASK_2_QUESTION="Run journalctl -u sshd --no-pager and write the complete standard output to /tmp/exam/ch04_23_sshd.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_2_HINT="Suggested command: journalctl -u sshd --no-pager > /tmp/exam/ch04_23_sshd.txt. Explanation: > overwrites the destination with standard output."
 TASK_2_COMMAND_1="journalctl -u sshd --no-pager > /tmp/exam/ch04_23_sshd.txt"
 
 HINT=$(_build_hint)

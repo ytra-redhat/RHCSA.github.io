@@ -407,6 +407,7 @@ activate_installation() {
 
   ln -sfn "${INSTALL_DIR}/rhcsa" "$BIN_LINK"
   ln -sfn "${INSTALL_DIR}/scripts/rhcsa-diagnostics" /usr/bin/rhcsa-status
+  ln -sfn "${INSTALL_DIR}/scripts/rhcsa-update" /usr/bin/rhcsa-update
 
   # Install systemd units as regular files. The helper explicitly removes stale
   # files, symlinks and directories left by earlier installer versions.
@@ -428,6 +429,7 @@ activate_installation() {
   if [[ "$RHCSA_AUTO_UPDATE" == "true" ]]; then
     systemctl enable rhcsa-update.timer
     systemctl restart rhcsa-update.timer
+    "${INSTALL_DIR}/scripts/rhcsa-update" --status --quiet >/dev/null 2>&1 || true
   else
     systemctl disable --now rhcsa-update.timer >/dev/null 2>&1 || true
   fi
@@ -505,7 +507,7 @@ main() {
   printf '\n%sInstallation complete%s\n' "$GREEN" "$RESET"
   printf 'Installed commit: %s\n' "${LATEST_COMMIT:0:7}"
   printf 'Chapters installed: %s\n' "${LOCAL_CHAPTERS[*]}"
-  printf 'CLI: rhcsa\nDiagnostics: rhcsa-status\n'
+  printf 'CLI: rhcsa\nUpdate: rhcsa update --check | rhcsa update\nDiagnostics: rhcsa-status\n'
   show_access_urls
 }
 

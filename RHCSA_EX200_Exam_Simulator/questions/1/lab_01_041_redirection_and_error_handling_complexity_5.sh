@@ -11,12 +11,12 @@ OBJECTIVE_TAG="text files"
 QUESTION="Redirection and error handling - complexity 5"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Write the kernel release to /tmp/exam/ch01_41_kernel.txt"
-TASK_1_HINT="Use uname -r > /tmp/exam/ch01_41_kernel.txt"
+TASK_1_QUESTION="Run uname -r and write the complete standard output to /tmp/exam/ch01_41_kernel.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_1_HINT="Suggested command: uname -r > /tmp/exam/ch01_41_kernel.txt. Explanation: > overwrites the destination with standard output. uname -r prints only the running kernel release."
 TASK_1_COMMAND_1="uname -r > /tmp/exam/ch01_41_kernel.txt"
 
-TASK_2_QUESTION="Capture stderr from a missing path in /tmp/exam/ch01_41_error.txt"
-TASK_2_HINT="Use ls /missing-rhcsa-41 2> /tmp/exam/ch01_41_error.txt"
+TASK_2_QUESTION="Run ls against the intentionally absent path /missing-rhcsa-41 and redirect only standard error (file descriptor 2) to /tmp/exam/ch01_41_error.txt. The task is complete when /tmp/exam/ch01_41_error.txt exists and contains the resulting error message."
+TASK_2_HINT="Suggested command: ls /missing-rhcsa-41 2> /tmp/exam/ch01_41_error.txt. Explanation: 2> redirects only standard error, leaving standard output unchanged."
 TASK_2_COMMAND_1="ls /missing-rhcsa-41 2> /tmp/exam/ch01_41_error.txt"
 
 HINT=$(_build_hint)

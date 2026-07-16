@@ -112,6 +112,12 @@ def main() -> int:
         simulator / "scripts" / "repair-systemd-units.sh": (
             "install-systemd-units.sh"
         ),
+        simulator / "scripts" / "question_quality.py": (
+            "Rewrite and audit RHCSA task questions"
+        ),
+        simulator / "scripts" / "rhcsa-update": (
+            "update-state.json"
+        ),
     }
     for required_file, required_text in required_runtime_files.items():
         if not required_file.is_file():
@@ -445,6 +451,53 @@ declare -F cleanup_lab >/dev/null
                     f"terminal supervisor missing original tmux lifecycle: {required}"
                 )
 
+    question_quality = simulator / "scripts" / "question_quality.py"
+    if question_quality.is_file() and questions.is_dir():
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(question_quality),
+                "--json",
+                str(questions),
+            ],
+            capture_output=True,
+            text=True,
+            timeout=120,
+        )
+        try:
+            quality_report = json.loads(result.stdout or "{}")
+        except json.JSONDecodeError:
+            quality_report = {"errors": [result.stdout or result.stderr]}
+        quality_errors = quality_report.get("errors", [])
+        if result.returncode or quality_errors:
+            errors.append(
+                "question clarity audit failed: "
+                + "; ".join(str(item) for item in quality_errors[:20])
+            )
+        if quality_report.get("tasks") != len(labs) * 2:
+            errors.append(
+                "question clarity audit task count mismatch: "
+                f"expected {len(labs) * 2}, got {quality_report.get('tasks')}"
+            )
+
+    updater_file = simulator / "scripts" / "rhcsa-update"
+    if updater_file.is_file():
+        updater_text = updater_file.read_text(encoding="utf-8", errors="replace")
+        for required in (
+            "/compare/${installed_commit}...${latest_commit}",
+            "flock -n",
+            "update-state.json",
+            "changed_files",
+        ):
+            if required not in updater_text:
+                errors.append(f"updater missing dynamic update feature: {required}")
+
+    cli_file = simulator / "rhcsa"
+    if cli_file.is_file():
+        cli_text = cli_file.read_text(encoding="utf-8", errors="replace")
+        if "handle_update_command" not in cli_text:
+            errors.append("CLI must expose the rhcsa update command")
+
     server_file = simulator / "webui" / "server.py"
     if server_file.is_file():
         server_text = server_file.read_text(encoding="utf-8", errors="replace")
@@ -452,6 +505,10 @@ declare -F cleanup_lab >/dev/null
             errors.append("server must recover a missing tmux session")
         if 'metadata["preparation_warning"]' not in server_text:
             errors.append("prepare_lab failures must be non-fatal as in the original simulator")
+        if '"/api/update/status"' not in server_text:
+            errors.append("Web API must expose update status")
+        if "rhcsa-update.service" not in server_text:
+            errors.append("Web API must start updates through systemd")
 
     summary = {
         "repository": expected_repo,

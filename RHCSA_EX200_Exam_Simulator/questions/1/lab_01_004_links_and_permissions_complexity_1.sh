@@ -11,12 +11,12 @@ OBJECTIVE_TAG="archives"
 QUESTION="Links and permissions - complexity 1"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Create a hard link /tmp/exam/ch01_04_hard to /tmp/exam/ch01_04_source"
-TASK_1_HINT="Create the source and use ln"
+TASK_1_QUESTION="Create /tmp/exam/ch01_04_source containing the text data, then create the hard link /tmp/exam/ch01_04_hard to that same inode. Both paths must exist and refer to the same file data."
+TASK_1_HINT="Suggested command: echo data > /tmp/exam/ch01_04_source; ln /tmp/exam/ch01_04_source /tmp/exam/ch01_04_hard. Explanation: > overwrites the destination with standard output."
 TASK_1_COMMAND_1="echo data > /tmp/exam/ch01_04_source; ln /tmp/exam/ch01_04_source /tmp/exam/ch01_04_hard"
 
-TASK_2_QUESTION="Create /tmp/exam/ch01_04_private with mode 640"
-TASK_2_HINT="Use install -m 640"
+TASK_2_QUESTION="Create the regular file /tmp/exam/ch01_04_private and set its numeric mode to exactly 640. The file may be empty."
+TASK_2_HINT="Suggested command: install -m 640 /dev/null /tmp/exam/ch01_04_private. Explanation: install creates the file and applies the requested mode in one operation."
 TASK_2_COMMAND_1="install -m 640 /dev/null /tmp/exam/ch01_04_private"
 
 HINT=$(_build_hint)

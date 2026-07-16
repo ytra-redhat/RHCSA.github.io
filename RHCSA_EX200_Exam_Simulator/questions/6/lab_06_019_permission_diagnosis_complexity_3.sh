@@ -11,12 +11,12 @@ OBJECTIVE_TAG="XFS"
 QUESTION="Permission diagnosis - complexity 3"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Create /tmp/exam/ch06_19_file with mode 600"
-TASK_1_HINT="Use install -m 600"
+TASK_1_QUESTION="Create the regular file /tmp/exam/ch06_19_file and set its numeric mode to exactly 600. The file may be empty."
+TASK_1_HINT="Suggested command: install -m 600 /dev/null /tmp/exam/ch06_19_file. Explanation: install creates the file and applies the requested mode in one operation."
 TASK_1_COMMAND_1="install -m 600 /dev/null /tmp/exam/ch06_19_file"
 
-TASK_2_QUESTION="Save its ownership and mode in /tmp/exam/ch06_19_stat.txt"
-TASK_2_HINT="Use stat -c \"%U %G %a\""
+TASK_2_QUESTION="Use stat to write the owner, group and numeric permission mode of /tmp/exam/ch06_19_file to /tmp/exam/ch06_19_stat.txt, in that order. The output file must contain all three values."
+TASK_2_HINT="Suggested command: stat -c '%U %G %a' /tmp/exam/ch06_19_file > /tmp/exam/ch06_19_stat.txt. Explanation: > overwrites the destination with standard output."
 TASK_2_COMMAND_1="stat -c '%U %G %a' /tmp/exam/ch06_19_file > /tmp/exam/ch06_19_stat.txt"
 
 HINT=$(_build_hint)

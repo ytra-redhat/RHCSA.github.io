@@ -1,56 +1,268 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -Eeuo pipefail
+umask 022
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-INSTALL_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+INSTALL_DIR="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
 # shellcheck disable=SC1091
 source "${SCRIPT_DIR}/load_repository.sh"
 
 VERSION_FILE="${INSTALL_DIR}/.version"
 INSTALLER="${INSTALL_DIR}/installer/Install_RHCSA_EX200_Exam_Simulator.sh"
+STATE_DIR="${RHCSA_UPDATE_STATE_DIR:-/var/lib/rhcsa}"
+STATE_FILE="${STATE_DIR}/update-state.json"
+LOG_DIR="${RHCSA_UPDATE_LOG_DIR:-/var/log/rhcsa}"
+LOG_FILE="${LOG_DIR}/update.log"
+LOCK_FILE="${RHCSA_UPDATE_LOCK_FILE:-/run/lock/rhcsa-update.lock}"
+
+MODE="apply"
 QUIET=false
-CHECK_ONLY=false
+JSON_OUTPUT=false
 FORCE=false
+AUTO=false
+
+usage() {
+  cat <<'USAGE'
+Usage: rhcsa-update [OPTION]
+
+  --check       Check GitHub and exit 10 when an update is available
+  --status      Show installed and remote versions plus last update state
+  --changes     List files changed between the installed and latest commit
+  --apply       Download, validate and atomically install an available update
+  --auto        Non-interactive apply mode for systemd
+  --force       Reinstall the latest commit even when already current
+  --json        Emit machine-readable JSON for --check or --status
+  --quiet       Suppress normal informational output
+  -h, --help    Show this help
+USAGE
+}
 
 for arg in "$@"; do
   case "$arg" in
+    --check) MODE="check" ;;
+    --status) MODE="status" ;;
+    --changes) MODE="changes" ;;
+    --apply) MODE="apply" ;;
+    --auto) MODE="apply"; AUTO=true ;;
+    --force) MODE="apply"; FORCE=true ;;
+    --json) JSON_OUTPUT=true ;;
     --quiet) QUIET=true ;;
-    --check) CHECK_ONLY=true ;;
-    --force|--auto) FORCE=true ;;
-    *) echo "Unknown argument: $arg" >&2; exit 2 ;;
+    -h|--help) usage; exit 0 ;;
+    *) echo "Unknown argument: $arg" >&2; usage >&2; exit 2 ;;
   esac
 done
 
-latest_commit="$(
+if [[ $EUID -ne 0 ]]; then
+  command -v sudo >/dev/null 2>&1 || {
+    echo "ERROR: rhcsa-update requires root privileges to maintain update state." >&2
+    exit 1
+  }
+  exec sudo -- "$0" "$@"
+fi
+
+mkdir -p "$STATE_DIR" "$LOG_DIR" "$(dirname "$LOCK_FILE")"
+touch "$LOG_FILE"
+chmod 0755 "$STATE_DIR" "$LOG_DIR"
+chmod 0644 "$LOG_FILE"
+
+log() {
+  local message="$1"
+  printf '%s %s\n' "$(date --iso-8601=seconds)" "$message" >> "$LOG_FILE"
+  $QUIET || printf '%s\n' "$message"
+}
+
+api_get() {
   curl --fail --silent --show-error --location \
+    --connect-timeout 10 --max-time 30 \
     -H 'Accept: application/vnd.github+json' \
     -H 'User-Agent: RHCSA-Exam-Simulator' \
-    "${RHCSA_GITHUB_API_URL}/commits/${RHCSA_GITHUB_BRANCH}" |
-  python3 -c 'import json,sys; print(json.load(sys.stdin).get("sha",""))'
-)"
+    "$1"
+}
 
 installed_commit=""
-[[ -f "$VERSION_FILE" ]] && installed_commit="$(tr -d '[:space:]' < "$VERSION_FILE")"
+if [[ -f "$VERSION_FILE" ]]; then
+  installed_commit="$(tr -d '[:space:]' < "$VERSION_FILE")"
+fi
 
+latest_json="$(api_get "${RHCSA_GITHUB_API_URL}/commits/${RHCSA_GITHUB_BRANCH}")"
+latest_commit="$(python3 -c 'import json,sys; print(json.load(sys.stdin).get("sha", ""))' <<<"$latest_json")"
+latest_date="$(python3 -c 'import json,sys; d=json.load(sys.stdin); print(d.get("commit",{}).get("committer",{}).get("date", ""))' <<<"$latest_json")"
+latest_message="$(python3 -c 'import json,sys; d=json.load(sys.stdin); print(d.get("commit",{}).get("message", "").splitlines()[0])' <<<"$latest_json")"
+
+[[ "$latest_commit" =~ ^[0-9a-fA-F]{40}$ ]] || {
+  log "ERROR: GitHub did not return a valid latest commit for ${RHCSA_GITHUB_REPOSITORY}/${RHCSA_GITHUB_BRANCH}."
+  exit 1
+}
+
+update_available=true
 if [[ -n "$installed_commit" && "$installed_commit" == "$latest_commit" ]]; then
-  $QUIET || echo "RHCSA simulator is up to date (${installed_commit:0:7})."
+  update_available=false
+fi
+
+changes_file="$(mktemp /tmp/rhcsa-update-changes.XXXXXX)"
+compare_file="$(mktemp /tmp/rhcsa-update-compare.XXXXXX)"
+trap 'rm -f "$changes_file" "$compare_file"' EXIT
+compare_status="unknown"
+commit_count=0
+
+if [[ "$update_available" == "true" && "$installed_commit" =~ ^[0-9a-fA-F]{40}$ ]]; then
+  compare_json="$(api_get "${RHCSA_GITHUB_API_URL}/compare/${installed_commit}...${latest_commit}" || true)"
+  if [[ -n "$compare_json" ]]; then
+    printf '%s' "$compare_json" > "$compare_file"
+    python3 - "$compare_file" "$changes_file" <<'PY'
+import json, sys
+source, out = sys.argv[1:3]
+with open(source, "r", encoding="utf-8") as handle:
+    data = json.load(handle)
+with open(out, "w", encoding="utf-8") as handle:
+    for item in data.get("files", []):
+        name = str(item.get("filename", "")).strip()
+        if name:
+            handle.write(name + "\n")
+PY
+    compare_status="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("status", "unknown"))' "$compare_file")"
+    commit_count="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("total_commits", 0))' "$compare_file")"
+  fi
+elif [[ "$update_available" == "true" ]]; then
+  printf '%s\n' '<complete repository installation>' > "$changes_file"
+fi
+
+write_state() {
+  local result="$1"
+  local error_message="${2:-}"
+  python3 - "$STATE_FILE" "$installed_commit" "$latest_commit" "$latest_date" \
+    "$latest_message" "$update_available" "$compare_status" "$commit_count" \
+    "$result" "$error_message" "$changes_file" \
+    "$RHCSA_GITHUB_REPOSITORY" "$RHCSA_GITHUB_BRANCH" <<'PY'
+import datetime as dt
+import json
+import pathlib
+import sys
+(
+    state_file, installed, latest, latest_date, latest_message,
+    available, compare_status, commit_count, result, error_message,
+    changes_path, repository, branch,
+) = sys.argv[1:]
+try:
+    changes = [x for x in pathlib.Path(changes_path).read_text(encoding="utf-8").splitlines() if x]
+except OSError:
+    changes = []
+data = {
+    "checked_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+    "repository": repository,
+    "branch": branch,
+    "installed_commit": installed,
+    "latest_commit": latest,
+    "latest_commit_date": latest_date,
+    "latest_commit_message": latest_message,
+    "update_available": available.lower() == "true",
+    "compare_status": compare_status,
+    "commit_count": int(commit_count or 0),
+    "changed_files": changes,
+    "result": result,
+    "error": error_message,
+}
+path = pathlib.Path(state_file)
+path.parent.mkdir(parents=True, exist_ok=True)
+temporary = path.with_suffix(path.suffix + ".new")
+temporary.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+temporary.chmod(0o644)
+temporary.replace(path)
+PY
+}
+
+emit_status() {
+  write_state "checked"
+  if $JSON_OUTPUT; then
+    cat "$STATE_FILE"
+    return
+  fi
+  printf 'Repository:       %s\n' "$RHCSA_GITHUB_REPOSITORY"
+  printf 'Branch:           %s\n' "$RHCSA_GITHUB_BRANCH"
+  printf 'Installed commit: %s\n' "${installed_commit:-not installed}"
+  printf 'Latest commit:    %s\n' "$latest_commit"
+  printf 'Latest message:   %s\n' "$latest_message"
+  printf 'Update available: %s\n' "$update_available"
+  printf 'Changed files:    %s\n' "$(wc -l < "$changes_file")"
+}
+
+case "$MODE" in
+  status)
+    emit_status
+    exit 0
+    ;;
+  changes)
+    write_state "checked"
+    if [[ -s "$changes_file" ]]; then
+      cat "$changes_file"
+    elif [[ "$update_available" == "false" ]]; then
+      $QUIET || echo "No changed files; the simulator is current."
+    else
+      $QUIET || echo "GitHub reported an update, but no file list was returned. A full validated archive will be installed."
+    fi
+    exit 0
+    ;;
+  check)
+    write_state "checked"
+    if $JSON_OUTPUT; then
+      cat "$STATE_FILE"
+    elif [[ "$update_available" == "true" ]]; then
+      printf 'Update available: %s -> %s (%s changed files)\n' \
+        "${installed_commit:-not-installed}" "$latest_commit" "$(wc -l < "$changes_file")"
+    else
+      $QUIET || printf 'RHCSA simulator is up to date (%s).\n' "${installed_commit:0:7}"
+    fi
+    [[ "$update_available" == "true" ]] && exit 10
+    exit 0
+    ;;
+esac
+
+if [[ "$update_available" == "false" && "$FORCE" == "false" ]]; then
+  write_state "current"
+  $QUIET || echo "RHCSA simulator is already up to date (${installed_commit:0:7})."
   exit 0
 fi
 
-if $CHECK_ONLY; then
-  $QUIET || printf 'Update available: installed=%s latest=%s\n' \
-    "${installed_commit:-unknown}" "$latest_commit"
-  exit 10
+exec 9>"$LOCK_FILE"
+if ! flock -n 9; then
+  echo "ERROR: another RHCSA update is already running." >&2
+  exit 75
 fi
 
 if [[ ! -x "$INSTALLER" ]]; then
+  write_state "failed" "Installed update installer not found: $INSTALLER"
   echo "ERROR: installed update installer not found: $INSTALLER" >&2
   exit 1
 fi
 
-$QUIET || printf 'Updating RHCSA simulator to %s from %s...\n' \
-  "${latest_commit:0:7}" "$RHCSA_GITHUB_REPOSITORY"
+log "Update detected: ${installed_commit:-not-installed} -> ${latest_commit} (${commit_count} commit(s), $(wc -l < "$changes_file") changed file(s))."
+if [[ -s "$changes_file" ]]; then
+  while IFS= read -r changed; do
+    printf '%s changed: %s\n' "$(date --iso-8601=seconds)" "$changed" >> "$LOG_FILE"
+  done < "$changes_file"
+fi
 
-args=(--force --non-interactive)
-$FORCE && args+=(--auto-update)
-exec "$INSTALLER" "${args[@]}"
+installer_args=(--force --non-interactive --auto-update)
+set +e
+"$INSTALLER" "${installer_args[@]}" 2>&1 | tee -a "$LOG_FILE"
+installer_rc=${PIPESTATUS[0]}
+set -e
+
+if [[ $installer_rc -ne 0 ]]; then
+  write_state "failed" "Installer exited with status ${installer_rc}"
+  log "ERROR: update installation failed with status ${installer_rc}; the installer rollback was invoked."
+  exit "$installer_rc"
+fi
+
+new_commit=""
+[[ -f "$VERSION_FILE" ]] && new_commit="$(tr -d '[:space:]' < "$VERSION_FILE")"
+if [[ "$new_commit" != "$latest_commit" ]]; then
+  write_state "failed" "Installed commit ${new_commit:-missing} does not match expected ${latest_commit}"
+  log "ERROR: update completed but installed version ${new_commit:-missing} does not match ${latest_commit}."
+  exit 1
+fi
+
+installed_commit="$new_commit"
+update_available=false
+write_state "updated"
+log "RHCSA simulator updated successfully to ${latest_commit:0:7}."

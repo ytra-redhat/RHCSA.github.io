@@ -11,12 +11,12 @@ OBJECTIVE_TAG="groups"
 QUESTION="Sudo policy artifact - complexity 3"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Create sudo rule in /tmp/exam/ch09_24_sudoers"
-TASK_1_HINT="Write %rhcsa_g24 ALL=(root) /usr/bin/id"
+TASK_1_QUESTION="Create or overwrite /tmp/exam/ch09_24_sudoers with the following exact line(s): \"%rhcsa_g24 ALL=(root) /usr/bin/id\"."
+TASK_1_HINT="Suggested command: printf '%rhcsa_g24 ALL=(root) /usr/bin/id\\n' > /tmp/exam/ch09_24_sudoers. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
 TASK_1_COMMAND_1="printf '%rhcsa_g24 ALL=(root) /usr/bin/id\\n' > /tmp/exam/ch09_24_sudoers"
 
-TASK_2_QUESTION="Set mode 440 on /tmp/exam/ch09_24_sudoers"
-TASK_2_HINT="Use chmod 440"
+TASK_2_QUESTION="Set the numeric permission mode of /tmp/exam/ch09_24_sudoers to exactly 440. Do not change the file's contents."
+TASK_2_HINT="Suggested command: chmod 440 /tmp/exam/ch09_24_sudoers. Explanation: chmod applies the requested numeric permission mode to the named path."
 TASK_2_COMMAND_1="chmod 440 /tmp/exam/ch09_24_sudoers"
 
 HINT=$(_build_hint)

@@ -11,12 +11,12 @@ OBJECTIVE_TAG="hostname resolution"
 QUESTION="IPv4 and IPv6 inventory - complexity 2"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Save IPv4 addresses in /tmp/exam/ch08_17_ipv4.txt"
-TASK_1_HINT="Use ip -4 address show"
+TASK_1_QUESTION="Run ip -4 address show and write the complete standard output to /tmp/exam/ch08_17_ipv4.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_1_HINT="Suggested command: ip -4 address show > /tmp/exam/ch08_17_ipv4.txt. Explanation: > overwrites the destination with standard output."
 TASK_1_COMMAND_1="ip -4 address show > /tmp/exam/ch08_17_ipv4.txt"
 
-TASK_2_QUESTION="Save IPv6 addresses in /tmp/exam/ch08_17_ipv6.txt"
-TASK_2_HINT="Use ip -6 address show"
+TASK_2_QUESTION="Run ip -6 address show and write the complete standard output to /tmp/exam/ch08_17_ipv6.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_2_HINT="Suggested command: ip -6 address show > /tmp/exam/ch08_17_ipv6.txt. Explanation: > overwrites the destination with standard output."
 TASK_2_COMMAND_1="ip -6 address show > /tmp/exam/ch08_17_ipv6.txt"
 
 HINT=$(_build_hint)

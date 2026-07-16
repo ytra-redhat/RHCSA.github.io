@@ -11,12 +11,12 @@ OBJECTIVE_TAG="port labels"
 QUESTION="SELinux booleans and ports - complexity 3"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Save httpd booleans in /tmp/exam/ch10_23_bool.txt"
-TASK_1_HINT="Use getsebool -a | grep httpd"
+TASK_1_QUESTION="Run getsebool -a | grep httpd and write the complete standard output to /tmp/exam/ch10_23_bool.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_1_HINT="Suggested command: getsebool -a | grep httpd > /tmp/exam/ch10_23_bool.txt. Explanation: > overwrites the destination with standard output."
 TASK_1_COMMAND_1="getsebool -a | grep httpd > /tmp/exam/ch10_23_bool.txt"
 
-TASK_2_QUESTION="Save http port labels in /tmp/exam/ch10_23_ports.txt"
-TASK_2_HINT="Use semanage port -l | grep http_port_t"
+TASK_2_QUESTION="Run semanage port -l | grep http_port_t and write the complete standard output to /tmp/exam/ch10_23_ports.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_2_HINT="Suggested command: semanage port -l | grep http_port_t > /tmp/exam/ch10_23_ports.txt. Explanation: > overwrites the destination with standard output."
 TASK_2_COMMAND_1="semanage port -l | grep http_port_t > /tmp/exam/ch10_23_ports.txt"
 
 HINT=$(_build_hint)

@@ -11,12 +11,12 @@ OBJECTIVE_TAG="nice priority"
 QUESTION="Process analysis - complexity 4"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Save CPU-sorted processes in /tmp/exam/ch04_31_ps.txt"
-TASK_1_HINT="Use ps -eo pid,ni,comm,%cpu --sort=-%cpu"
+TASK_1_QUESTION="Run ps -eo pid,ni,comm,%cpu --sort=-%cpu and write the complete standard output to /tmp/exam/ch04_31_ps.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_1_HINT="Suggested command: ps -eo pid,ni,comm,%cpu --sort=-%cpu > /tmp/exam/ch04_31_ps.txt. Explanation: > overwrites the destination with standard output."
 TASK_1_COMMAND_1="ps -eo pid,ni,comm,%cpu --sort=-%cpu > /tmp/exam/ch04_31_ps.txt"
 
-TASK_2_QUESTION="Save memory summary in /tmp/exam/ch04_31_mem.txt"
-TASK_2_HINT="Use free -h"
+TASK_2_QUESTION="Run free -h and write the complete standard output to /tmp/exam/ch04_31_mem.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_2_HINT="Suggested command: free -h > /tmp/exam/ch04_31_mem.txt. Explanation: > overwrites the destination with standard output."
 TASK_2_COMMAND_1="free -h > /tmp/exam/ch04_31_mem.txt"
 
 HINT=$(_build_hint)

@@ -11,12 +11,12 @@ OBJECTIVE_TAG="tuned"
 QUESTION="Systemd service inventory - complexity 4"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Save failed units in /tmp/exam/ch04_32_failed.txt"
-TASK_1_HINT="Use systemctl --failed --no-pager"
+TASK_1_QUESTION="Run systemctl --failed --no-pager and write the complete standard output to /tmp/exam/ch04_32_failed.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_1_HINT="Suggested command: systemctl --failed --no-pager > /tmp/exam/ch04_32_failed.txt. Explanation: > overwrites the destination with standard output. systemctl queries systemd's current unit state."
 TASK_1_COMMAND_1="systemctl --failed --no-pager > /tmp/exam/ch04_32_failed.txt"
 
-TASK_2_QUESTION="Save enabled services in /tmp/exam/ch04_32_enabled.txt"
-TASK_2_HINT="Use systemctl list-unit-files --type=service --state=enabled"
+TASK_2_QUESTION="Run systemctl list-unit-files --type=service --state=enabled --no-pager and write the complete standard output to /tmp/exam/ch04_32_enabled.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_2_HINT="Suggested command: systemctl list-unit-files --type=service --state=enabled --no-pager > /tmp/exam/ch04_32_enabled.txt. Explanation: > overwrites the destination with standard output. systemctl queries systemd's current unit state."
 TASK_2_COMMAND_1="systemctl list-unit-files --type=service --state=enabled --no-pager > /tmp/exam/ch04_32_enabled.txt"
 
 HINT=$(_build_hint)

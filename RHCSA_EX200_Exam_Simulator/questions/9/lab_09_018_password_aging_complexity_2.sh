@@ -11,12 +11,12 @@ OBJECTIVE_TAG="memberships"
 QUESTION="Password aging - complexity 2"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Create user rhcsa_u18"
-TASK_1_HINT="Use useradd -m rhcsa_u18"
+TASK_1_QUESTION="Create the local user account rhcsa_u18, create its home directory. The account and its home directory must both be present."
+TASK_1_HINT="Suggested command: useradd -m rhcsa_u18. Explanation: useradd -m creates the account and its home directory."
 TASK_1_COMMAND_1="useradd -m rhcsa_u18"
 
-TASK_2_QUESTION="Set maximum password age to 45 for rhcsa_u18"
-TASK_2_HINT="Use chage -M 45 rhcsa_u18"
+TASK_2_QUESTION="Set the maximum password age for user rhcsa_u18 to exactly 45 days. Verify that the account records that value."
+TASK_2_HINT="Suggested command: chage -M 45 rhcsa_u18. Explanation: chage -M sets the maximum password lifetime in days."
 TASK_2_COMMAND_1="chage -M 45 rhcsa_u18"
 
 HINT=$(_build_hint)

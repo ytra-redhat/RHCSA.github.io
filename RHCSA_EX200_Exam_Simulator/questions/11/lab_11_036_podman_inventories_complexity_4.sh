@@ -11,12 +11,12 @@ OBJECTIVE_TAG="volumes"
 QUESTION="Podman inventories - complexity 4"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Save containers in /tmp/exam/ch11_36_containers.txt"
-TASK_1_HINT="Use podman ps -a"
+TASK_1_QUESTION="Run podman ps -a and write both standard output and standard error to /tmp/exam/ch11_36_containers.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_1_HINT="Suggested command: podman ps -a > /tmp/exam/ch11_36_containers.txt 2>&1. Explanation: 2>&1 merges standard error into the standard-output stream before it is written. > overwrites the destination with standard output. podman reports the current container-engine state for the executing user."
 TASK_1_COMMAND_1="podman ps -a > /tmp/exam/ch11_36_containers.txt 2>&1"
 
-TASK_2_QUESTION="Save images in /tmp/exam/ch11_36_images.txt"
-TASK_2_HINT="Use podman images"
+TASK_2_QUESTION="Run podman images and write both standard output and standard error to /tmp/exam/ch11_36_images.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_2_HINT="Suggested command: podman images > /tmp/exam/ch11_36_images.txt 2>&1. Explanation: 2>&1 merges standard error into the standard-output stream before it is written. > overwrites the destination with standard output. podman reports the current container-engine state for the executing user."
 TASK_2_COMMAND_1="podman images > /tmp/exam/ch11_36_images.txt 2>&1"
 
 HINT=$(_build_hint)

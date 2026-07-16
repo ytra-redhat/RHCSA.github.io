@@ -11,12 +11,12 @@ OBJECTIVE_TAG="memberships"
 QUESTION="Account reporting - complexity 3"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Save root passwd entry in /tmp/exam/ch09_25_passwd.txt"
-TASK_1_HINT="Use getent passwd root"
+TASK_1_QUESTION="Run getent passwd root and write the complete standard output to /tmp/exam/ch09_25_passwd.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_1_HINT="Suggested command: getent passwd root > /tmp/exam/ch09_25_passwd.txt. Explanation: > overwrites the destination with standard output."
 TASK_1_COMMAND_1="getent passwd root > /tmp/exam/ch09_25_passwd.txt"
 
-TASK_2_QUESTION="Save root identity in /tmp/exam/ch09_25_id.txt"
-TASK_2_HINT="Use id root"
+TASK_2_QUESTION="Run id root and write the complete standard output to /tmp/exam/ch09_25_id.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_2_HINT="Suggested command: id root > /tmp/exam/ch09_25_id.txt. Explanation: > overwrites the destination with standard output."
 TASK_2_COMMAND_1="id root > /tmp/exam/ch09_25_id.txt"
 
 HINT=$(_build_hint)

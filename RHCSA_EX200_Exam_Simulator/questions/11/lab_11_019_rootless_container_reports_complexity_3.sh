@@ -11,12 +11,12 @@ OBJECTIVE_TAG="registries"
 QUESTION="Rootless container reports - complexity 3"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Save subordinate IDs in /tmp/exam/ch11_19_subuid.txt"
-TASK_1_HINT="Use grep for current user in /etc/subuid"
+TASK_1_QUESTION="Run grep \"^\$(whoami):\" /etc/subuid and write both standard output and standard error to /tmp/exam/ch11_19_subuid.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_1_HINT="Suggested command: grep \"^\$(whoami):\" /etc/subuid > /tmp/exam/ch11_19_subuid.txt 2>&1. Explanation: 2>&1 merges standard error into the standard-output stream before it is written. > overwrites the destination with standard output. grep selects only records matching the requested expression."
 TASK_1_COMMAND_1="grep \"^\$(whoami):\" /etc/subuid > /tmp/exam/ch11_19_subuid.txt 2>&1"
 
-TASK_2_QUESTION="Save podman info in /tmp/exam/ch11_19_info.txt"
-TASK_2_HINT="Use podman info"
+TASK_2_QUESTION="Run podman info and write both standard output and standard error to /tmp/exam/ch11_19_info.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_2_HINT="Suggested command: podman info > /tmp/exam/ch11_19_info.txt 2>&1. Explanation: 2>&1 merges standard error into the standard-output stream before it is written. > overwrites the destination with standard output. podman reports the current container-engine state for the executing user."
 TASK_2_COMMAND_1="podman info > /tmp/exam/ch11_19_info.txt 2>&1"
 
 HINT=$(_build_hint)

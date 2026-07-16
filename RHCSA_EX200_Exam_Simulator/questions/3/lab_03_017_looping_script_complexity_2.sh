@@ -11,12 +11,12 @@ OBJECTIVE_TAG="positional parameters"
 QUESTION="Looping script - complexity 2"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Create /usr/local/bin/rhcsa_17.sh that prints each argument"
-TASK_1_HINT="Use for item in \"\$@\""
+TASK_1_QUESTION="Create /usr/local/bin/rhcsa_17.sh that prints each argument. Make /usr/local/bin/rhcsa_17.sh executable. The task is complete only when running that exact script produces the behavior and output stated above."
+TASK_1_HINT="Suggested command: printf '#!/bin/bash\\nfor item in \\\"\\\$@\\\"; do echo \\\"\\\$item\\\"; done\\n' > /usr/local/bin/rhcsa_17.sh; chmod +x /usr/local/bin/rhcsa_17.sh. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
 TASK_1_COMMAND_1="printf '#!/bin/bash\\nfor item in \\\"\\\$@\\\"; do echo \\\"\\\$item\\\"; done\\n' > /usr/local/bin/rhcsa_17.sh; chmod +x /usr/local/bin/rhcsa_17.sh"
 
-TASK_2_QUESTION="Run /usr/local/bin/rhcsa_17.sh with red green blue into /tmp/exam/ch03_17_colors.txt"
-TASK_2_HINT="Use /usr/local/bin/rhcsa_17.sh red green blue"
+TASK_2_QUESTION="Run /usr/local/bin/rhcsa_17.sh red green blue and write the complete standard output to /tmp/exam/ch03_17_colors.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_2_HINT="Suggested command: /usr/local/bin/rhcsa_17.sh red green blue > /tmp/exam/ch03_17_colors.txt. Explanation: > overwrites the destination with standard output."
 TASK_2_COMMAND_1="/usr/local/bin/rhcsa_17.sh red green blue > /tmp/exam/ch03_17_colors.txt"
 
 HINT=$(_build_hint)

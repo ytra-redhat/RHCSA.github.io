@@ -11,12 +11,12 @@ OBJECTIVE_TAG="Kickstart"
 QUESTION="Kickstart artifact - complexity 1"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Create /tmp/exam/ch12_01.ks with text and reboot"
-TASK_1_HINT="Write text and reboot directives"
+TASK_1_QUESTION="Create or overwrite /tmp/exam/ch12_01.ks with the following exact line(s): \"text\"; \"reboot\"."
+TASK_1_HINT="Suggested command: printf 'text\\nreboot\\n' > /tmp/exam/ch12_01.ks. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
 TASK_1_COMMAND_1="printf 'text\\nreboot\\n' > /tmp/exam/ch12_01.ks"
 
-TASK_2_QUESTION="Add rootpw --lock and timezone UTC"
-TASK_2_HINT="Append both directives"
+TASK_2_QUESTION="Append the following exact line(s) to /tmp/exam/ch12_01.ks without removing its existing content: \"rootpw --lock\"; \"timezone UTC\"."
+TASK_2_HINT="Suggested command: printf 'rootpw --lock\\ntimezone UTC\\n' >> /tmp/exam/ch12_01.ks. Explanation: >> appends and preserves existing file content. printf writes deterministic text, including the requested line breaks."
 TASK_2_COMMAND_1="printf 'rootpw --lock\\ntimezone UTC\\n' >> /tmp/exam/ch12_01.ks"
 
 HINT=$(_build_hint)

@@ -11,12 +11,12 @@ OBJECTIVE_TAG="IPv4"
 QUESTION="Routing and sockets - complexity 4"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Save routes in /tmp/exam/ch08_29_routes.txt"
-TASK_1_HINT="Use ip route show"
+TASK_1_QUESTION="Run ip route show and write the complete standard output to /tmp/exam/ch08_29_routes.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_1_HINT="Suggested command: ip route show > /tmp/exam/ch08_29_routes.txt. Explanation: > overwrites the destination with standard output."
 TASK_1_COMMAND_1="ip route show > /tmp/exam/ch08_29_routes.txt"
 
-TASK_2_QUESTION="Save listening TCP sockets in /tmp/exam/ch08_29_sockets.txt"
-TASK_2_HINT="Use ss -lnt"
+TASK_2_QUESTION="Run ss -lnt and write the complete standard output to /tmp/exam/ch08_29_sockets.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_2_HINT="Suggested command: ss -lnt > /tmp/exam/ch08_29_sockets.txt. Explanation: > overwrites the destination with standard output."
 TASK_2_COMMAND_1="ss -lnt > /tmp/exam/ch08_29_sockets.txt"
 
 HINT=$(_build_hint)

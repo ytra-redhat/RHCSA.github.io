@@ -11,12 +11,12 @@ OBJECTIVE_TAG="IPv6"
 QUESTION="Firewall zones - complexity 4"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Save active zones in /tmp/exam/ch08_30_zones.txt"
-TASK_1_HINT="Use firewall-cmd --get-active-zones"
+TASK_1_QUESTION="Run firewall-cmd --get-active-zones and write both standard output and standard error to /tmp/exam/ch08_30_zones.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_1_HINT="Suggested command: firewall-cmd --get-active-zones > /tmp/exam/ch08_30_zones.txt 2>&1. Explanation: 2>&1 merges standard error into the standard-output stream before it is written. > overwrites the destination with standard output. without --permanent, firewall-cmd queries the current runtime configuration."
 TASK_1_COMMAND_1="firewall-cmd --get-active-zones > /tmp/exam/ch08_30_zones.txt 2>&1"
 
-TASK_2_QUESTION="Save public zone data in /tmp/exam/ch08_30_public.txt"
-TASK_2_HINT="Use firewall-cmd --zone=public --list-all"
+TASK_2_QUESTION="Run firewall-cmd --zone=public --list-all and write both standard output and standard error to /tmp/exam/ch08_30_public.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_2_HINT="Suggested command: firewall-cmd --zone=public --list-all > /tmp/exam/ch08_30_public.txt 2>&1. Explanation: 2>&1 merges standard error into the standard-output stream before it is written. > overwrites the destination with standard output. without --permanent, firewall-cmd queries the current runtime configuration."
 TASK_2_COMMAND_1="firewall-cmd --zone=public --list-all > /tmp/exam/ch08_30_public.txt 2>&1"
 
 HINT=$(_build_hint)

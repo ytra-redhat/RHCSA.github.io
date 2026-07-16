@@ -11,12 +11,12 @@ OBJECTIVE_TAG="SELinux contexts"
 QUESTION="SELinux mode and context - complexity 3"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Save SELinux mode in /tmp/exam/ch10_21_mode.txt"
-TASK_1_HINT="Use getenforce"
+TASK_1_QUESTION="Run getenforce and write the complete standard output to /tmp/exam/ch10_21_mode.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_1_HINT="Suggested command: getenforce > /tmp/exam/ch10_21_mode.txt. Explanation: > overwrites the destination with standard output."
 TASK_1_COMMAND_1="getenforce > /tmp/exam/ch10_21_mode.txt"
 
-TASK_2_QUESTION="Save /etc/passwd context in /tmp/exam/ch10_21_ctx.txt"
-TASK_2_HINT="Use ls -Z /etc/passwd"
+TASK_2_QUESTION="Run ls -Z /etc/passwd and write the complete standard output to /tmp/exam/ch10_21_ctx.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_2_HINT="Suggested command: ls -Z /etc/passwd > /tmp/exam/ch10_21_ctx.txt. Explanation: > overwrites the destination with standard output."
 TASK_2_COMMAND_1="ls -Z /etc/passwd > /tmp/exam/ch10_21_ctx.txt"
 
 HINT=$(_build_hint)

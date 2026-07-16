@@ -11,12 +11,12 @@ OBJECTIVE_TAG="images"
 QUESTION="Quadlet artifact - complexity 2"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Create /tmp/exam/ch11_10.container with an Image line"
-TASK_1_HINT="Use [Container] and Image=registry.example.com/app:latest"
+TASK_1_QUESTION="Create or overwrite /tmp/exam/ch11_10.container with the following exact line(s): \"[Container]\"; \"Image=registry.example.com/app:latest\"."
+TASK_1_HINT="Suggested command: printf '[Container]\\nImage=registry.example.com/app:latest\\n' > /tmp/exam/ch11_10.container. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
 TASK_1_COMMAND_1="printf '[Container]\\nImage=registry.example.com/app:latest\\n' > /tmp/exam/ch11_10.container"
 
-TASK_2_QUESTION="Add WantedBy=default.target"
-TASK_2_HINT="Append an Install section"
+TASK_2_QUESTION="Append the following exact line(s) to /tmp/exam/ch11_10.container without removing its existing content: \"[Install]\"; \"WantedBy=default.target\"."
+TASK_2_HINT="Suggested command: printf '[Install]\\nWantedBy=default.target\\n' >> /tmp/exam/ch11_10.container. Explanation: >> appends and preserves existing file content. printf writes deterministic text, including the requested line breaks."
 TASK_2_COMMAND_1="printf '[Install]\\nWantedBy=default.target\\n' >> /tmp/exam/ch11_10.container"
 
 HINT=$(_build_hint)

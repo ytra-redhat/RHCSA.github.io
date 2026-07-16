@@ -11,12 +11,12 @@ OBJECTIVE_TAG="volume groups"
 QUESTION="GPT disk image - complexity 4"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Create a 128 MiB disk image /var/tmp/rhcsa_31.img"
-TASK_1_HINT="Use truncate -s 128M"
+TASK_1_QUESTION="Create the disk-image file /var/tmp/rhcsa_31.img with an exact apparent size of 128M."
+TASK_1_HINT="Suggested command: truncate -s 128M /var/tmp/rhcsa_31.img. Explanation: truncate -s sets the exact apparent file size."
 TASK_1_COMMAND_1="truncate -s 128M /var/tmp/rhcsa_31.img"
 
-TASK_2_QUESTION="Create a GPT label on /var/tmp/rhcsa_31.img"
-TASK_2_HINT="Use parted -s /var/tmp/rhcsa_31.img mklabel gpt"
+TASK_2_QUESTION="Write a GPT partition-table label to disk image /var/tmp/rhcsa_31.img. Use non-interactive operation."
+TASK_2_HINT="Suggested command: parted -s /var/tmp/rhcsa_31.img mklabel gpt. Explanation: -s runs non-interactively and mklabel writes the partition-table type."
 TASK_2_COMMAND_1="parted -s /var/tmp/rhcsa_31.img mklabel gpt"
 
 HINT=$(_build_hint)

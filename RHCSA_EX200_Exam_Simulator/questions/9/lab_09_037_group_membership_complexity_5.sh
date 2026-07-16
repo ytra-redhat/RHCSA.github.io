@@ -11,12 +11,12 @@ OBJECTIVE_TAG="password aging"
 QUESTION="Group membership - complexity 5"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Create group rhcsa_g37"
-TASK_1_HINT="Use groupadd rhcsa_g37"
+TASK_1_QUESTION="Create the local group rhcsa_g37. The group must exist in the local group database."
+TASK_1_HINT="Suggested command: groupadd rhcsa_g37. Explanation: groupadd creates a local group entry with the exact name supplied."
 TASK_1_COMMAND_1="groupadd rhcsa_g37"
 
-TASK_2_QUESTION="Create user rhcsa_u37 in supplementary group rhcsa_g37"
-TASK_2_HINT="Use useradd -m -G rhcsa_g37 rhcsa_u37"
+TASK_2_QUESTION="Create the local user account rhcsa_u37, create its home directory and add it to supplementary group rhcsa_g37. The account, home directory and supplementary group membership must all be present."
+TASK_2_HINT="Suggested command: useradd -m -G rhcsa_g37 rhcsa_u37. Explanation: useradd -m creates the account and its home directory. -G assigns supplementary group membership."
 TASK_2_COMMAND_1="useradd -m -G rhcsa_g37 rhcsa_u37"
 
 HINT=$(_build_hint)

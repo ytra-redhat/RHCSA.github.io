@@ -11,12 +11,12 @@ OBJECTIVE_TAG="local packages"
 QUESTION="RPM package inspection - complexity 2"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Save bash RPM metadata in /tmp/exam/ch02_16_rpm.txt"
-TASK_1_HINT="Use rpm -qi bash"
+TASK_1_QUESTION="Run rpm -qi bash and write the complete standard output to /tmp/exam/ch02_16_rpm.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_1_HINT="Suggested command: rpm -qi bash > /tmp/exam/ch02_16_rpm.txt. Explanation: > overwrites the destination with standard output. rpm -qi queries installed-package metadata."
 TASK_1_COMMAND_1="rpm -qi bash > /tmp/exam/ch02_16_rpm.txt"
 
-TASK_2_QUESTION="Save bash file list in /tmp/exam/ch02_16_files.txt"
-TASK_2_HINT="Use rpm -ql bash"
+TASK_2_QUESTION="Run rpm -ql bash and write the complete standard output to /tmp/exam/ch02_16_files.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_2_HINT="Suggested command: rpm -ql bash > /tmp/exam/ch02_16_files.txt. Explanation: > overwrites the destination with standard output. rpm -ql lists files owned by an installed package."
 TASK_2_COMMAND_1="rpm -ql bash > /tmp/exam/ch02_16_files.txt"
 
 HINT=$(_build_hint)

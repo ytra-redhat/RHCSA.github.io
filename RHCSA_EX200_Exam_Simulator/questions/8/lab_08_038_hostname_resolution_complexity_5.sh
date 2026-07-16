@@ -11,12 +11,12 @@ OBJECTIVE_TAG="hostname resolution"
 QUESTION="Hostname resolution - complexity 5"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Create hosts artifact /tmp/exam/ch08_38_hosts"
-TASK_1_HINT="Write 192.0.2.38 server38.example.com server38"
+TASK_1_QUESTION="Create or overwrite /tmp/exam/ch08_38_hosts with the following exact line(s): \"192.0.2.38 server38.example.com server38\"."
+TASK_1_HINT="Suggested command: printf '192.0.2.38 server38.example.com server38\\n' > /tmp/exam/ch08_38_hosts. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
 TASK_1_COMMAND_1="printf '192.0.2.38 server38.example.com server38\\n' > /tmp/exam/ch08_38_hosts"
 
-TASK_2_QUESTION="Save resolver configuration in /tmp/exam/ch08_38_resolver.txt"
-TASK_2_HINT="Use cat /etc/resolv.conf"
+TASK_2_QUESTION="Run cat /etc/resolv.conf and write the complete standard output to /tmp/exam/ch08_38_resolver.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_2_HINT="Suggested command: cat /etc/resolv.conf > /tmp/exam/ch08_38_resolver.txt. Explanation: > overwrites the destination with standard output."
 TASK_2_COMMAND_1="cat /etc/resolv.conf > /tmp/exam/ch08_38_resolver.txt"
 
 HINT=$(_build_hint)

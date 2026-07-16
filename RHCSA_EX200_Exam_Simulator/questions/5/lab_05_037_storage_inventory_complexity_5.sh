@@ -11,12 +11,12 @@ OBJECTIVE_TAG="physical volumes"
 QUESTION="Storage inventory - complexity 5"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Save lsblk -f in /tmp/exam/ch05_37_lsblk.txt"
-TASK_1_HINT="Use lsblk -f"
+TASK_1_QUESTION="Run lsblk -f and write the complete standard output to /tmp/exam/ch05_37_lsblk.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_1_HINT="Suggested command: lsblk -f > /tmp/exam/ch05_37_lsblk.txt. Explanation: > overwrites the destination with standard output."
 TASK_1_COMMAND_1="lsblk -f > /tmp/exam/ch05_37_lsblk.txt"
 
-TASK_2_QUESTION="Save blkid in /tmp/exam/ch05_37_blkid.txt"
-TASK_2_HINT="Use blkid"
+TASK_2_QUESTION="Run blkid and write both standard output and standard error to /tmp/exam/ch05_37_blkid.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
+TASK_2_HINT="Suggested command: blkid > /tmp/exam/ch05_37_blkid.txt 2>&1. Explanation: 2>&1 merges standard error into the standard-output stream before it is written. > overwrites the destination with standard output."
 TASK_2_COMMAND_1="blkid > /tmp/exam/ch05_37_blkid.txt 2>&1"
 
 HINT=$(_build_hint)

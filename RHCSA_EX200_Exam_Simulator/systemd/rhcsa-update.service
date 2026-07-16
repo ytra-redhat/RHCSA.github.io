@@ -1,9 +1,15 @@
 [Unit]
-Description=Update RHCSA Exam Simulator from configured GitHub fork
+Description=Update RHCSA Exam Simulator from ytra-redhat/RHCSA.github.io
 After=network-online.target
 Wants=network-online.target
+ConditionPathExists=/usr/local/share/rhcsa/scripts/rhcsa-update
 
 [Service]
 Type=oneshot
 ExecStart=/usr/local/share/rhcsa/scripts/rhcsa-update --auto
 User=root
+TimeoutStartSec=20min
+Nice=10
+IOSchedulingClass=idle
+StandardOutput=journal
+StandardError=journal
