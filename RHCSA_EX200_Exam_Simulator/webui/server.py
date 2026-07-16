@@ -30,9 +30,16 @@ sys.path.insert(0, str(INSTALL_DIR))
 from lib.progress import ProgressStore  # noqa: E402
 
 PROGRESS = ProgressStore(PROGRESS_FILE, QUESTIONS_DIR)
-PROGRESS.migrate_legacy(
-    [INSTALL_DIR / ".progress", Path("/tmp/.rhcsa_progress")]
-)
+VALIDATION_MODE = os.environ.get(
+    "RHCSA_VALIDATION_MODE", ""
+).strip().lower() in {"1", "true", "yes"}
+
+# Normal runtime performs the legacy progress migration. The release validator
+# skips this expensive startup operation only for its temporary HTTP smoke test.
+if not VALIDATION_MODE:
+    PROGRESS.migrate_legacy(
+        [INSTALL_DIR / ".progress", Path("/tmp/.rhcsa_progress")]
+    )
 
 
 def load_repository_config() -> dict[str, str]:

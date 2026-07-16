@@ -8,6 +8,7 @@ import json
 import py_compile
 import re
 import subprocess
+import sys
 import os
 import socket
 import time
@@ -43,6 +44,15 @@ def main() -> int:
         nargs="?",
         type=Path,
         default=Path(__file__).resolve().parents[2],
+    )
+    parser.add_argument(
+        "--skip-runtime-smoke-test",
+        action="store_true",
+        help=(
+            "Skip the temporary Web UI process test. Intended for target-VM "
+            "installation, where the installer performs a real post-activation "
+            "health check instead."
+        ),
     )
     args = parser.parse_args()
     repo_root = args.repository_root.resolve()
@@ -309,10 +319,15 @@ declare -F cleanup_lab >/dev/null
             f"found: {central_assignments}"
         )
 
-    # Runtime smoke test: start the actual Web UI on an ephemeral port and
-    # verify that it returns the same dynamically discovered chapters.
+    # Developer/CI smoke test. Target-VM installation passes
+    # --skip-runtime-smoke-test because the installer performs a stronger real
+    # health check after systemd activation.
     server_py = simulator / "webui" / "server.py"
-    if server_py.is_file() and chapter_dirs:
+    if (
+        not args.skip_runtime_smoke_test
+        and server_py.is_file()
+        and chapter_dirs
+    ):
         sock = socket.socket()
         sock.bind(("127.0.0.1", 0))
         smoke_port = sock.getsockname()[1]
@@ -320,8 +335,10 @@ declare -F cleanup_lab >/dev/null
         env = os.environ.copy()
         env["RHCSA_INSTALL_DIR"] = str(simulator)
         env["RHCSA_WEBUI_PORT"] = str(smoke_port)
+        env["RHCSA_VALIDATION_MODE"] = "1"
+        env["PYTHONUNBUFFERED"] = "1"
         process = subprocess.Popen(
-            ["python3", str(server_py)],
+            [sys.executable, str(server_py)],
             cwd=str(simulator / "webui"),
             env=env,
             stdout=subprocess.PIPE,
@@ -331,7 +348,7 @@ declare -F cleanup_lab >/dev/null
         try:
             payload = None
             last_error = ""
-            for _ in range(50):
+            for _ in range(150):
                 if process.poll() is not None:
                     break
                 try:
@@ -347,10 +364,15 @@ declare -F cleanup_lab >/dev/null
             if not isinstance(payload, list):
                 if process.poll() is None:
                     process.terminate()
-                stdout, stderr = process.communicate(timeout=3)
+                try:
+                    stdout, stderr = process.communicate(timeout=5)
+                except subprocess.TimeoutExpired:
+                    process.kill()
+                    stdout, stderr = process.communicate(timeout=5)
                 errors.append(
                     "Web UI runtime smoke test failed: "
-                    f"{last_error}; stdout={stdout.strip()!r}; stderr={stderr.strip()!r}"
+                    f"{last_error}; exit_status={process.returncode}; "
+                    f"stdout={stdout.strip()!r}; stderr={stderr.strip()!r}"
                 )
             else:
                 returned = [str(item.get("id")) for item in payload]

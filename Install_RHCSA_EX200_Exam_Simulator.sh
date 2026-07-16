@@ -294,7 +294,10 @@ download_and_validate() {
   done
 
   log_step "Running complete release validation..."
-  if ! python3 "${SOURCE_SIMULATOR}/scripts/validate_release.py" "$SOURCE_REPOSITORY" \
+  # Static/content validation runs before activation. A real runtime check is
+  # performed after starting systemd services by wait_for_runtime.
+  if ! python3 "${SOURCE_SIMULATOR}/scripts/validate_release.py" \
+      --skip-runtime-smoke-test "$SOURCE_REPOSITORY" \
       > "${TMP_DIR}/validation.json"; then
     printf '\nRelease validation failed:\n' >&2
     cat "${TMP_DIR}/validation.json" >&2
