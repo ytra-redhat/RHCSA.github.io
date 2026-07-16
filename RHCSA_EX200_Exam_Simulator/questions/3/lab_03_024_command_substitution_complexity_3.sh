@@ -8,15 +8,19 @@ LAB_ID="ch03_024_command_substitution_complexity_3"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="3"
 OBJECTIVE_TAG="positional parameters"
+OBJECTIVE_IDS="3.1,3.3,3.4"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Command substitution - complexity 3"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Create /usr/local/bin/rhcsa_24.sh that prints hostname=<short-hostname>. Make /usr/local/bin/rhcsa_24.sh executable. The task is complete only when running that exact script produces the behavior and output stated above."
-TASK_1_HINT="Suggested command: printf '#!/bin/bash\\necho hostname=\\\$(hostname -s)\\n' > /usr/local/bin/rhcsa_24.sh; chmod +x /usr/local/bin/rhcsa_24.sh. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
+TASK_1_QUESTION="Create /usr/local/bin/rhcsa_24.sh that prints hostname=<short-hostname>. Make /usr/local/bin/rhcsa_24.sh executable."
+TASK_1_HINT="Use standard-output redirection to the requested path."
 TASK_1_COMMAND_1="printf '#!/bin/bash\\necho hostname=\\\$(hostname -s)\\n' > /usr/local/bin/rhcsa_24.sh; chmod +x /usr/local/bin/rhcsa_24.sh"
 
-TASK_2_QUESTION="Run /usr/local/bin/rhcsa_24.sh and write the complete standard output to /tmp/exam/ch03_24_host.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_2_HINT="Suggested command: /usr/local/bin/rhcsa_24.sh > /tmp/exam/ch03_24_host.txt. Explanation: > overwrites the destination with standard output."
+TASK_2_QUESTION="Write the standard output of \`/usr/local/bin/rhcsa_24.sh\` to /tmp/exam/ch03_24_host.txt."
+TASK_2_HINT="Use standard-output redirection to the requested path."
 TASK_2_COMMAND_1="/usr/local/bin/rhcsa_24.sh > /tmp/exam/ch03_24_host.txt"
 
 HINT=$(_build_hint)

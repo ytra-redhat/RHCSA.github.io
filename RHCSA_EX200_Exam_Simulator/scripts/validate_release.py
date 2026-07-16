@@ -113,7 +113,13 @@ def main() -> int:
             "install-systemd-units.sh"
         ),
         simulator / "scripts" / "question_quality.py": (
-            "Rewrite and audit RHCSA task questions"
+            "concise, unambiguous exam-style phrasing"
+        ),
+        simulator / "scripts" / "objective_coverage.py": (
+            "Validate and report RHCSA EX200 RHEL 10 objective coverage"
+        ),
+        simulator / "config" / "rhcsa_v10_objectives.json": (
+            '"objectives"'
         ),
         simulator / "scripts" / "rhcsa-update": (
             "update-state.json"
@@ -182,13 +188,9 @@ def main() -> int:
         if lab.is_symlink():
             errors.append(f"symlinked lab is not allowed: {rel}")
             continue
-        result = subprocess.run(
-            ["bash", "-n", str(lab)], capture_output=True, text=True
-        )
-        if result.returncode:
-            errors.append(f"Bash syntax error in {rel}: {result.stderr.strip()}")
-            continue
-
+        # Syntax and source safety are checked for all active labs in one
+        # batched Bash process below. Spawning two Bash processes per lab made
+        # installation and updates unnecessarily slow as the catalog grew.
         content = lab.read_text(encoding="utf-8", errors="replace")
         for field in REQUIRED_FIELDS:
             if not re.search(rf"(?m)^[ \t]*{re.escape(field)}=", content):
@@ -226,28 +228,39 @@ def main() -> int:
             errors.append(f"duplicate LAB_ID {lab_id}: {', '.join(paths)}")
 
     source_script = r'''
-set -e
-_build_hint() { :; }
-source "$1"
-declare -F prepare_lab >/dev/null
-declare -F check_tasks >/dev/null
-declare -F cleanup_lab >/dev/null
+set -u
+for lab in "$@"; do
+  (
+    set -e
+    _build_hint() { :; }
+    source "$lab"
+    declare -F prepare_lab >/dev/null
+    declare -F check_tasks >/dev/null
+    declare -F cleanup_lab >/dev/null
+  ) || {
+    printf '__RHCSA_LAB_ERROR__%s\n' "$lab" >&2
+    exit 1
+  }
+done
 '''
-    for lab in labs:
+    if labs:
         result = subprocess.run(
-            ["bash", "-c", source_script, "bash", str(lab)],
+            ["bash", "-c", source_script, "rhcsa-validator", *map(str, labs)],
             capture_output=True,
             text=True,
-            timeout=10,
+            timeout=60,
         )
         if result.returncode:
             errors.append(
-                f"lab cannot be safely sourced: {lab.relative_to(repo_root)}: "
-                f"{result.stderr.strip()}"
+                "one or more labs cannot be safely sourced: "
+                + result.stderr.strip()[:4000]
             )
 
+    # Active labs were parsed by the batch source test. Check only remaining
+    # shell scripts individually; this keeps target-VM validation fast.
+    lab_set = {path.resolve() for path in labs}
     for shell in sorted(repo_root.rglob("*.sh")):
-        if ".git" in shell.parts:
+        if ".git" in shell.parts or shell.resolve() in lab_set:
             continue
         result = subprocess.run(
             ["bash", "-n", str(shell)], capture_output=True, text=True
@@ -474,10 +487,44 @@ declare -F cleanup_lab >/dev/null
                 "question clarity audit failed: "
                 + "; ".join(str(item) for item in quality_errors[:20])
             )
-        if quality_report.get("tasks") != len(labs) * 2:
+        expected_tasks = 0
+        for lab in labs:
+            lab_text = lab.read_text(encoding="utf-8", errors="replace")
+            match = re.search(r"(?m)^LAB_TASK_COUNT=(\d+)", lab_text)
+            expected_tasks += int(match.group(1)) if match else 0
+        if quality_report.get("tasks") != expected_tasks:
             errors.append(
                 "question clarity audit task count mismatch: "
-                f"expected {len(labs) * 2}, got {quality_report.get('tasks')}"
+                f"expected {expected_tasks}, got {quality_report.get('tasks')}"
+            )
+
+    objective_report = {}
+    objective_coverage = simulator / "scripts" / "objective_coverage.py"
+    if objective_coverage.is_file():
+        result = subprocess.run(
+            [sys.executable, str(objective_coverage), str(simulator), "--json"],
+            capture_output=True,
+            text=True,
+            timeout=120,
+        )
+        try:
+            objective_report = json.loads(result.stdout or "{}")
+        except json.JSONDecodeError:
+            objective_report = {"errors": [result.stdout or result.stderr]}
+        coverage_errors = objective_report.get("errors", [])
+        if result.returncode or coverage_errors:
+            errors.append(
+                "RHEL 10 objective coverage failed: "
+                + "; ".join(str(item) for item in coverage_errors[:20])
+            )
+        if objective_report.get("official_objectives") != 62:
+            errors.append(
+                "official RHEL 10 objective count mismatch: "
+                f"expected 62, got {objective_report.get('official_objectives')}"
+            )
+        if objective_report.get("objectives_failed"):
+            errors.append(
+                f"{objective_report.get('objectives_failed')} official objectives fail coverage policy"
             )
 
     updater_file = simulator / "scripts" / "rhcsa-update"
@@ -516,6 +563,11 @@ declare -F cleanup_lab >/dev/null
         "chapter_count": len(chapter_counts),
         "lab_count": len(labs),
         "unique_lab_ids": len(lab_ids),
+        "official_objectives": objective_report.get("official_objectives", 0),
+        "objectives_passed": objective_report.get("objectives_passed", 0),
+        "core_labs": objective_report.get("core_labs", 0),
+        "supplementary_labs": objective_report.get("supplementary_labs", 0),
+        "task_count": objective_report.get("total_tasks", 0),
         "errors": errors,
         "warnings": warnings,
     }

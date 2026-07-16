@@ -8,15 +8,19 @@ LAB_ID="ch02_034_install_and_inspect_safe_software_complexity_4"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="4"
 OBJECTIVE_TAG="local packages"
+OBJECTIVE_IDS="2.2"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Install and inspect safe software - complexity 4"
 LAB_TASK_COUNT=2
 
 TASK_1_QUESTION="Install the RPM package bash-completion with DNF. The package must be installed when the task is checked."
-TASK_1_HINT="Suggested command: dnf install -y bash-completion. Explanation: dnf install resolves dependencies and installs the named RPM package."
+TASK_1_HINT="Review the dnf manual page and verify the requested final state."
 TASK_1_COMMAND_1="dnf install -y bash-completion"
 
-TASK_2_QUESTION="Run rpm -qi bash-completion and write the complete standard output to /tmp/exam/ch02_34_pkg.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_2_HINT="Suggested command: rpm -qi bash-completion > /tmp/exam/ch02_34_pkg.txt. Explanation: > overwrites the destination with standard output. rpm -qi queries installed-package metadata."
+TASK_2_QUESTION="Write the standard output of \`rpm -qi bash-completion\` to /tmp/exam/ch02_34_pkg.txt."
+TASK_2_HINT="Review the rpm manual page and verify the requested final state."
 TASK_2_COMMAND_1="rpm -qi bash-completion > /tmp/exam/ch02_34_pkg.txt"
 
 HINT=$(_build_hint)

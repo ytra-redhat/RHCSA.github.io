@@ -8,15 +8,19 @@ LAB_ID="ch02_007_dnf_package_queries_complexity_1"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="1"
 OBJECTIVE_TAG="RPM repositories"
+OBJECTIVE_IDS="2.1,2.2"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="DNF package queries - complexity 1"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Run dnf info bash and write both standard output and standard error to /tmp/exam/ch02_07_info.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_1_HINT="Suggested command: dnf info bash > /tmp/exam/ch02_07_info.txt 2>&1. Explanation: 2>&1 merges standard error into the standard-output stream before it is written. > overwrites the destination with standard output."
+TASK_1_QUESTION="dnf info bash and write both standard output and standard error to /tmp/exam/ch02_07_info.txt."
+TASK_1_HINT="Use file descriptor 2 redirection."
 TASK_1_COMMAND_1="dnf info bash > /tmp/exam/ch02_07_info.txt 2>&1"
 
-TASK_2_QUESTION="Run dnf provides /usr/bin/awk and write both standard output and standard error to /tmp/exam/ch02_07_provider.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_2_HINT="Suggested command: dnf provides /usr/bin/awk > /tmp/exam/ch02_07_provider.txt 2>&1. Explanation: 2>&1 merges standard error into the standard-output stream before it is written. > overwrites the destination with standard output."
+TASK_2_QUESTION="dnf provides /usr/bin/awk and write both standard output and standard error to /tmp/exam/ch02_07_provider.txt."
+TASK_2_HINT="Use file descriptor 2 redirection."
 TASK_2_COMMAND_1="dnf provides /usr/bin/awk > /tmp/exam/ch02_07_provider.txt 2>&1"
 
 HINT=$(_build_hint)

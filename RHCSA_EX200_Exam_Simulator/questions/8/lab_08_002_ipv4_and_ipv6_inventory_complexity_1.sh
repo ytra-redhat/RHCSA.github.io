@@ -8,15 +8,19 @@ LAB_ID="ch08_002_ipv4_and_ipv6_inventory_complexity_1"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="1"
 OBJECTIVE_TAG="IPv6"
+OBJECTIVE_IDS="8.1"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="IPv4 and IPv6 inventory - complexity 1"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Run ip -4 address show and write the complete standard output to /tmp/exam/ch08_02_ipv4.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_1_HINT="Suggested command: ip -4 address show > /tmp/exam/ch08_02_ipv4.txt. Explanation: > overwrites the destination with standard output."
+TASK_1_QUESTION="Write the standard output of \`ip -4 address show\` to /tmp/exam/ch08_02_ipv4.txt."
+TASK_1_HINT="Use standard-output redirection to the requested path."
 TASK_1_COMMAND_1="ip -4 address show > /tmp/exam/ch08_02_ipv4.txt"
 
-TASK_2_QUESTION="Run ip -6 address show and write the complete standard output to /tmp/exam/ch08_02_ipv6.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_2_HINT="Suggested command: ip -6 address show > /tmp/exam/ch08_02_ipv6.txt. Explanation: > overwrites the destination with standard output."
+TASK_2_QUESTION="Write the standard output of \`ip -6 address show\` to /tmp/exam/ch08_02_ipv6.txt."
+TASK_2_HINT="Use standard-output redirection to the requested path."
 TASK_2_COMMAND_1="ip -6 address show > /tmp/exam/ch08_02_ipv6.txt"
 
 HINT=$(_build_hint)

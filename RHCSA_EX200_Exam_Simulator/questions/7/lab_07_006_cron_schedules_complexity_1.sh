@@ -8,15 +8,19 @@ LAB_ID="ch07_006_cron_schedules_complexity_1"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="1"
 OBJECTIVE_TAG="time clients"
+OBJECTIVE_IDS="7.1"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Cron schedules - complexity 1"
 LAB_TASK_COUNT=2
 
 TASK_1_QUESTION="Create or overwrite /tmp/exam/ch07_06_daily with the following exact line(s): \"15 2 * * * root date\"."
-TASK_1_HINT="Suggested command: printf '15 2 * * * root date\\n' > /tmp/exam/ch07_06_daily. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
+TASK_1_HINT="Use standard-output redirection to the requested path."
 TASK_1_COMMAND_1="printf '15 2 * * * root date\\n' > /tmp/exam/ch07_06_daily"
 
 TASK_2_QUESTION="Create or overwrite /tmp/exam/ch07_06_weekly with the following exact line(s): \"0 4 * * 0 root date\"."
-TASK_2_HINT="Suggested command: printf '0 4 * * 0 root date\\n' > /tmp/exam/ch07_06_weekly. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
+TASK_2_HINT="Use standard-output redirection to the requested path."
 TASK_2_COMMAND_1="printf '0 4 * * 0 root date\\n' > /tmp/exam/ch07_06_weekly"
 
 HINT=$(_build_hint)

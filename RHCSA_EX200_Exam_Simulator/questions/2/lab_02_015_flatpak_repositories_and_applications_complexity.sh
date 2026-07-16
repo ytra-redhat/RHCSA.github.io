@@ -8,15 +8,19 @@ LAB_ID="ch02_015_flatpak_repositories_and_applications_complexity"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="2"
 OBJECTIVE_TAG="DNF queries"
+OBJECTIVE_IDS="2.1,2.3,2.4"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Flatpak repositories and applications - complexity 2"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Run flatpak remotes --columns=name,url and write both standard output and standard error to /tmp/exam/ch02_15_remotes.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_1_HINT="Suggested command: flatpak remotes --columns=name,url > /tmp/exam/ch02_15_remotes.txt 2>&1. Explanation: 2>&1 merges standard error into the standard-output stream before it is written. > overwrites the destination with standard output."
+TASK_1_QUESTION="flatpak remotes --columns=name,url and write both standard output and standard error to /tmp/exam/ch02_15_remotes.txt."
+TASK_1_HINT="Use file descriptor 2 redirection."
 TASK_1_COMMAND_1="flatpak remotes --columns=name,url > /tmp/exam/ch02_15_remotes.txt 2>&1"
 
-TASK_2_QUESTION="Run flatpak list --app and write both standard output and standard error to /tmp/exam/ch02_15_apps.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_2_HINT="Suggested command: flatpak list --app > /tmp/exam/ch02_15_apps.txt 2>&1. Explanation: 2>&1 merges standard error into the standard-output stream before it is written. > overwrites the destination with standard output."
+TASK_2_QUESTION="flatpak list --app and write both standard output and standard error to /tmp/exam/ch02_15_apps.txt."
+TASK_2_HINT="Use file descriptor 2 redirection."
 TASK_2_COMMAND_1="flatpak list --app > /tmp/exam/ch02_15_apps.txt 2>&1"
 
 HINT=$(_build_hint)

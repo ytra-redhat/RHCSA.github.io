@@ -8,15 +8,19 @@ LAB_ID="ch05_033_lvm_inventory_complexity_4"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="4"
 OBJECTIVE_TAG="persistent mounts"
+OBJECTIVE_IDS="5.2,5.4"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="LVM inventory - complexity 4"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Run pvs and write both standard output and standard error to /tmp/exam/ch05_33_pvs.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_1_HINT="Suggested command: pvs > /tmp/exam/ch05_33_pvs.txt 2>&1. Explanation: 2>&1 merges standard error into the standard-output stream before it is written. > overwrites the destination with standard output."
+TASK_1_QUESTION="pvs and write both standard output and standard error to /tmp/exam/ch05_33_pvs.txt."
+TASK_1_HINT="Review the pvs manual page and verify the requested final state."
 TASK_1_COMMAND_1="pvs > /tmp/exam/ch05_33_pvs.txt 2>&1"
 
-TASK_2_QUESTION="Run lvs and write both standard output and standard error to /tmp/exam/ch05_33_lvs.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_2_HINT="Suggested command: lvs > /tmp/exam/ch05_33_lvs.txt 2>&1. Explanation: 2>&1 merges standard error into the standard-output stream before it is written. > overwrites the destination with standard output."
+TASK_2_QUESTION="lvs and write both standard output and standard error to /tmp/exam/ch05_33_lvs.txt."
+TASK_2_HINT="Review the lvs manual page and verify the requested final state."
 TASK_2_COMMAND_1="lvs > /tmp/exam/ch05_33_lvs.txt 2>&1"
 
 HINT=$(_build_hint)

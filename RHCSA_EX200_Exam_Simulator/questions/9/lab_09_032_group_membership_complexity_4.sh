@@ -8,15 +8,19 @@ LAB_ID="ch09_032_group_membership_complexity_4"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="4"
 OBJECTIVE_TAG="memberships"
+OBJECTIVE_IDS="9.1,9.3"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Group membership - complexity 4"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Create the local group rhcsa_g32. The group must exist in the local group database."
-TASK_1_HINT="Suggested command: groupadd rhcsa_g32. Explanation: groupadd creates a local group entry with the exact name supplied."
+TASK_1_QUESTION="Create local group rhcsa_g32."
+TASK_1_HINT="Review the groupadd manual page and verify the requested final state."
 TASK_1_COMMAND_1="groupadd rhcsa_g32"
 
-TASK_2_QUESTION="Create the local user account rhcsa_u32, create its home directory and add it to supplementary group rhcsa_g32. The account, home directory and supplementary group membership must all be present."
-TASK_2_HINT="Suggested command: useradd -m -G rhcsa_g32 rhcsa_u32. Explanation: useradd -m creates the account and its home directory. -G assigns supplementary group membership."
+TASK_2_QUESTION="Create local user rhcsa_u32 with the options required by the task title."
+TASK_2_HINT="Review the useradd manual page and verify the requested final state."
 TASK_2_COMMAND_1="useradd -m -G rhcsa_g32 rhcsa_u32"
 
 HINT=$(_build_hint)

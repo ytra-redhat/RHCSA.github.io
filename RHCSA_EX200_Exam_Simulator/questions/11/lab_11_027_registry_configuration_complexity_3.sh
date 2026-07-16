@@ -8,15 +8,19 @@ LAB_ID="ch11_027_registry_configuration_complexity_3"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="3"
 OBJECTIVE_TAG="registries"
+OBJECTIVE_IDS="11.0"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Registry configuration - complexity 3"
 LAB_TASK_COUNT=2
 
 TASK_1_QUESTION="Create or overwrite /tmp/exam/ch11_27_registries.conf with the following exact line(s): \"registry.example.com\"."
-TASK_1_HINT="Suggested command: printf 'registry.example.com\\n' > /tmp/exam/ch11_27_registries.conf. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
+TASK_1_HINT="Use standard-output redirection to the requested path."
 TASK_1_COMMAND_1="printf 'registry.example.com\\n' > /tmp/exam/ch11_27_registries.conf"
 
 TASK_2_QUESTION="Create or overwrite /tmp/exam/ch11_27_notes.txt with the following exact line(s): \"search\"; \"insecure\"; \"blocked\"."
-TASK_2_HINT="Suggested command: printf 'search\\ninsecure\\nblocked\\n' > /tmp/exam/ch11_27_notes.txt. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
+TASK_2_HINT="Use standard-output redirection to the requested path."
 TASK_2_COMMAND_1="printf 'search\\ninsecure\\nblocked\\n' > /tmp/exam/ch11_27_notes.txt"
 
 HINT=$(_build_hint)

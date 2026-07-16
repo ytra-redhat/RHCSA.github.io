@@ -8,15 +8,19 @@ LAB_ID="ch10_028_selinux_booleans_and_ports_complexity_4"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="4"
 OBJECTIVE_TAG="SELinux modes"
+OBJECTIVE_IDS="10.4,10.7,10.8"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="SELinux booleans and ports - complexity 4"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Run getsebool -a | grep httpd and write the complete standard output to /tmp/exam/ch10_28_bool.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_1_HINT="Suggested command: getsebool -a | grep httpd > /tmp/exam/ch10_28_bool.txt. Explanation: > overwrites the destination with standard output."
+TASK_1_QUESTION="Write the standard output of \`getsebool -a | grep httpd\` to /tmp/exam/ch10_28_bool.txt."
+TASK_1_HINT="Review the getsebool manual page and verify the requested final state."
 TASK_1_COMMAND_1="getsebool -a | grep httpd > /tmp/exam/ch10_28_bool.txt"
 
-TASK_2_QUESTION="Run semanage port -l | grep http_port_t and write the complete standard output to /tmp/exam/ch10_28_ports.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_2_HINT="Suggested command: semanage port -l | grep http_port_t > /tmp/exam/ch10_28_ports.txt. Explanation: > overwrites the destination with standard output."
+TASK_2_QUESTION="Write the standard output of \`semanage port -l | grep http_port_t\` to /tmp/exam/ch10_28_ports.txt."
+TASK_2_HINT="Review the semanage manual page and verify the requested final state."
 TASK_2_COMMAND_1="semanage port -l | grep http_port_t > /tmp/exam/ch10_28_ports.txt"
 
 HINT=$(_build_hint)

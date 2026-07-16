@@ -8,15 +8,19 @@ LAB_ID="ch08_043_hostname_resolution_complexity_5"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="5"
 OBJECTIVE_TAG="IPv4"
+OBJECTIVE_IDS="8.1,8.2"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Hostname resolution - complexity 5"
 LAB_TASK_COUNT=2
 
 TASK_1_QUESTION="Create or overwrite /tmp/exam/ch08_43_hosts with the following exact line(s): \"192.0.2.43 server43.example.com server43\"."
-TASK_1_HINT="Suggested command: printf '192.0.2.43 server43.example.com server43\\n' > /tmp/exam/ch08_43_hosts. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
+TASK_1_HINT="Review the printf manual page and verify the requested final state."
 TASK_1_COMMAND_1="printf '192.0.2.43 server43.example.com server43\\n' > /tmp/exam/ch08_43_hosts"
 
-TASK_2_QUESTION="Run cat /etc/resolv.conf and write the complete standard output to /tmp/exam/ch08_43_resolver.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_2_HINT="Suggested command: cat /etc/resolv.conf > /tmp/exam/ch08_43_resolver.txt. Explanation: > overwrites the destination with standard output."
+TASK_2_QUESTION="Write the standard output of \`cat /etc/resolv.conf\` to /tmp/exam/ch08_43_resolver.txt."
+TASK_2_HINT="Review the cat manual page and verify the requested final state."
 TASK_2_COMMAND_1="cat /etc/resolv.conf > /tmp/exam/ch08_43_resolver.txt"
 
 HINT=$(_build_hint)

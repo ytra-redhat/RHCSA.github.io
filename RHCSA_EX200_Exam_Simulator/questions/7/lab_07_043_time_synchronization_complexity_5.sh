@@ -8,15 +8,19 @@ LAB_ID="ch07_043_time_synchronization_complexity_5"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="5"
 OBJECTIVE_TAG="systemd timers"
+OBJECTIVE_IDS="7.4"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Time synchronization - complexity 5"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Run timedatectl and write the complete standard output to /tmp/exam/ch07_43_time.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_1_HINT="Suggested command: timedatectl > /tmp/exam/ch07_43_time.txt. Explanation: > overwrites the destination with standard output."
+TASK_1_QUESTION="Write the standard output of \`timedatectl\` to /tmp/exam/ch07_43_time.txt."
+TASK_1_HINT="Review the timedatectl manual page and verify the requested final state."
 TASK_1_COMMAND_1="timedatectl > /tmp/exam/ch07_43_time.txt"
 
-TASK_2_QUESTION="Run chronyc sources and write both standard output and standard error to /tmp/exam/ch07_43_chrony.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_2_HINT="Suggested command: chronyc sources > /tmp/exam/ch07_43_chrony.txt 2>&1. Explanation: 2>&1 merges standard error into the standard-output stream before it is written. > overwrites the destination with standard output."
+TASK_2_QUESTION="chronyc sources and write both standard output and standard error to /tmp/exam/ch07_43_chrony.txt."
+TASK_2_HINT="Review the chronyc manual page and verify the requested final state."
 TASK_2_COMMAND_1="chronyc sources > /tmp/exam/ch07_43_chrony.txt 2>&1"
 
 HINT=$(_build_hint)

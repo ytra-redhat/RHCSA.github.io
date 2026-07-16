@@ -180,6 +180,15 @@ def parse_lab_file(filepath: Path) -> dict | None:
         "commands": commands,
         "difficulty": parse_shell_assignment(content, "DIFFICULTY") or "",
         "objective_tag": parse_shell_assignment(content, "OBJECTIVE_TAG") or "",
+        "objective_ids": [
+            item.strip()
+            for item in (parse_shell_assignment(content, "OBJECTIVE_IDS") or "").split(",")
+            if item.strip()
+        ],
+        "lab_kind": parse_shell_assignment(content, "LAB_KIND") or "drill",
+        "state_changing": (parse_shell_assignment(content, "STATE_CHANGING") or "false").lower() == "true",
+        "persistence_required": parse_shell_assignment(content, "PERSISTENCE_REQUIRED") or "false",
+        "warning": parse_shell_assignment(content, "LAB_WARNING") or "",
         "file": filepath.name,
         "chapter": filepath.parent.name,
         "is_lab": "IS_LAB=true" in content,

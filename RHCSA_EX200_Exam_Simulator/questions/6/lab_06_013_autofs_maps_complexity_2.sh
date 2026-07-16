@@ -8,15 +8,19 @@ LAB_ID="ch06_013_autofs_maps_complexity_2"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="2"
 OBJECTIVE_TAG="NFS"
+OBJECTIVE_IDS="6.2,6.3"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Autofs maps - complexity 2"
 LAB_TASK_COUNT=2
 
 TASK_1_QUESTION="Create or overwrite /tmp/exam/ch06_13_master with the following exact line(s): \"/shares /tmp/exam/ch06_13_map\"."
-TASK_1_HINT="Suggested command: printf '/shares /tmp/exam/ch06_13_map\\n' > /tmp/exam/ch06_13_master. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
+TASK_1_HINT="Use standard-output redirection to the requested path."
 TASK_1_COMMAND_1="printf '/shares /tmp/exam/ch06_13_map\\n' > /tmp/exam/ch06_13_master"
 
 TASK_2_QUESTION="Create or overwrite /tmp/exam/ch06_13_map with the following exact line(s): \"docs -fstype=nfs server:/docs\"."
-TASK_2_HINT="Suggested command: printf 'docs -fstype=nfs server:/docs\\n' > /tmp/exam/ch06_13_map. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
+TASK_2_HINT="Use standard-output redirection to the requested path."
 TASK_2_COMMAND_1="printf 'docs -fstype=nfs server:/docs\\n' > /tmp/exam/ch06_13_map"
 
 HINT=$(_build_hint)

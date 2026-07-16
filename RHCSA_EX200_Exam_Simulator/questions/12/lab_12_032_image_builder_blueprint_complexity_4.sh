@@ -8,15 +8,19 @@ LAB_ID="ch12_032_image_builder_blueprint_complexity_4"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="4"
 OBJECTIVE_TAG="subscription management"
+OBJECTIVE_IDS="12.0"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Image Builder blueprint - complexity 4"
 LAB_TASK_COUNT=2
 
 TASK_1_QUESTION="Create or overwrite /tmp/exam/ch12_32.toml with the following exact line(s): \"name=rhcsa-32\"; \"version=0.0.1\"."
-TASK_1_HINT="Suggested command: printf 'name=rhcsa-32\\nversion=0.0.1\\n' > /tmp/exam/ch12_32.toml. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
+TASK_1_HINT="Review the printf manual page and verify the requested final state."
 TASK_1_COMMAND_1="printf 'name=rhcsa-32\\nversion=0.0.1\\n' > /tmp/exam/ch12_32.toml"
 
-TASK_2_QUESTION="Append the following exact line(s) to /tmp/exam/ch12_32.toml without removing its existing content: \"[[packages]]\"; \"name=bash\"; \"version=*\"."
-TASK_2_HINT="Suggested command: printf '[[packages]]\\nname=bash\\nversion=*\\n' >> /tmp/exam/ch12_32.toml. Explanation: >> appends and preserves existing file content. printf writes deterministic text, including the requested line breaks."
+TASK_2_QUESTION="Append the standard output of \`printf '[[packages]]\\nname=bash\\nversion=*\\n'\` to /tmp/exam/ch12_32.toml."
+TASK_2_HINT="Review the printf manual page and verify the requested final state."
 TASK_2_COMMAND_1="printf '[[packages]]\\nname=bash\\nversion=*\\n' >> /tmp/exam/ch12_32.toml"
 
 HINT=$(_build_hint)

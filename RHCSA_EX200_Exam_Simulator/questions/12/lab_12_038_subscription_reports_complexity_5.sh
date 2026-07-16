@@ -8,15 +8,19 @@ LAB_ID="ch12_038_subscription_reports_complexity_5"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="5"
 OBJECTIVE_TAG="Cockpit"
+OBJECTIVE_IDS="12.0"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Subscription reports - complexity 5"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Run subscription-manager identity and write both standard output and standard error to /tmp/exam/ch12_38_identity.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_1_HINT="Suggested command: subscription-manager identity > /tmp/exam/ch12_38_identity.txt 2>&1. Explanation: 2>&1 merges standard error into the standard-output stream before it is written. > overwrites the destination with standard output."
+TASK_1_QUESTION="subscription-manager identity and write both standard output and standard error to /tmp/exam/ch12_38_identity.txt."
+TASK_1_HINT="Review the subscription-manager manual page and verify the requested final state."
 TASK_1_COMMAND_1="subscription-manager identity > /tmp/exam/ch12_38_identity.txt 2>&1"
 
-TASK_2_QUESTION="Run subscription-manager repos --list-enabled and write both standard output and standard error to /tmp/exam/ch12_38_repos.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_2_HINT="Suggested command: subscription-manager repos --list-enabled > /tmp/exam/ch12_38_repos.txt 2>&1. Explanation: 2>&1 merges standard error into the standard-output stream before it is written. > overwrites the destination with standard output."
+TASK_2_QUESTION="subscription-manager repos --list-enabled and write both standard output and standard error to /tmp/exam/ch12_38_repos.txt."
+TASK_2_HINT="Review the subscription-manager manual page and verify the requested final state."
 TASK_2_COMMAND_1="subscription-manager repos --list-enabled > /tmp/exam/ch12_38_repos.txt 2>&1"
 
 HINT=$(_build_hint)

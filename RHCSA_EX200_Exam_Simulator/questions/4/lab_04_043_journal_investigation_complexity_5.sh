@@ -8,15 +8,19 @@ LAB_ID="ch04_043_journal_investigation_complexity_5"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="5"
 OBJECTIVE_TAG="persistent journal"
+OBJECTIVE_IDS="4.7,4.8"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Journal investigation - complexity 5"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Run journalctl -b -p warning --no-pager and write the complete standard output to /tmp/exam/ch04_43_warnings.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_1_HINT="Suggested command: journalctl -b -p warning --no-pager > /tmp/exam/ch04_43_warnings.txt. Explanation: > overwrites the destination with standard output. -b limits results to the current boot and -p warning selects warning-or-higher priorities."
+TASK_1_QUESTION="Write the standard output of \`journalctl -b -p warning --no-pager\` to /tmp/exam/ch04_43_warnings.txt."
+TASK_1_HINT="Review the journalctl manual page and verify the requested final state."
 TASK_1_COMMAND_1="journalctl -b -p warning --no-pager > /tmp/exam/ch04_43_warnings.txt"
 
-TASK_2_QUESTION="Run journalctl -u sshd --no-pager and write the complete standard output to /tmp/exam/ch04_43_sshd.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_2_HINT="Suggested command: journalctl -u sshd --no-pager > /tmp/exam/ch04_43_sshd.txt. Explanation: > overwrites the destination with standard output."
+TASK_2_QUESTION="Write the standard output of \`journalctl -u sshd --no-pager\` to /tmp/exam/ch04_43_sshd.txt."
+TASK_2_HINT="Review the journalctl manual page and verify the requested final state."
 TASK_2_COMMAND_1="journalctl -u sshd --no-pager > /tmp/exam/ch04_43_sshd.txt"
 
 HINT=$(_build_hint)

@@ -8,15 +8,19 @@ LAB_ID="ch01_021_redirection_and_error_handling_complexity_3"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="3"
 OBJECTIVE_TAG="SSH"
+OBJECTIVE_IDS="1.2,1.4"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Redirection and error handling - complexity 3"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Run uname -r and write the complete standard output to /tmp/exam/ch01_21_kernel.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_1_HINT="Suggested command: uname -r > /tmp/exam/ch01_21_kernel.txt. Explanation: > overwrites the destination with standard output. uname -r prints only the running kernel release."
+TASK_1_QUESTION="Write the running kernel release to /tmp/exam/ch01_21_kernel.txt."
+TASK_1_HINT="Use standard-output redirection to the requested path."
 TASK_1_COMMAND_1="uname -r > /tmp/exam/ch01_21_kernel.txt"
 
-TASK_2_QUESTION="Run ls against the intentionally absent path /missing-rhcsa-21 and redirect only standard error (file descriptor 2) to /tmp/exam/ch01_21_error.txt. The task is complete when /tmp/exam/ch01_21_error.txt exists and contains the resulting error message."
-TASK_2_HINT="Suggested command: ls /missing-rhcsa-21 2> /tmp/exam/ch01_21_error.txt. Explanation: 2> redirects only standard error, leaving standard output unchanged."
+TASK_2_QUESTION="Write only the error produced for /missing-rhcsa-21 to /tmp/exam/ch01_21_error.txt."
+TASK_2_HINT="Use file descriptor 2 redirection."
 TASK_2_COMMAND_1="ls /missing-rhcsa-21 2> /tmp/exam/ch01_21_error.txt"
 
 HINT=$(_build_hint)

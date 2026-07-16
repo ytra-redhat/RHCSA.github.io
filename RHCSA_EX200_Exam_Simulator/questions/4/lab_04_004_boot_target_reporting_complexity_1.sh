@@ -8,15 +8,19 @@ LAB_ID="ch04_004_boot_target_reporting_complexity_1"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="1"
 OBJECTIVE_TAG="nice priority"
+OBJECTIVE_IDS="4.5"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Boot target reporting - complexity 1"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Run systemctl get-default and write the complete standard output to /tmp/exam/ch04_04_target.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_1_HINT="Suggested command: systemctl get-default > /tmp/exam/ch04_04_target.txt. Explanation: > overwrites the destination with standard output. systemctl get-default reports the boot target selected as default."
+TASK_1_QUESTION="Write the standard output of \`systemctl get-default\` to /tmp/exam/ch04_04_target.txt."
+TASK_1_HINT="Use standard-output redirection to the requested path."
 TASK_1_COMMAND_1="systemctl get-default > /tmp/exam/ch04_04_target.txt"
 
-TASK_2_QUESTION="Run systemctl list-unit-files --type=target --no-pager and write the complete standard output to /tmp/exam/ch04_04_targets.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_2_HINT="Suggested command: systemctl list-unit-files --type=target --no-pager > /tmp/exam/ch04_04_targets.txt. Explanation: > overwrites the destination with standard output. systemctl queries systemd's current unit state."
+TASK_2_QUESTION="Write the standard output of \`systemctl list-unit-files --type=target --no-pager\` to /tmp/exam/ch04_04_targets.txt."
+TASK_2_HINT="Use standard-output redirection to the requested path."
 TASK_2_COMMAND_1="systemctl list-unit-files --type=target --no-pager > /tmp/exam/ch04_04_targets.txt"
 
 HINT=$(_build_hint)

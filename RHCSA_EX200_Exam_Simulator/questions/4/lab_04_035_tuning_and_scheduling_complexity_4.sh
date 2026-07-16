@@ -8,15 +8,19 @@ LAB_ID="ch04_035_tuning_and_scheduling_complexity_4"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="4"
 OBJECTIVE_TAG="services"
+OBJECTIVE_IDS="4.5,4.6"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Tuning and scheduling - complexity 4"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Run tuned-adm active and write both standard output and standard error to /tmp/exam/ch04_35_tuned.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_1_HINT="Suggested command: tuned-adm active > /tmp/exam/ch04_35_tuned.txt 2>&1. Explanation: 2>&1 merges standard error into the standard-output stream before it is written. > overwrites the destination with standard output."
+TASK_1_QUESTION="tuned-adm active and write both standard output and standard error to /tmp/exam/ch04_35_tuned.txt."
+TASK_1_HINT="Review the tuned-adm manual page and verify the requested final state."
 TASK_1_COMMAND_1="tuned-adm active > /tmp/exam/ch04_35_tuned.txt 2>&1"
 
-TASK_2_QUESTION="Run ps -eo pid,ni,comm and write the complete standard output to /tmp/exam/ch04_35_nice.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_2_HINT="Suggested command: ps -eo pid,ni,comm > /tmp/exam/ch04_35_nice.txt. Explanation: > overwrites the destination with standard output."
+TASK_2_QUESTION="Write the standard output of \`ps -eo pid,ni,comm\` to /tmp/exam/ch04_35_nice.txt."
+TASK_2_HINT="Review the ps manual page and verify the requested final state."
 TASK_2_COMMAND_1="ps -eo pid,ni,comm > /tmp/exam/ch04_35_nice.txt"
 
 HINT=$(_build_hint)

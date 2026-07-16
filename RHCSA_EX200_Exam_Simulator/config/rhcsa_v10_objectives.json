@@ -1,0 +1,2904 @@
+{
+  "schema": 1,
+  "exam": "EX200",
+  "platform": "Red Hat Enterprise Linux 10",
+  "core_chapters": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "supplementary_chapters": [
+    11,
+    12
+  ],
+  "coverage_policy": {
+    "minimum_labs_per_objective": 3,
+    "minimum_difficulty_levels_per_objective": 3,
+    "minimum_exam_labs_per_objective": 1,
+    "core_objectives": 62,
+    "supplementary_content_excluded_from_core_score": true
+  },
+  "objectives": [
+    {
+      "id": "1.1",
+      "chapter": 1,
+      "category": "Understand and use essential tools",
+      "title": "Access a shell prompt and issue commands with correct syntax",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 2,
+            "title": "Accessing the Command Line"
+          },
+          {
+            "chapter": 7,
+            "title": "Managing Files from the Command Line"
+          },
+          {
+            "chapter": 10,
+            "title": "Managing Local Users and Groups"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 1,
+            "title": "Shell Scripting and the Command Line"
+          },
+          {
+            "chapter": 12,
+            "title": "Controlling and Troubleshooting the Boot Process"
+          },
+          {
+            "chapter": 3,
+            "title": "Scheduling User Tasks"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 2,
+            "title": "Basic Command-Line Tools"
+          },
+          {
+            "chapter": 13,
+            "title": "RHEL 10 Installation with Graphical Installer"
+          },
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          }
+        ]
+      }
+    },
+    {
+      "id": "1.2",
+      "chapter": 1,
+      "category": "Understand and use essential tools",
+      "title": "Use input-output redirection (>, >>, |, 2>, etc.)",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 9,
+            "title": "Redirecting Shell Input and Output"
+          },
+          {
+            "chapter": 15,
+            "title": "Monitoring and Managing Linux Processes"
+          },
+          {
+            "chapter": 3,
+            "title": "Getting Help from Local Documentation"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 17,
+            "title": "Managing Containers with Podman"
+          },
+          {
+            "chapter": 1,
+            "title": "Shell Scripting and the Command Line"
+          },
+          {
+            "chapter": 15,
+            "title": "Accessing Network-attached Storage"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 2,
+            "title": "Basic Command-Line Tools"
+          },
+          {
+            "chapter": 13,
+            "title": "RHEL 10 Installation with Graphical Installer"
+          },
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          }
+        ]
+      }
+    },
+    {
+      "id": "1.3",
+      "chapter": 1,
+      "category": "Understand and use essential tools",
+      "title": "Use grep and regular expressions to analyze text",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 15,
+            "title": "Monitoring and Managing Linux Processes"
+          },
+          {
+            "chapter": 5,
+            "title": "Getting AI-assisted Help with Red Hat Enterprise Linux Lightspeed"
+          },
+          {
+            "chapter": 3,
+            "title": "Getting Help from Local Documentation"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 2,
+            "title": "Using Regular Expressions for Practical Applications"
+          },
+          {
+            "chapter": 15,
+            "title": "Accessing Network-attached Storage"
+          },
+          {
+            "chapter": 14,
+            "title": "Managing Network Security"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 2,
+            "title": "Basic Command-Line Tools"
+          },
+          {
+            "chapter": 7,
+            "title": "Operating Running Systems"
+          }
+        ]
+      }
+    },
+    {
+      "id": "1.4",
+      "chapter": 1,
+      "category": "Understand and use essential tools",
+      "title": "Access remote systems using SSH",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 19,
+            "title": "Configuring and Securing SSH"
+          },
+          {
+            "chapter": 16,
+            "title": "Controlling Services and Daemons"
+          },
+          {
+            "chapter": 2,
+            "title": "Accessing the Command Line"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 8,
+            "title": "Transferring Files"
+          },
+          {
+            "chapter": 5,
+            "title": "Analyzing and Storing Logs"
+          },
+          {
+            "chapter": 19,
+            "title": "Comprehensive Review"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 8,
+            "title": "Scheduling, Time, and OpenSSH"
+          },
+          {
+            "chapter": 7,
+            "title": "Operating Running Systems"
+          }
+        ]
+      }
+    },
+    {
+      "id": "1.5",
+      "chapter": 1,
+      "category": "Understand and use essential tools",
+      "title": "Log in and switch users in multiuser targets",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 10,
+            "title": "Managing Local Users and Groups"
+          },
+          {
+            "chapter": 11,
+            "title": "Controlling Access to Files"
+          },
+          {
+            "chapter": 3,
+            "title": "Getting Help from Local Documentation"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 1,
+            "title": "Shell Scripting and the Command Line"
+          },
+          {
+            "chapter": 15,
+            "title": "Accessing Network-attached Storage"
+          },
+          {
+            "chapter": 16,
+            "title": "Installing Red Hat Enterprise Linux"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 2,
+            "title": "Basic Command-Line Tools"
+          },
+          {
+            "chapter": 13,
+            "title": "RHEL 10 Installation with Graphical Installer"
+          },
+          {
+            "chapter": 4,
+            "title": "Manage Users and Groups"
+          }
+        ]
+      }
+    },
+    {
+      "id": "1.6",
+      "chapter": 1,
+      "category": "Understand and use essential tools",
+      "title": "Archive, compress, unpack, and uncompress files using tar, gzip, and bzip2",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 16,
+            "title": "Controlling Services and Daemons"
+          },
+          {
+            "chapter": 10,
+            "title": "Managing Local Users and Groups"
+          },
+          {
+            "chapter": 2,
+            "title": "Accessing the Command Line"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 7,
+            "title": "Archiving Files"
+          },
+          {
+            "chapter": 12,
+            "title": "Controlling and Troubleshooting the Boot Process"
+          },
+          {
+            "chapter": 16,
+            "title": "Installing Red Hat Enterprise Linux"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 7,
+            "title": "Operating Running Systems"
+          },
+          {
+            "chapter": 2,
+            "title": "Basic Command-Line Tools"
+          }
+        ]
+      }
+    },
+    {
+      "id": "1.7",
+      "chapter": 1,
+      "category": "Understand and use essential tools",
+      "title": "Create and edit text files",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 8,
+            "title": "Editing Text Files"
+          },
+          {
+            "chapter": 3,
+            "title": "Getting Help from Local Documentation"
+          },
+          {
+            "chapter": 2,
+            "title": "Accessing the Command Line"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 18,
+            "title": "Working with Image-based Red Hat Enterprise Linux"
+          },
+          {
+            "chapter": 1,
+            "title": "Shell Scripting and the Command Line"
+          },
+          {
+            "chapter": 2,
+            "title": "Using Regular Expressions for Practical Applications"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 2,
+            "title": "Basic Command-Line Tools"
+          },
+          {
+            "chapter": 13,
+            "title": "RHEL 10 Installation with Graphical Installer"
+          }
+        ]
+      }
+    },
+    {
+      "id": "1.8",
+      "chapter": 1,
+      "category": "Understand and use essential tools",
+      "title": "Create, delete, copy, and move files and directories",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 7,
+            "title": "Managing Files from the Command Line"
+          },
+          {
+            "chapter": 11,
+            "title": "Controlling Access to Files"
+          },
+          {
+            "chapter": 6,
+            "title": "Navigating the File-system Hierarchy"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 15,
+            "title": "Accessing Network-attached Storage"
+          },
+          {
+            "chapter": 6,
+            "title": "Managing Security with SELinux"
+          },
+          {
+            "chapter": 4,
+            "title": "Scheduling System Tasks"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 2,
+            "title": "Basic Command-Line Tools"
+          },
+          {
+            "chapter": 13,
+            "title": "RHEL 10 Installation with Graphical Installer"
+          },
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          }
+        ]
+      }
+    },
+    {
+      "id": "1.9",
+      "chapter": 1,
+      "category": "Understand and use essential tools",
+      "title": "Create hard and soft links",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 7,
+            "title": "Managing Files from the Command Line"
+          },
+          {
+            "chapter": 14,
+            "title": "Accessing Removable Media"
+          },
+          {
+            "chapter": 16,
+            "title": "Controlling Services and Daemons"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 12,
+            "title": "Controlling and Troubleshooting the Boot Process"
+          },
+          {
+            "chapter": 4,
+            "title": "Scheduling System Tasks"
+          },
+          {
+            "chapter": 8,
+            "title": "Transferring Files"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 2,
+            "title": "Basic Command-Line Tools"
+          },
+          {
+            "chapter": 13,
+            "title": "RHEL 10 Installation with Graphical Installer"
+          },
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          }
+        ]
+      }
+    },
+    {
+      "id": "1.10",
+      "chapter": 1,
+      "category": "Understand and use essential tools",
+      "title": "List, set, and change standard ugo/rwx permissions",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 11,
+            "title": "Controlling Access to Files"
+          },
+          {
+            "chapter": 7,
+            "title": "Managing Files from the Command Line"
+          },
+          {
+            "chapter": 6,
+            "title": "Navigating the File-system Hierarchy"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 18,
+            "title": "Working with Image-based Red Hat Enterprise Linux"
+          },
+          {
+            "chapter": 6,
+            "title": "Managing Security with SELinux"
+          },
+          {
+            "chapter": 4,
+            "title": "Scheduling System Tasks"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 2,
+            "title": "Basic Command-Line Tools"
+          },
+          {
+            "chapter": 13,
+            "title": "RHEL 10 Installation with Graphical Installer"
+          },
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          }
+        ]
+      }
+    },
+    {
+      "id": "1.11",
+      "chapter": 1,
+      "category": "Understand and use essential tools",
+      "title": "Locate, read, and use system documentation including man, info, and /usr/share/doc",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 3,
+            "title": "Getting Help from Local Documentation"
+          },
+          {
+            "chapter": 10,
+            "title": "Managing Local Users and Groups"
+          },
+          {
+            "chapter": 15,
+            "title": "Monitoring and Managing Linux Processes"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 5,
+            "title": "Analyzing and Storing Logs"
+          },
+          {
+            "chapter": 6,
+            "title": "Managing Security with SELinux"
+          },
+          {
+            "chapter": 14,
+            "title": "Managing Network Security"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 2,
+            "title": "Basic Command-Line Tools"
+          },
+          {
+            "chapter": 13,
+            "title": "RHEL 10 Installation with Graphical Installer"
+          },
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          }
+        ]
+      }
+    },
+    {
+      "id": "2.1",
+      "chapter": 2,
+      "category": "Manage software",
+      "title": "Configure access to RPM repositories",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": true,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 12,
+            "title": "Installing and Updating Software with RPM"
+          },
+          {
+            "chapter": 1,
+            "title": "Introduction to Red Hat Enterprise Linux"
+          }
+        ],
+        "RH134": [],
+        "Markelov": []
+      }
+    },
+    {
+      "id": "2.2",
+      "chapter": 2,
+      "category": "Manage software",
+      "title": "Install and remove RPM software packages",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 12,
+            "title": "Installing and Updating Software with RPM"
+          },
+          {
+            "chapter": 5,
+            "title": "Getting AI-assisted Help with Red Hat Enterprise Linux Lightspeed"
+          },
+          {
+            "chapter": 13,
+            "title": "Installing and Updating Applications by Using Flatpak"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 18,
+            "title": "Working with Image-based Red Hat Enterprise Linux"
+          },
+          {
+            "chapter": 15,
+            "title": "Accessing Network-attached Storage"
+          },
+          {
+            "chapter": 4,
+            "title": "Scheduling System Tasks"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 9,
+            "title": "Software Management"
+          },
+          {
+            "chapter": 8,
+            "title": "Scheduling, Time, and OpenSSH"
+          }
+        ]
+      }
+    },
+    {
+      "id": "2.3",
+      "chapter": 2,
+      "category": "Manage software",
+      "title": "Configure access to Flatpak repositories",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": true,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 13,
+            "title": "Installing and Updating Applications by Using Flatpak"
+          }
+        ],
+        "RH134": [],
+        "Markelov": [
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 9,
+            "title": "Software Management"
+          }
+        ]
+      }
+    },
+    {
+      "id": "2.4",
+      "chapter": 2,
+      "category": "Manage software",
+      "title": "Install and remove Flatpak software packages",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 13,
+            "title": "Installing and Updating Applications by Using Flatpak"
+          }
+        ],
+        "RH134": [],
+        "Markelov": [
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 9,
+            "title": "Software Management"
+          }
+        ]
+      }
+    },
+    {
+      "id": "3.1",
+      "chapter": 3,
+      "category": "Create simple shell scripts",
+      "title": "Conditionally execute code using if, test, and []",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [],
+        "RH134": [
+          {
+            "chapter": 1,
+            "title": "Shell Scripting and the Command Line"
+          },
+          {
+            "chapter": 4,
+            "title": "Scheduling System Tasks"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 3,
+            "title": "Bash and Shell Scripts"
+          },
+          {
+            "chapter": 2,
+            "title": "Basic Command-Line Tools"
+          }
+        ]
+      }
+    },
+    {
+      "id": "3.2",
+      "chapter": 3,
+      "category": "Create simple shell scripts",
+      "title": "Use looping constructs to process file or command-line input",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 18,
+            "title": "Managing Network Configuration"
+          },
+          {
+            "chapter": 17,
+            "title": "Introduction to Networking"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 1,
+            "title": "Shell Scripting and the Command Line"
+          },
+          {
+            "chapter": 9,
+            "title": "Tuning System Performance"
+          },
+          {
+            "chapter": 4,
+            "title": "Scheduling System Tasks"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 3,
+            "title": "Bash and Shell Scripts"
+          },
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 10,
+            "title": "Manage Basic Networking"
+          }
+        ]
+      }
+    },
+    {
+      "id": "3.3",
+      "chapter": 3,
+      "category": "Create simple shell scripts",
+      "title": "Process script inputs such as $1 and $2",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 2,
+            "title": "Accessing the Command Line"
+          },
+          {
+            "chapter": 12,
+            "title": "Installing and Updating Software with RPM"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 1,
+            "title": "Shell Scripting and the Command Line"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 3,
+            "title": "Bash and Shell Scripts"
+          },
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 9,
+            "title": "Software Management"
+          }
+        ]
+      }
+    },
+    {
+      "id": "3.4",
+      "chapter": 3,
+      "category": "Create simple shell scripts",
+      "title": "Process output of shell commands within a script",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 7,
+            "title": "Managing Files from the Command Line"
+          },
+          {
+            "chapter": 9,
+            "title": "Redirecting Shell Input and Output"
+          },
+          {
+            "chapter": 15,
+            "title": "Monitoring and Managing Linux Processes"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 1,
+            "title": "Shell Scripting and the Command Line"
+          },
+          {
+            "chapter": 2,
+            "title": "Using Regular Expressions for Practical Applications"
+          },
+          {
+            "chapter": 12,
+            "title": "Controlling and Troubleshooting the Boot Process"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 2,
+            "title": "Basic Command-Line Tools"
+          }
+        ]
+      }
+    },
+    {
+      "id": "4.1",
+      "chapter": 4,
+      "category": "Operate running systems",
+      "title": "Boot, reboot, and shut down a system normally",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 18,
+            "title": "Managing Network Configuration"
+          },
+          {
+            "chapter": 16,
+            "title": "Controlling Services and Daemons"
+          },
+          {
+            "chapter": 2,
+            "title": "Accessing the Command Line"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 12,
+            "title": "Controlling and Troubleshooting the Boot Process"
+          },
+          {
+            "chapter": 5,
+            "title": "Analyzing and Storing Logs"
+          },
+          {
+            "chapter": 10,
+            "title": "Managing Basic Storage"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 7,
+            "title": "Operating Running Systems"
+          },
+          {
+            "chapter": 10,
+            "title": "Manage Basic Networking"
+          }
+        ]
+      }
+    },
+    {
+      "id": "4.2",
+      "chapter": 4,
+      "category": "Operate running systems",
+      "title": "Boot systems into different targets manually",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [],
+        "RH134": [
+          {
+            "chapter": 12,
+            "title": "Controlling and Troubleshooting the Boot Process"
+          },
+          {
+            "chapter": 19,
+            "title": "Comprehensive Review"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 7,
+            "title": "Operating Running Systems"
+          }
+        ]
+      }
+    },
+    {
+      "id": "4.3",
+      "chapter": 4,
+      "category": "Operate running systems",
+      "title": "Interrupt the boot process to gain access to a system",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 0,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [],
+        "RH134": [
+          {
+            "chapter": 13,
+            "title": "Recovering Superuser Access"
+          },
+          {
+            "chapter": 12,
+            "title": "Controlling and Troubleshooting the Boot Process"
+          },
+          {
+            "chapter": 19,
+            "title": "Comprehensive Review"
+          }
+        ],
+        "Markelov": []
+      }
+    },
+    {
+      "id": "4.4",
+      "chapter": 4,
+      "category": "Operate running systems",
+      "title": "Identify CPU/memory intensive processes and kill processes",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 15,
+            "title": "Monitoring and Managing Linux Processes"
+          },
+          {
+            "chapter": 5,
+            "title": "Getting AI-assisted Help with Red Hat Enterprise Linux Lightspeed"
+          },
+          {
+            "chapter": 16,
+            "title": "Controlling Services and Daemons"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 9,
+            "title": "Tuning System Performance"
+          },
+          {
+            "chapter": 6,
+            "title": "Managing Security with SELinux"
+          },
+          {
+            "chapter": 1,
+            "title": "Shell Scripting and the Command Line"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 7,
+            "title": "Operating Running Systems"
+          },
+          {
+            "chapter": 2,
+            "title": "Basic Command-Line Tools"
+          }
+        ]
+      }
+    },
+    {
+      "id": "4.5",
+      "chapter": 4,
+      "category": "Operate running systems",
+      "title": "Adjust process scheduling",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 5,
+            "title": "Getting AI-assisted Help with Red Hat Enterprise Linux Lightspeed"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 9,
+            "title": "Tuning System Performance"
+          },
+          {
+            "chapter": 4,
+            "title": "Scheduling System Tasks"
+          },
+          {
+            "chapter": 19,
+            "title": "Comprehensive Review"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 7,
+            "title": "Operating Running Systems"
+          }
+        ]
+      }
+    },
+    {
+      "id": "4.6",
+      "chapter": 4,
+      "category": "Operate running systems",
+      "title": "Manage tuning profiles",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [],
+        "RH134": [
+          {
+            "chapter": 9,
+            "title": "Tuning System Performance"
+          },
+          {
+            "chapter": 8,
+            "title": "Transferring Files"
+          },
+          {
+            "chapter": 12,
+            "title": "Controlling and Troubleshooting the Boot Process"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 7,
+            "title": "Operating Running Systems"
+          }
+        ]
+      }
+    },
+    {
+      "id": "4.7",
+      "chapter": 4,
+      "category": "Operate running systems",
+      "title": "Locate and interpret system log files and journals",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 5,
+            "title": "Getting AI-assisted Help with Red Hat Enterprise Linux Lightspeed"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 5,
+            "title": "Analyzing and Storing Logs"
+          },
+          {
+            "chapter": 14,
+            "title": "Managing Network Security"
+          },
+          {
+            "chapter": 19,
+            "title": "Comprehensive Review"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 7,
+            "title": "Operating Running Systems"
+          }
+        ]
+      }
+    },
+    {
+      "id": "4.8",
+      "chapter": 4,
+      "category": "Operate running systems",
+      "title": "Preserve system journals",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": true,
+      "source_refs": {
+        "RH124": [],
+        "RH134": [
+          {
+            "chapter": 5,
+            "title": "Analyzing and Storing Logs"
+          }
+        ],
+        "Markelov": []
+      }
+    },
+    {
+      "id": "4.9",
+      "chapter": 4,
+      "category": "Operate running systems",
+      "title": "Start, stop, and check the status of network services",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 16,
+            "title": "Controlling Services and Daemons"
+          },
+          {
+            "chapter": 5,
+            "title": "Getting AI-assisted Help with Red Hat Enterprise Linux Lightspeed"
+          },
+          {
+            "chapter": 8,
+            "title": "Editing Text Files"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 14,
+            "title": "Managing Network Security"
+          },
+          {
+            "chapter": 4,
+            "title": "Scheduling System Tasks"
+          },
+          {
+            "chapter": 1,
+            "title": "Shell Scripting and the Command Line"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 7,
+            "title": "Operating Running Systems"
+          },
+          {
+            "chapter": 10,
+            "title": "Manage Basic Networking"
+          }
+        ]
+      }
+    },
+    {
+      "id": "4.10",
+      "chapter": 4,
+      "category": "Operate running systems",
+      "title": "Securely transfer files between systems",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 15,
+            "title": "Monitoring and Managing Linux Processes"
+          },
+          {
+            "chapter": 12,
+            "title": "Installing and Updating Software with RPM"
+          },
+          {
+            "chapter": 16,
+            "title": "Controlling Services and Daemons"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 8,
+            "title": "Transferring Files"
+          },
+          {
+            "chapter": 7,
+            "title": "Archiving Files"
+          },
+          {
+            "chapter": 19,
+            "title": "Comprehensive Review"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 7,
+            "title": "Operating Running Systems"
+          },
+          {
+            "chapter": 8,
+            "title": "Scheduling, Time, and OpenSSH"
+          }
+        ]
+      }
+    },
+    {
+      "id": "5.1",
+      "chapter": 5,
+      "category": "Configure local storage",
+      "title": "List, create, and delete partitions on GPT disks",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 14,
+            "title": "Accessing Removable Media"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 10,
+            "title": "Managing Basic Storage"
+          },
+          {
+            "chapter": 11,
+            "title": "Managing Storage with Logical Volume Manager"
+          },
+          {
+            "chapter": 16,
+            "title": "Installing Red Hat Enterprise Linux"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 4,
+            "title": "Manage Users and Groups"
+          },
+          {
+            "chapter": 2,
+            "title": "Basic Command-Line Tools"
+          }
+        ]
+      }
+    },
+    {
+      "id": "5.2",
+      "chapter": 5,
+      "category": "Configure local storage",
+      "title": "Create and remove physical volumes",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [],
+        "RH134": [
+          {
+            "chapter": 11,
+            "title": "Managing Storage with Logical Volume Manager"
+          },
+          {
+            "chapter": 19,
+            "title": "Comprehensive Review"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          }
+        ]
+      }
+    },
+    {
+      "id": "5.3",
+      "chapter": 5,
+      "category": "Configure local storage",
+      "title": "Assign physical volumes to volume groups",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 14,
+            "title": "Accessing Removable Media"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 11,
+            "title": "Managing Storage with Logical Volume Manager"
+          },
+          {
+            "chapter": 19,
+            "title": "Comprehensive Review"
+          },
+          {
+            "chapter": 16,
+            "title": "Installing Red Hat Enterprise Linux"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          }
+        ]
+      }
+    },
+    {
+      "id": "5.4",
+      "chapter": 5,
+      "category": "Configure local storage",
+      "title": "Create and delete logical volumes",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 14,
+            "title": "Accessing Removable Media"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 11,
+            "title": "Managing Storage with Logical Volume Manager"
+          },
+          {
+            "chapter": 19,
+            "title": "Comprehensive Review"
+          },
+          {
+            "chapter": 16,
+            "title": "Installing Red Hat Enterprise Linux"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 4,
+            "title": "Manage Users and Groups"
+          }
+        ]
+      }
+    },
+    {
+      "id": "5.5",
+      "chapter": 5,
+      "category": "Configure local storage",
+      "title": "Configure file systems to mount at boot by UUID or label",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": true,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 14,
+            "title": "Accessing Removable Media"
+          },
+          {
+            "chapter": 18,
+            "title": "Managing Network Configuration"
+          },
+          {
+            "chapter": 15,
+            "title": "Monitoring and Managing Linux Processes"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 10,
+            "title": "Managing Basic Storage"
+          },
+          {
+            "chapter": 6,
+            "title": "Managing Security with SELinux"
+          },
+          {
+            "chapter": 11,
+            "title": "Managing Storage with Logical Volume Manager"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 11,
+            "title": "Manage Security with SELinux"
+          },
+          {
+            "chapter": 7,
+            "title": "Operating Running Systems"
+          }
+        ]
+      }
+    },
+    {
+      "id": "5.6",
+      "chapter": 5,
+      "category": "Configure local storage",
+      "title": "Add partitions, logical volumes, and swap non-destructively",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": true,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 15,
+            "title": "Monitoring and Managing Linux Processes"
+          },
+          {
+            "chapter": 5,
+            "title": "Getting AI-assisted Help with Red Hat Enterprise Linux Lightspeed"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 10,
+            "title": "Managing Basic Storage"
+          },
+          {
+            "chapter": 11,
+            "title": "Managing Storage with Logical Volume Manager"
+          },
+          {
+            "chapter": 9,
+            "title": "Tuning System Performance"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          }
+        ]
+      }
+    },
+    {
+      "id": "6.1",
+      "chapter": 6,
+      "category": "Create and configure file systems",
+      "title": "Create, mount, unmount, and use VFAT, ext4, and XFS file systems",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 14,
+            "title": "Accessing Removable Media"
+          },
+          {
+            "chapter": 3,
+            "title": "Getting Help from Local Documentation"
+          },
+          {
+            "chapter": 6,
+            "title": "Navigating the File-system Hierarchy"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 10,
+            "title": "Managing Basic Storage"
+          },
+          {
+            "chapter": 11,
+            "title": "Managing Storage with Logical Volume Manager"
+          },
+          {
+            "chapter": 12,
+            "title": "Controlling and Troubleshooting the Boot Process"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 2,
+            "title": "Basic Command-Line Tools"
+          },
+          {
+            "chapter": 13,
+            "title": "RHEL 10 Installation with Graphical Installer"
+          }
+        ]
+      }
+    },
+    {
+      "id": "6.2",
+      "chapter": 6,
+      "category": "Create and configure file systems",
+      "title": "Mount and unmount NFS network file systems",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 17,
+            "title": "Introduction to Networking"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 15,
+            "title": "Accessing Network-attached Storage"
+          },
+          {
+            "chapter": 19,
+            "title": "Comprehensive Review"
+          },
+          {
+            "chapter": 16,
+            "title": "Installing Red Hat Enterprise Linux"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 2,
+            "title": "Basic Command-Line Tools"
+          },
+          {
+            "chapter": 9,
+            "title": "Software Management"
+          }
+        ]
+      }
+    },
+    {
+      "id": "6.3",
+      "chapter": 6,
+      "category": "Create and configure file systems",
+      "title": "Configure autofs",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": true,
+      "source_refs": {
+        "RH124": [],
+        "RH134": [
+          {
+            "chapter": 15,
+            "title": "Accessing Network-attached Storage"
+          },
+          {
+            "chapter": 19,
+            "title": "Comprehensive Review"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 11,
+            "title": "Manage Security with SELinux"
+          }
+        ]
+      }
+    },
+    {
+      "id": "6.4",
+      "chapter": 6,
+      "category": "Create and configure file systems",
+      "title": "Extend existing logical volumes",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 3,
+            "title": "Getting Help from Local Documentation"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 11,
+            "title": "Managing Storage with Logical Volume Manager"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          }
+        ]
+      }
+    },
+    {
+      "id": "6.5",
+      "chapter": 6,
+      "category": "Create and configure file systems",
+      "title": "Diagnose and correct file permission problems",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 11,
+            "title": "Controlling Access to Files"
+          },
+          {
+            "chapter": 10,
+            "title": "Managing Local Users and Groups"
+          },
+          {
+            "chapter": 6,
+            "title": "Navigating the File-system Hierarchy"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 6,
+            "title": "Managing Security with SELinux"
+          },
+          {
+            "chapter": 4,
+            "title": "Scheduling System Tasks"
+          },
+          {
+            "chapter": 1,
+            "title": "Shell Scripting and the Command Line"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          }
+        ]
+      }
+    },
+    {
+      "id": "7.1",
+      "chapter": 7,
+      "category": "Deploy, configure, and maintain systems",
+      "title": "Schedule tasks using at, cron, and systemd timer units",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 2,
+            "title": "Accessing the Command Line"
+          },
+          {
+            "chapter": 17,
+            "title": "Introduction to Networking"
+          },
+          {
+            "chapter": 3,
+            "title": "Getting Help from Local Documentation"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 4,
+            "title": "Scheduling System Tasks"
+          },
+          {
+            "chapter": 3,
+            "title": "Scheduling User Tasks"
+          },
+          {
+            "chapter": 5,
+            "title": "Analyzing and Storing Logs"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 8,
+            "title": "Scheduling, Time, and OpenSSH"
+          },
+          {
+            "chapter": 7,
+            "title": "Operating Running Systems"
+          }
+        ]
+      }
+    },
+    {
+      "id": "7.2",
+      "chapter": 7,
+      "category": "Deploy, configure, and maintain systems",
+      "title": "Start and stop services and configure them to start at boot",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": true,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 16,
+            "title": "Controlling Services and Daemons"
+          },
+          {
+            "chapter": 12,
+            "title": "Installing and Updating Software with RPM"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 4,
+            "title": "Scheduling System Tasks"
+          },
+          {
+            "chapter": 18,
+            "title": "Working with Image-based Red Hat Enterprise Linux"
+          },
+          {
+            "chapter": 14,
+            "title": "Managing Network Security"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 7,
+            "title": "Operating Running Systems"
+          }
+        ]
+      }
+    },
+    {
+      "id": "7.3",
+      "chapter": 7,
+      "category": "Deploy, configure, and maintain systems",
+      "title": "Configure systems to boot into a specific target automatically",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": true,
+      "source_refs": {
+        "RH124": [],
+        "RH134": [
+          {
+            "chapter": 12,
+            "title": "Controlling and Troubleshooting the Boot Process"
+          },
+          {
+            "chapter": 19,
+            "title": "Comprehensive Review"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 7,
+            "title": "Operating Running Systems"
+          }
+        ]
+      }
+    },
+    {
+      "id": "7.4",
+      "chapter": 7,
+      "category": "Deploy, configure, and maintain systems",
+      "title": "Configure time service clients",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": true,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 16,
+            "title": "Controlling Services and Daemons"
+          },
+          {
+            "chapter": 14,
+            "title": "Accessing Removable Media"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 5,
+            "title": "Analyzing and Storing Logs"
+          },
+          {
+            "chapter": 2,
+            "title": "Using Regular Expressions for Practical Applications"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 8,
+            "title": "Scheduling, Time, and OpenSSH"
+          }
+        ]
+      }
+    },
+    {
+      "id": "7.5",
+      "chapter": 7,
+      "category": "Deploy, configure, and maintain systems",
+      "title": "Install and update packages from CDN, remote repositories, or local files",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 13,
+            "title": "Installing and Updating Applications by Using Flatpak"
+          },
+          {
+            "chapter": 12,
+            "title": "Installing and Updating Software with RPM"
+          },
+          {
+            "chapter": 4,
+            "title": "Registering Systems for Red Hat Support"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 17,
+            "title": "Managing Containers with Podman"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 9,
+            "title": "Software Management"
+          }
+        ]
+      }
+    },
+    {
+      "id": "7.6",
+      "chapter": 7,
+      "category": "Deploy, configure, and maintain systems",
+      "title": "Modify the system bootloader",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": true,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 14,
+            "title": "Accessing Removable Media"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 12,
+            "title": "Controlling and Troubleshooting the Boot Process"
+          },
+          {
+            "chapter": 13,
+            "title": "Recovering Superuser Access"
+          },
+          {
+            "chapter": 18,
+            "title": "Working with Image-based Red Hat Enterprise Linux"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 7,
+            "title": "Operating Running Systems"
+          },
+          {
+            "chapter": 2,
+            "title": "Basic Command-Line Tools"
+          }
+        ]
+      }
+    },
+    {
+      "id": "8.1",
+      "chapter": 8,
+      "category": "Manage basic networking",
+      "title": "Configure IPv4 and IPv6 addresses",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": true,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 18,
+            "title": "Managing Network Configuration"
+          },
+          {
+            "chapter": 17,
+            "title": "Introduction to Networking"
+          },
+          {
+            "chapter": 3,
+            "title": "Getting Help from Local Documentation"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 16,
+            "title": "Installing Red Hat Enterprise Linux"
+          },
+          {
+            "chapter": 5,
+            "title": "Analyzing and Storing Logs"
+          },
+          {
+            "chapter": 14,
+            "title": "Managing Network Security"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 10,
+            "title": "Manage Basic Networking"
+          },
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 9,
+            "title": "Software Management"
+          }
+        ]
+      }
+    },
+    {
+      "id": "8.2",
+      "chapter": 8,
+      "category": "Manage basic networking",
+      "title": "Configure hostname resolution",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": true,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 18,
+            "title": "Managing Network Configuration"
+          },
+          {
+            "chapter": 17,
+            "title": "Introduction to Networking"
+          },
+          {
+            "chapter": 2,
+            "title": "Accessing the Command Line"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 8,
+            "title": "Transferring Files"
+          },
+          {
+            "chapter": 16,
+            "title": "Installing Red Hat Enterprise Linux"
+          },
+          {
+            "chapter": 5,
+            "title": "Analyzing and Storing Logs"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 10,
+            "title": "Manage Basic Networking"
+          },
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 2,
+            "title": "Basic Command-Line Tools"
+          }
+        ]
+      }
+    },
+    {
+      "id": "8.3",
+      "chapter": 8,
+      "category": "Manage basic networking",
+      "title": "Configure network services to start automatically at boot",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": true,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 18,
+            "title": "Managing Network Configuration"
+          },
+          {
+            "chapter": 16,
+            "title": "Controlling Services and Daemons"
+          },
+          {
+            "chapter": 9,
+            "title": "Redirecting Shell Input and Output"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 5,
+            "title": "Analyzing and Storing Logs"
+          },
+          {
+            "chapter": 14,
+            "title": "Managing Network Security"
+          },
+          {
+            "chapter": 16,
+            "title": "Installing Red Hat Enterprise Linux"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 10,
+            "title": "Manage Basic Networking"
+          },
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 7,
+            "title": "Operating Running Systems"
+          }
+        ]
+      }
+    },
+    {
+      "id": "8.4",
+      "chapter": 8,
+      "category": "Manage basic networking",
+      "title": "Restrict network access using firewalld and firewall-cmd",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": true,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 15,
+            "title": "Monitoring and Managing Linux Processes"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 14,
+            "title": "Managing Network Security"
+          },
+          {
+            "chapter": 19,
+            "title": "Comprehensive Review"
+          },
+          {
+            "chapter": 9,
+            "title": "Tuning System Performance"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 10,
+            "title": "Manage Basic Networking"
+          },
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 7,
+            "title": "Operating Running Systems"
+          }
+        ]
+      }
+    },
+    {
+      "id": "9.1",
+      "chapter": 9,
+      "category": "Manage users and groups",
+      "title": "Create, delete, and modify local user accounts",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 10,
+            "title": "Managing Local Users and Groups"
+          },
+          {
+            "chapter": 2,
+            "title": "Accessing the Command Line"
+          },
+          {
+            "chapter": 12,
+            "title": "Installing and Updating Software with RPM"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 8,
+            "title": "Transferring Files"
+          },
+          {
+            "chapter": 19,
+            "title": "Comprehensive Review"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 4,
+            "title": "Manage Users and Groups"
+          },
+          {
+            "chapter": 3,
+            "title": "Bash and Shell Scripts"
+          },
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          }
+        ]
+      }
+    },
+    {
+      "id": "9.2",
+      "chapter": 9,
+      "category": "Manage users and groups",
+      "title": "Change passwords and adjust password aging",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 10,
+            "title": "Managing Local Users and Groups"
+          },
+          {
+            "chapter": 3,
+            "title": "Getting Help from Local Documentation"
+          },
+          {
+            "chapter": 2,
+            "title": "Accessing the Command Line"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 13,
+            "title": "Recovering Superuser Access"
+          },
+          {
+            "chapter": 2,
+            "title": "Using Regular Expressions for Practical Applications"
+          },
+          {
+            "chapter": 19,
+            "title": "Comprehensive Review"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 2,
+            "title": "Basic Command-Line Tools"
+          },
+          {
+            "chapter": 4,
+            "title": "Manage Users and Groups"
+          },
+          {
+            "chapter": 13,
+            "title": "RHEL 10 Installation with Graphical Installer"
+          }
+        ]
+      }
+    },
+    {
+      "id": "9.3",
+      "chapter": 9,
+      "category": "Manage users and groups",
+      "title": "Create, delete, and modify local groups and memberships",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 10,
+            "title": "Managing Local Users and Groups"
+          },
+          {
+            "chapter": 11,
+            "title": "Controlling Access to Files"
+          },
+          {
+            "chapter": 12,
+            "title": "Installing and Updating Software with RPM"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 16,
+            "title": "Installing Red Hat Enterprise Linux"
+          },
+          {
+            "chapter": 19,
+            "title": "Comprehensive Review"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 4,
+            "title": "Manage Users and Groups"
+          },
+          {
+            "chapter": 3,
+            "title": "Bash and Shell Scripts"
+          }
+        ]
+      }
+    },
+    {
+      "id": "9.4",
+      "chapter": 9,
+      "category": "Manage users and groups",
+      "title": "Configure privileged access",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": true,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 10,
+            "title": "Managing Local Users and Groups"
+          },
+          {
+            "chapter": 18,
+            "title": "Managing Network Configuration"
+          },
+          {
+            "chapter": 5,
+            "title": "Getting AI-assisted Help with Red Hat Enterprise Linux Lightspeed"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 18,
+            "title": "Working with Image-based Red Hat Enterprise Linux"
+          },
+          {
+            "chapter": 5,
+            "title": "Analyzing and Storing Logs"
+          },
+          {
+            "chapter": 6,
+            "title": "Managing Security with SELinux"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 4,
+            "title": "Manage Users and Groups"
+          },
+          {
+            "chapter": 2,
+            "title": "Basic Command-Line Tools"
+          },
+          {
+            "chapter": 13,
+            "title": "RHEL 10 Installation with Graphical Installer"
+          }
+        ]
+      }
+    },
+    {
+      "id": "10.1",
+      "chapter": 10,
+      "category": "Manage security",
+      "title": "Configure firewall settings using firewall-cmd and firewalld",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": true,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 15,
+            "title": "Monitoring and Managing Linux Processes"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 14,
+            "title": "Managing Network Security"
+          },
+          {
+            "chapter": 19,
+            "title": "Comprehensive Review"
+          },
+          {
+            "chapter": 9,
+            "title": "Tuning System Performance"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 10,
+            "title": "Manage Basic Networking"
+          },
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 7,
+            "title": "Operating Running Systems"
+          }
+        ]
+      }
+    },
+    {
+      "id": "10.2",
+      "chapter": 10,
+      "category": "Manage security",
+      "title": "Manage default file permissions",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": true,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 11,
+            "title": "Controlling Access to Files"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 2,
+            "title": "Using Regular Expressions for Practical Applications"
+          },
+          {
+            "chapter": 7,
+            "title": "Archiving Files"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 2,
+            "title": "Basic Command-Line Tools"
+          },
+          {
+            "chapter": 13,
+            "title": "RHEL 10 Installation with Graphical Installer"
+          }
+        ]
+      }
+    },
+    {
+      "id": "10.3",
+      "chapter": 10,
+      "category": "Manage security",
+      "title": "Configure key-based SSH authentication",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": true,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 19,
+            "title": "Configuring and Securing SSH"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 19,
+            "title": "Comprehensive Review"
+          },
+          {
+            "chapter": 8,
+            "title": "Transferring Files"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 5,
+            "title": "Local Storage Configuration"
+          },
+          {
+            "chapter": 8,
+            "title": "Scheduling, Time, and OpenSSH"
+          },
+          {
+            "chapter": 2,
+            "title": "Basic Command-Line Tools"
+          }
+        ]
+      }
+    },
+    {
+      "id": "10.4",
+      "chapter": 10,
+      "category": "Manage security",
+      "title": "Set enforcing and permissive modes for SELinux",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [
+          {
+            "chapter": 1,
+            "title": "Introduction to Red Hat Enterprise Linux"
+          },
+          {
+            "chapter": 3,
+            "title": "Getting Help from Local Documentation"
+          }
+        ],
+        "RH134": [
+          {
+            "chapter": 6,
+            "title": "Managing Security with SELinux"
+          },
+          {
+            "chapter": 19,
+            "title": "Comprehensive Review"
+          },
+          {
+            "chapter": 14,
+            "title": "Managing Network Security"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 11,
+            "title": "Manage Security with SELinux"
+          }
+        ]
+      }
+    },
+    {
+      "id": "10.5",
+      "chapter": 10,
+      "category": "Manage security",
+      "title": "List and identify SELinux file and process contexts",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": false,
+      "source_refs": {
+        "RH124": [],
+        "RH134": [
+          {
+            "chapter": 6,
+            "title": "Managing Security with SELinux"
+          },
+          {
+            "chapter": 13,
+            "title": "Recovering Superuser Access"
+          },
+          {
+            "chapter": 14,
+            "title": "Managing Network Security"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 11,
+            "title": "Manage Security with SELinux"
+          },
+          {
+            "chapter": 10,
+            "title": "Manage Basic Networking"
+          },
+          {
+            "chapter": 2,
+            "title": "Basic Command-Line Tools"
+          }
+        ]
+      }
+    },
+    {
+      "id": "10.6",
+      "chapter": 10,
+      "category": "Manage security",
+      "title": "Restore default file contexts",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": true,
+      "source_refs": {
+        "RH124": [],
+        "RH134": [
+          {
+            "chapter": 6,
+            "title": "Managing Security with SELinux"
+          },
+          {
+            "chapter": 7,
+            "title": "Archiving Files"
+          },
+          {
+            "chapter": 8,
+            "title": "Transferring Files"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 11,
+            "title": "Manage Security with SELinux"
+          }
+        ]
+      }
+    },
+    {
+      "id": "10.7",
+      "chapter": 10,
+      "category": "Manage security",
+      "title": "Manage SELinux port labels",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": true,
+      "source_refs": {
+        "RH124": [],
+        "RH134": [
+          {
+            "chapter": 14,
+            "title": "Managing Network Security"
+          },
+          {
+            "chapter": 19,
+            "title": "Comprehensive Review"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 11,
+            "title": "Manage Security with SELinux"
+          }
+        ]
+      }
+    },
+    {
+      "id": "10.8",
+      "chapter": 10,
+      "category": "Manage security",
+      "title": "Use booleans to modify SELinux settings",
+      "core": true,
+      "minimum_labs": 3,
+      "minimum_difficulty_levels": 3,
+      "minimum_exam_labs": 1,
+      "minimum_state_changing_labs": 1,
+      "persistence_expected": true,
+      "source_refs": {
+        "RH124": [],
+        "RH134": [
+          {
+            "chapter": 6,
+            "title": "Managing Security with SELinux"
+          },
+          {
+            "chapter": 19,
+            "title": "Comprehensive Review"
+          }
+        ],
+        "Markelov": [
+          {
+            "chapter": 11,
+            "title": "Manage Security with SELinux"
+          }
+        ]
+      }
+    }
+  ]
+}

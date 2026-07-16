@@ -8,15 +8,19 @@ LAB_ID="ch10_019_ssh_key_authentication_complexity_3"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="3"
 OBJECTIVE_TAG="SSH keys"
+OBJECTIVE_IDS="10.3"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="SSH key authentication - complexity 3"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Generate an Ed25519 SSH key pair at /tmp/exam/ch10_19_key with an empty passphrase. Both /tmp/exam/ch10_19_key and /tmp/exam/ch10_19_key.pub must be created."
-TASK_1_HINT="Suggested command: ssh-keygen -q -t ed25519 -N \"\" -f /tmp/exam/ch10_19_key. Explanation: -t selects Ed25519, -N sets the passphrase and -f selects the key path."
+TASK_1_QUESTION="Create an Ed25519 SSH key pair at /tmp/exam/ch10_19_key without a passphrase."
+TASK_1_HINT="Use ssh-keygen with the requested key type, path, and passphrase policy."
 TASK_1_COMMAND_1="ssh-keygen -q -t ed25519 -N \"\" -f /tmp/exam/ch10_19_key"
 
 TASK_2_QUESTION="Copy /tmp/exam/ch10_19_key.pub to /tmp/exam/ch10_19_authorized and set the resulting file's numeric mode to 600. The destination must contain the public key and have exactly that mode."
-TASK_2_HINT="Suggested command: cp /tmp/exam/ch10_19_key.pub /tmp/exam/ch10_19_authorized; chmod 600 /tmp/exam/ch10_19_authorized. Explanation: run the command exactly as shown and verify the requested final state or output file."
+TASK_2_HINT="Review the cp manual page and verify the requested final state."
 TASK_2_COMMAND_1="cp /tmp/exam/ch10_19_key.pub /tmp/exam/ch10_19_authorized; chmod 600 /tmp/exam/ch10_19_authorized"
 
 HINT=$(_build_hint)

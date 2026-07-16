@@ -8,15 +8,19 @@ LAB_ID="ch07_015_service_state_reports_complexity_2"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="2"
 OBJECTIVE_TAG="software sources"
+OBJECTIVE_IDS="7.2,7.5"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Service state reports - complexity 2"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Run systemctl is-enabled sshd and write both standard output and standard error to /tmp/exam/ch07_15_enabled.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_1_HINT="Suggested command: systemctl is-enabled sshd > /tmp/exam/ch07_15_enabled.txt 2>&1. Explanation: 2>&1 merges standard error into the standard-output stream before it is written. > overwrites the destination with standard output. systemctl queries systemd's current unit state."
+TASK_1_QUESTION="systemctl is-enabled sshd and write both standard output and standard error to /tmp/exam/ch07_15_enabled.txt."
+TASK_1_HINT="Use file descriptor 2 redirection."
 TASK_1_COMMAND_1="systemctl is-enabled sshd > /tmp/exam/ch07_15_enabled.txt 2>&1"
 
-TASK_2_QUESTION="Run systemctl status sshd --no-pager and write both standard output and standard error to /tmp/exam/ch07_15_status.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_2_HINT="Suggested command: systemctl status sshd --no-pager > /tmp/exam/ch07_15_status.txt 2>&1. Explanation: 2>&1 merges standard error into the standard-output stream before it is written. > overwrites the destination with standard output. systemctl queries systemd's current unit state."
+TASK_2_QUESTION="systemctl status sshd --no-pager and write both standard output and standard error to /tmp/exam/ch07_15_status.txt."
+TASK_2_HINT="Use file descriptor 2 redirection."
 TASK_2_COMMAND_1="systemctl status sshd --no-pager > /tmp/exam/ch07_15_status.txt 2>&1"
 
 HINT=$(_build_hint)

@@ -8,15 +8,19 @@ LAB_ID="ch03_007_looping_script_complexity_1"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="1"
 OBJECTIVE_TAG="automation"
+OBJECTIVE_IDS="3.1,3.3,3.4"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Looping script - complexity 1"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Create /usr/local/bin/rhcsa_07.sh that prints each argument. Make /usr/local/bin/rhcsa_07.sh executable. The task is complete only when running that exact script produces the behavior and output stated above."
-TASK_1_HINT="Suggested command: printf '#!/bin/bash\\nfor item in \\\"\\\$@\\\"; do echo \\\"\\\$item\\\"; done\\n' > /usr/local/bin/rhcsa_07.sh; chmod +x /usr/local/bin/rhcsa_07.sh. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
+TASK_1_QUESTION="Create /usr/local/bin/rhcsa_07.sh that prints each argument. Make /usr/local/bin/rhcsa_07.sh executable."
+TASK_1_HINT="Use standard-output redirection to the requested path."
 TASK_1_COMMAND_1="printf '#!/bin/bash\\nfor item in \\\"\\\$@\\\"; do echo \\\"\\\$item\\\"; done\\n' > /usr/local/bin/rhcsa_07.sh; chmod +x /usr/local/bin/rhcsa_07.sh"
 
-TASK_2_QUESTION="Run /usr/local/bin/rhcsa_07.sh red green blue and write the complete standard output to /tmp/exam/ch03_07_colors.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_2_HINT="Suggested command: /usr/local/bin/rhcsa_07.sh red green blue > /tmp/exam/ch03_07_colors.txt. Explanation: > overwrites the destination with standard output."
+TASK_2_QUESTION="Write the standard output of \`/usr/local/bin/rhcsa_07.sh red green blue\` to /tmp/exam/ch03_07_colors.txt."
+TASK_2_HINT="Use standard-output redirection to the requested path."
 TASK_2_COMMAND_1="/usr/local/bin/rhcsa_07.sh red green blue > /tmp/exam/ch03_07_colors.txt"
 
 HINT=$(_build_hint)

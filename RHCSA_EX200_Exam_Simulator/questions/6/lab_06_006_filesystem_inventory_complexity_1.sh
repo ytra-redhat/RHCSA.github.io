@@ -8,15 +8,19 @@ LAB_ID="ch06_006_filesystem_inventory_complexity_1"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="1"
 OBJECTIVE_TAG="autofs"
+OBJECTIVE_IDS="6.1,6.3"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Filesystem inventory - complexity 1"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Run findmnt -o TARGET,SOURCE,FSTYPE and write the complete standard output to /tmp/exam/ch06_06_findmnt.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_1_HINT="Suggested command: findmnt -o TARGET,SOURCE,FSTYPE > /tmp/exam/ch06_06_findmnt.txt. Explanation: > overwrites the destination with standard output. findmnt reports the currently mounted filesystem topology."
+TASK_1_QUESTION="Write the standard output of \`findmnt -o TARGET,SOURCE,FSTYPE\` to /tmp/exam/ch06_06_findmnt.txt."
+TASK_1_HINT="Use standard-output redirection to the requested path."
 TASK_1_COMMAND_1="findmnt -o TARGET,SOURCE,FSTYPE > /tmp/exam/ch06_06_findmnt.txt"
 
-TASK_2_QUESTION="Run (command -v mkfs.xfs; command -v mkfs.ext4; command -v mkfs.vfat) and write both standard output and standard error to /tmp/exam/ch06_06_tools.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_2_HINT="Suggested command: (command -v mkfs.xfs; command -v mkfs.ext4; command -v mkfs.vfat) > /tmp/exam/ch06_06_tools.txt 2>&1. Explanation: 2>&1 merges standard error into the standard-output stream before it is written. > overwrites the destination with standard output."
+TASK_2_QUESTION="(command -v mkfs.xfs; command -v mkfs.ext4; command -v mkfs.vfat) and write both standard output and standard error to /tmp/exam/ch06_06_tools.txt."
+TASK_2_HINT="Use file descriptor 2 redirection."
 TASK_2_COMMAND_1="(command -v mkfs.xfs; command -v mkfs.ext4; command -v mkfs.vfat) > /tmp/exam/ch06_06_tools.txt 2>&1"
 
 HINT=$(_build_hint)

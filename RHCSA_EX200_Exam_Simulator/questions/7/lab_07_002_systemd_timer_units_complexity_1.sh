@@ -8,15 +8,19 @@ LAB_ID="ch07_002_systemd_timer_units_complexity_1"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="1"
 OBJECTIVE_TAG="cron"
+OBJECTIVE_IDS="7.1,7.2"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Systemd timer units - complexity 1"
 LAB_TASK_COUNT=2
 
 TASK_1_QUESTION="Create or overwrite /tmp/exam/ch07_02.service with the following exact line(s): \"[Service]\"; \"Type=oneshot\"; \"ExecStart=/usr/bin/true\"."
-TASK_1_HINT="Suggested command: printf '[Service]\\nType=oneshot\\nExecStart=/usr/bin/true\\n' > /tmp/exam/ch07_02.service. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
+TASK_1_HINT="Use standard-output redirection to the requested path."
 TASK_1_COMMAND_1="printf '[Service]\\nType=oneshot\\nExecStart=/usr/bin/true\\n' > /tmp/exam/ch07_02.service"
 
 TASK_2_QUESTION="Create or overwrite /tmp/exam/ch07_02.timer with the following exact line(s): \"[Timer]\"; \"OnCalendar=daily\"; \"[Install]\"; \"WantedBy=timers.target\"."
-TASK_2_HINT="Suggested command: printf '[Timer]\\nOnCalendar=daily\\n[Install]\\nWantedBy=timers.target\\n' > /tmp/exam/ch07_02.timer. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
+TASK_2_HINT="Use standard-output redirection to the requested path."
 TASK_2_COMMAND_1="printf '[Timer]\\nOnCalendar=daily\\n[Install]\\nWantedBy=timers.target\\n' > /tmp/exam/ch07_02.timer"
 
 HINT=$(_build_hint)

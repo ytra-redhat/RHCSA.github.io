@@ -8,15 +8,19 @@ LAB_ID="ch10_031_selinux_mode_and_context_complexity_4"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="4"
 OBJECTIVE_TAG="port labels"
+OBJECTIVE_IDS="10.4,10.5,10.7"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="SELinux mode and context - complexity 4"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Run getenforce and write the complete standard output to /tmp/exam/ch10_31_mode.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_1_HINT="Suggested command: getenforce > /tmp/exam/ch10_31_mode.txt. Explanation: > overwrites the destination with standard output."
+TASK_1_QUESTION="Write the standard output of \`getenforce\` to /tmp/exam/ch10_31_mode.txt."
+TASK_1_HINT="Review the getenforce manual page and verify the requested final state."
 TASK_1_COMMAND_1="getenforce > /tmp/exam/ch10_31_mode.txt"
 
-TASK_2_QUESTION="Run ls -Z /etc/passwd and write the complete standard output to /tmp/exam/ch10_31_ctx.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_2_HINT="Suggested command: ls -Z /etc/passwd > /tmp/exam/ch10_31_ctx.txt. Explanation: > overwrites the destination with standard output."
+TASK_2_QUESTION="Write the standard output of \`ls -Z /etc/passwd\` to /tmp/exam/ch10_31_ctx.txt."
+TASK_2_HINT="Review the ls manual page and verify the requested final state."
 TASK_2_COMMAND_1="ls -Z /etc/passwd > /tmp/exam/ch10_31_ctx.txt"
 
 HINT=$(_build_hint)

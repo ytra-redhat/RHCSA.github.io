@@ -8,15 +8,19 @@ LAB_ID="ch03_040_idempotent_automation_complexity_5"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="5"
 OBJECTIVE_TAG="text processing"
+OBJECTIVE_IDS="3.4"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Idempotent automation - complexity 5"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Create /usr/local/bin/rhcsa_40.sh that ensures /tmp/rhcsa_40 exists. Make /usr/local/bin/rhcsa_40.sh executable. The task is complete only when running that exact script produces the behavior and output stated above."
-TASK_1_HINT="Suggested command: printf '#!/bin/bash\\nmkdir -p /tmp/rhcsa_40\\necho ready\\n' > /usr/local/bin/rhcsa_40.sh; chmod +x /usr/local/bin/rhcsa_40.sh. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
+TASK_1_QUESTION="Create /usr/local/bin/rhcsa_40.sh that ensures /tmp/rhcsa_40 exists. Make /usr/local/bin/rhcsa_40.sh executable."
+TASK_1_HINT="Review the printf manual page and verify the requested final state."
 TASK_1_COMMAND_1="printf '#!/bin/bash\\nmkdir -p /tmp/rhcsa_40\\necho ready\\n' > /usr/local/bin/rhcsa_40.sh; chmod +x /usr/local/bin/rhcsa_40.sh"
 
-TASK_2_QUESTION="Execute /usr/local/bin/rhcsa_40.sh twice. Discard the first run's output and redirect the second run's standard output to /tmp/exam/ch03_40_second.txt. The file must contain the output from only the second execution."
-TASK_2_HINT="Suggested command: /usr/local/bin/rhcsa_40.sh >/dev/null; /usr/local/bin/rhcsa_40.sh > /tmp/exam/ch03_40_second.txt. Explanation: > overwrites the destination with standard output."
+TASK_2_QUESTION="Write the standard output of \`/usr/local/bin/rhcsa_40.sh >/dev/null; /usr/local/bin/rhcsa_40.sh\` to /tmp/exam/ch03_40_second.txt."
+TASK_2_HINT="Review the /usr/local/bin/rhcsa_40.sh manual page and verify the requested final state."
 TASK_2_COMMAND_1="/usr/local/bin/rhcsa_40.sh >/dev/null; /usr/local/bin/rhcsa_40.sh > /tmp/exam/ch03_40_second.txt"
 
 HINT=$(_build_hint)

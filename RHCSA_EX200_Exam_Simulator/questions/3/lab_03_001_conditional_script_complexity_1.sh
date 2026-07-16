@@ -8,15 +8,19 @@ LAB_ID="ch03_001_conditional_script_complexity_1"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="1"
 OBJECTIVE_TAG="conditionals"
+OBJECTIVE_IDS="3.1,3.4"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Conditional script - complexity 1"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Create executable /usr/local/bin/rhcsa_01.sh that prints present if /etc/passwd exists. Make /usr/local/bin/rhcsa_01.sh executable. The task is complete only when running that exact script produces the behavior and output stated above."
-TASK_1_HINT="Suggested command: printf '#!/bin/bash\\nif [ -f /etc/passwd ]; then echo present; else echo missing; fi\\n' > /usr/local/bin/rhcsa_01.sh; chmod +x /usr/local/bin/rhcsa_01.sh. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
+TASK_1_QUESTION="Create executable /usr/local/bin/rhcsa_01.sh that prints present if /etc/passwd exists. Make /usr/local/bin/rhcsa_01.sh executable."
+TASK_1_HINT="Use standard-output redirection to the requested path."
 TASK_1_COMMAND_1="printf '#!/bin/bash\\nif [ -f /etc/passwd ]; then echo present; else echo missing; fi\\n' > /usr/local/bin/rhcsa_01.sh; chmod +x /usr/local/bin/rhcsa_01.sh"
 
-TASK_2_QUESTION="Run /usr/local/bin/rhcsa_01.sh and write the complete standard output to /tmp/exam/ch03_01_run.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_2_HINT="Suggested command: /usr/local/bin/rhcsa_01.sh > /tmp/exam/ch03_01_run.txt. Explanation: > overwrites the destination with standard output."
+TASK_2_QUESTION="Write the standard output of \`/usr/local/bin/rhcsa_01.sh\` to /tmp/exam/ch03_01_run.txt."
+TASK_2_HINT="Use standard-output redirection to the requested path."
 TASK_2_COMMAND_1="/usr/local/bin/rhcsa_01.sh > /tmp/exam/ch03_01_run.txt"
 
 HINT=$(_build_hint)

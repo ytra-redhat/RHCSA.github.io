@@ -8,15 +8,19 @@ LAB_ID="ch12_011_kickstart_artifact_complexity_2"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="2"
 OBJECTIVE_TAG="subscription management"
+OBJECTIVE_IDS="12.0"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Kickstart artifact - complexity 2"
 LAB_TASK_COUNT=2
 
 TASK_1_QUESTION="Create or overwrite /tmp/exam/ch12_11.ks with the following exact line(s): \"text\"; \"reboot\"."
-TASK_1_HINT="Suggested command: printf 'text\\nreboot\\n' > /tmp/exam/ch12_11.ks. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
+TASK_1_HINT="Use standard-output redirection to the requested path."
 TASK_1_COMMAND_1="printf 'text\\nreboot\\n' > /tmp/exam/ch12_11.ks"
 
-TASK_2_QUESTION="Append the following exact line(s) to /tmp/exam/ch12_11.ks without removing its existing content: \"rootpw --lock\"; \"timezone UTC\"."
-TASK_2_HINT="Suggested command: printf 'rootpw --lock\\ntimezone UTC\\n' >> /tmp/exam/ch12_11.ks. Explanation: >> appends and preserves existing file content. printf writes deterministic text, including the requested line breaks."
+TASK_2_QUESTION="Append the standard output of \`printf 'rootpw --lock\\ntimezone UTC\\n'\` to /tmp/exam/ch12_11.ks."
+TASK_2_HINT="Use append redirection so existing content is retained."
 TASK_2_COMMAND_1="printf 'rootpw --lock\\ntimezone UTC\\n' >> /tmp/exam/ch12_11.ks"
 
 HINT=$(_build_hint)

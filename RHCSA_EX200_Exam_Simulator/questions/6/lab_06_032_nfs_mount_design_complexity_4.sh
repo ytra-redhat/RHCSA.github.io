@@ -8,15 +8,19 @@ LAB_ID="ch06_032_nfs_mount_design_complexity_4"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="4"
 OBJECTIVE_TAG="permissions"
+OBJECTIVE_IDS="6.1,6.2"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="NFS mount design - complexity 4"
 LAB_TASK_COUNT=2
 
 TASK_1_QUESTION="Create or overwrite /tmp/exam/ch06_32_nfs.txt with the following exact line(s): \"server:/share /mnt/share32 nfs defaults,_netdev 0 0\"."
-TASK_1_HINT="Suggested command: printf 'server:/share /mnt/share32 nfs defaults,_netdev 0 0\\n' > /tmp/exam/ch06_32_nfs.txt. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
+TASK_1_HINT="Review the printf manual page and verify the requested final state."
 TASK_1_COMMAND_1="printf 'server:/share /mnt/share32 nfs defaults,_netdev 0 0\\n' > /tmp/exam/ch06_32_nfs.txt"
 
 TASK_2_QUESTION="Create directory /tmp/rhcsa_32, including missing parent directories, and set its numeric mode to exactly 755."
-TASK_2_HINT="Suggested command: install -d -m 755 /tmp/rhcsa_32. Explanation: install -d creates directories while -m applies the requested mode atomically."
+TASK_2_HINT="Review the install manual page and verify the requested final state."
 TASK_2_COMMAND_1="install -d -m 755 /tmp/rhcsa_32"
 
 HINT=$(_build_hint)

@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "sources": [
+    {
+      "filename": "Markelov Andrey - Red Hat RHCSA 10 Study Companion (Certification Study Companion Series) - 2026.pdf",
+      "sha256": "ab0d08ad9984dc3de9516a5a8c01115b36f9b99d7c4d7df0408e444897fea345",
+      "size_bytes": 10408989,
+      "role": "Exam-oriented RHEL 10 synthesis and cross-topic review",
+      "embedded_in_release": false
+    },
+    {
+      "filename": "RH124(1).docx",
+      "sha256": "7b9ea8ab03275f51db1fc6502b8acb7c2fc386bf2746534e5e460b4f114cd47a",
+      "size_bytes": 5036683,
+      "role": "RHEL 10 foundational administration course source",
+      "embedded_in_release": false
+    },
+    {
+      "filename": "RH134(1).docx",
+      "sha256": "642e622494ebeb63f08cfb88c381941c00eec25bbd39c07d30b625a13eac18fd",
+      "size_bytes": 4774244,
+      "role": "RHEL 10 advanced administration course source",
+      "embedded_in_release": false
+    }
+  ],
+  "notes": [
+    "Source documents are not redistributed in the simulator archive.",
+    "Objective mappings contain chapter-level references only.",
+    "Official EX200 RHEL 10 objectives remain the normative coverage authority."
+  ]
+}

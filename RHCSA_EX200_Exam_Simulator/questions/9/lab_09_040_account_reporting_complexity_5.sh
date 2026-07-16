@@ -8,15 +8,19 @@ LAB_ID="ch09_040_account_reporting_complexity_5"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="5"
 OBJECTIVE_TAG="sudo"
+OBJECTIVE_IDS="9.1,9.2"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Account reporting - complexity 5"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Run getent passwd root and write the complete standard output to /tmp/exam/ch09_40_passwd.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_1_HINT="Suggested command: getent passwd root > /tmp/exam/ch09_40_passwd.txt. Explanation: > overwrites the destination with standard output."
+TASK_1_QUESTION="Write the standard output of \`getent passwd root\` to /tmp/exam/ch09_40_passwd.txt."
+TASK_1_HINT="Review the getent manual page and verify the requested final state."
 TASK_1_COMMAND_1="getent passwd root > /tmp/exam/ch09_40_passwd.txt"
 
-TASK_2_QUESTION="Run id root and write the complete standard output to /tmp/exam/ch09_40_id.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_2_HINT="Suggested command: id root > /tmp/exam/ch09_40_id.txt. Explanation: > overwrites the destination with standard output."
+TASK_2_QUESTION="Write the standard output of \`id root\` to /tmp/exam/ch09_40_id.txt."
+TASK_2_HINT="Review the id manual page and verify the requested final state."
 TASK_2_COMMAND_1="id root > /tmp/exam/ch09_40_id.txt"
 
 HINT=$(_build_hint)

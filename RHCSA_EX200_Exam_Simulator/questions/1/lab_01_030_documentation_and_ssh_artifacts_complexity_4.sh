@@ -8,15 +8,19 @@ LAB_ID="ch01_030_documentation_and_ssh_artifacts_complexity_4"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="4"
 OBJECTIVE_TAG="SSH"
+OBJECTIVE_IDS="1.4,1.11"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Documentation and SSH artifacts - complexity 4"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Run apropos passwd and write the complete standard output to /tmp/exam/ch01_30_apropos.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_1_HINT="Suggested command: apropos passwd > /tmp/exam/ch01_30_apropos.txt. Explanation: > overwrites the destination with standard output."
+TASK_1_QUESTION="Write the standard output of \`apropos passwd\` to /tmp/exam/ch01_30_apropos.txt."
+TASK_1_HINT="Review the apropos manual page and verify the requested final state."
 TASK_1_COMMAND_1="apropos passwd > /tmp/exam/ch01_30_apropos.txt"
 
-TASK_2_QUESTION="Generate an Ed25519 SSH key pair at /tmp/exam/ch01_30_key with an empty passphrase. Both /tmp/exam/ch01_30_key and /tmp/exam/ch01_30_key.pub must be created."
-TASK_2_HINT="Suggested command: ssh-keygen -q -t ed25519 -N \"\" -f /tmp/exam/ch01_30_key. Explanation: -t selects Ed25519, -N sets the passphrase and -f selects the key path."
+TASK_2_QUESTION="Create an Ed25519 SSH key pair at /tmp/exam/ch01_30_key without a passphrase."
+TASK_2_HINT="Review the ssh-keygen manual page and verify the requested final state."
 TASK_2_COMMAND_1="ssh-keygen -q -t ed25519 -N \"\" -f /tmp/exam/ch01_30_key"
 
 HINT=$(_build_hint)

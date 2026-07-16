@@ -8,15 +8,19 @@ LAB_ID="ch11_045_quadlet_artifact_complexity_5"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="5"
 OBJECTIVE_TAG="ports"
+OBJECTIVE_IDS="11.0"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Quadlet artifact - complexity 5"
 LAB_TASK_COUNT=2
 
 TASK_1_QUESTION="Create or overwrite /tmp/exam/ch11_45.container with the following exact line(s): \"[Container]\"; \"Image=registry.example.com/app:latest\"."
-TASK_1_HINT="Suggested command: printf '[Container]\\nImage=registry.example.com/app:latest\\n' > /tmp/exam/ch11_45.container. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
+TASK_1_HINT="Review the printf manual page and verify the requested final state."
 TASK_1_COMMAND_1="printf '[Container]\\nImage=registry.example.com/app:latest\\n' > /tmp/exam/ch11_45.container"
 
-TASK_2_QUESTION="Append the following exact line(s) to /tmp/exam/ch11_45.container without removing its existing content: \"[Install]\"; \"WantedBy=default.target\"."
-TASK_2_HINT="Suggested command: printf '[Install]\\nWantedBy=default.target\\n' >> /tmp/exam/ch11_45.container. Explanation: >> appends and preserves existing file content. printf writes deterministic text, including the requested line breaks."
+TASK_2_QUESTION="Append the standard output of \`printf '[Install]\\nWantedBy=default.target\\n'\` to /tmp/exam/ch11_45.container."
+TASK_2_HINT="Review the printf manual page and verify the requested final state."
 TASK_2_COMMAND_1="printf '[Install]\\nWantedBy=default.target\\n' >> /tmp/exam/ch11_45.container"
 
 HINT=$(_build_hint)

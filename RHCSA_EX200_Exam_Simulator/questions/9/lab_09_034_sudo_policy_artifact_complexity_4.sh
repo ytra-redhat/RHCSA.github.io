@@ -8,15 +8,19 @@ LAB_ID="ch09_034_sudo_policy_artifact_complexity_4"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="4"
 OBJECTIVE_TAG="account modification"
+OBJECTIVE_IDS="9.1,9.4"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Sudo policy artifact - complexity 4"
 LAB_TASK_COUNT=2
 
 TASK_1_QUESTION="Create or overwrite /tmp/exam/ch09_34_sudoers with the following exact line(s): \"%rhcsa_g34 ALL=(root) /usr/bin/id\"."
-TASK_1_HINT="Suggested command: printf '%rhcsa_g34 ALL=(root) /usr/bin/id\\n' > /tmp/exam/ch09_34_sudoers. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
+TASK_1_HINT="Review the printf manual page and verify the requested final state."
 TASK_1_COMMAND_1="printf '%rhcsa_g34 ALL=(root) /usr/bin/id\\n' > /tmp/exam/ch09_34_sudoers"
 
-TASK_2_QUESTION="Set the numeric permission mode of /tmp/exam/ch09_34_sudoers to exactly 440. Do not change the file's contents."
-TASK_2_HINT="Suggested command: chmod 440 /tmp/exam/ch09_34_sudoers. Explanation: chmod applies the requested numeric permission mode to the named path."
+TASK_2_QUESTION="Set /tmp/exam/ch09_34_sudoers to permission mode 440."
+TASK_2_HINT="Review the chmod manual page and verify the requested final state."
 TASK_2_COMMAND_1="chmod 440 /tmp/exam/ch09_34_sudoers"
 
 HINT=$(_build_hint)

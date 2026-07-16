@@ -8,15 +8,19 @@ LAB_ID="ch05_016_gpt_disk_image_complexity_2"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="2"
 OBJECTIVE_TAG="physical volumes"
+OBJECTIVE_IDS="5.1"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="GPT disk image - complexity 2"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Create the disk-image file /var/tmp/rhcsa_16.img with an exact apparent size of 128M."
-TASK_1_HINT="Suggested command: truncate -s 128M /var/tmp/rhcsa_16.img. Explanation: truncate -s sets the exact apparent file size."
+TASK_1_QUESTION="Create /var/tmp/rhcsa_16.img with an apparent size of 128M."
+TASK_1_HINT="Review the truncate manual page and verify the requested final state."
 TASK_1_COMMAND_1="truncate -s 128M /var/tmp/rhcsa_16.img"
 
-TASK_2_QUESTION="Write a GPT partition-table label to disk image /var/tmp/rhcsa_16.img. Use non-interactive operation."
-TASK_2_HINT="Suggested command: parted -s /var/tmp/rhcsa_16.img mklabel gpt. Explanation: -s runs non-interactively and mklabel writes the partition-table type."
+TASK_2_QUESTION="Create a GPT partition table on /var/tmp/rhcsa_16.img."
+TASK_2_HINT="Use non-interactive GPT partitioning and verify the resulting table."
 TASK_2_COMMAND_1="parted -s /var/tmp/rhcsa_16.img mklabel gpt"
 
 HINT=$(_build_hint)

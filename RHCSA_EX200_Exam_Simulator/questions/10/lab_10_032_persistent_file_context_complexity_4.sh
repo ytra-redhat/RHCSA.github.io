@@ -8,15 +8,19 @@ LAB_ID="ch10_032_persistent_file_context_complexity_4"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="4"
 OBJECTIVE_TAG="booleans"
+OBJECTIVE_IDS="10.6,10.8"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Persistent file context - complexity 4"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Create directory /tmp/rhcsa_web_32, including any missing parent directories. The exact path must exist."
-TASK_1_HINT="Suggested command: mkdir -p /tmp/rhcsa_web_32. Explanation: mkdir -p creates the directory and any missing parent directories."
+TASK_1_QUESTION="Create directory /tmp/rhcsa_web_32, including missing parent directories."
+TASK_1_HINT="Review the mkdir manual page and verify the requested final state."
 TASK_1_COMMAND_1="mkdir -p /tmp/rhcsa_web_32"
 
 TASK_2_QUESTION="Create a persistent SELinux file-context mapping that assigns type httpd_sys_content_t to /tmp/rhcsa_web_32(/.*)?, then apply the mapping immediately to /tmp/rhcsa_web_32 with restorecon."
-TASK_2_HINT="Suggested command: semanage fcontext -a -t httpd_sys_content_t '/tmp/rhcsa_web_32(/.*)?'; restorecon -Rv /tmp/rhcsa_web_32. Explanation: semanage fcontext records a persistent SELinux mapping and restorecon applies it."
+TASK_2_HINT="Review the semanage manual page and verify the requested final state."
 TASK_2_COMMAND_1="semanage fcontext -a -t httpd_sys_content_t '/tmp/rhcsa_web_32(/.*)?'; restorecon -Rv /tmp/rhcsa_web_32"
 
 HINT=$(_build_hint)

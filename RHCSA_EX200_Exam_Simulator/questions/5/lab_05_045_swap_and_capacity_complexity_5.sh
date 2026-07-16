@@ -8,15 +8,19 @@ LAB_ID="ch05_045_swap_and_capacity_complexity_5"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="5"
 OBJECTIVE_TAG="volume groups"
+OBJECTIVE_IDS="5.6"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Swap and capacity - complexity 5"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Run swapon --show and write the complete standard output to /tmp/exam/ch05_45_swap.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_1_HINT="Suggested command: swapon --show > /tmp/exam/ch05_45_swap.txt. Explanation: > overwrites the destination with standard output."
+TASK_1_QUESTION="Write the standard output of \`swapon --show\` to /tmp/exam/ch05_45_swap.txt."
+TASK_1_HINT="Review the swapon manual page and verify the requested final state."
 TASK_1_COMMAND_1="swapon --show > /tmp/exam/ch05_45_swap.txt"
 
-TASK_2_QUESTION="Run df -hT and write the complete standard output to /tmp/exam/ch05_45_df.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_2_HINT="Suggested command: df -hT > /tmp/exam/ch05_45_df.txt. Explanation: > overwrites the destination with standard output."
+TASK_2_QUESTION="Write the standard output of \`df -hT\` to /tmp/exam/ch05_45_df.txt."
+TASK_2_HINT="Review the df manual page and verify the requested final state."
 TASK_2_COMMAND_1="df -hT > /tmp/exam/ch05_45_df.txt"
 
 HINT=$(_build_hint)

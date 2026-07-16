@@ -8,15 +8,19 @@ LAB_ID="ch12_002_image_builder_blueprint_complexity_1"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="1"
 OBJECTIVE_TAG="Image Builder"
+OBJECTIVE_IDS="12.0"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Image Builder blueprint - complexity 1"
 LAB_TASK_COUNT=2
 
 TASK_1_QUESTION="Create or overwrite /tmp/exam/ch12_02.toml with the following exact line(s): \"name=rhcsa-02\"; \"version=0.0.1\"."
-TASK_1_HINT="Suggested command: printf 'name=rhcsa-02\\nversion=0.0.1\\n' > /tmp/exam/ch12_02.toml. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
+TASK_1_HINT="Use standard-output redirection to the requested path."
 TASK_1_COMMAND_1="printf 'name=rhcsa-02\\nversion=0.0.1\\n' > /tmp/exam/ch12_02.toml"
 
-TASK_2_QUESTION="Append the following exact line(s) to /tmp/exam/ch12_02.toml without removing its existing content: \"[[packages]]\"; \"name=bash\"; \"version=*\"."
-TASK_2_HINT="Suggested command: printf '[[packages]]\\nname=bash\\nversion=*\\n' >> /tmp/exam/ch12_02.toml. Explanation: >> appends and preserves existing file content. printf writes deterministic text, including the requested line breaks."
+TASK_2_QUESTION="Append the standard output of \`printf '[[packages]]\\nname=bash\\nversion=*\\n'\` to /tmp/exam/ch12_02.toml."
+TASK_2_HINT="Use append redirection so existing content is retained."
 TASK_2_COMMAND_1="printf '[[packages]]\\nname=bash\\nversion=*\\n' >> /tmp/exam/ch12_02.toml"
 
 HINT=$(_build_hint)

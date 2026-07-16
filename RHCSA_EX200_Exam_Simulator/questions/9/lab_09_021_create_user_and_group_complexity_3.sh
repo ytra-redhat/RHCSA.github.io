@@ -8,15 +8,19 @@ LAB_ID="ch09_021_create_user_and_group_complexity_3"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="3"
 OBJECTIVE_TAG="account removal"
+OBJECTIVE_IDS="9.1,9.3"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Create user and group - complexity 3"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Create the local user account rhcsa_u21, create its home directory. The account and its home directory must both be present."
-TASK_1_HINT="Suggested command: useradd -m rhcsa_u21. Explanation: useradd -m creates the account and its home directory."
+TASK_1_QUESTION="Create local user rhcsa_u21 with the options required by the task title."
+TASK_1_HINT="Use the local account-management command and verify the relevant database entry."
 TASK_1_COMMAND_1="useradd -m rhcsa_u21"
 
-TASK_2_QUESTION="Create the local group rhcsa_g21. The group must exist in the local group database."
-TASK_2_HINT="Suggested command: groupadd rhcsa_g21. Explanation: groupadd creates a local group entry with the exact name supplied."
+TASK_2_QUESTION="Create local group rhcsa_g21."
+TASK_2_HINT="Use the local account-management command and verify the relevant database entry."
 TASK_2_COMMAND_1="groupadd rhcsa_g21"
 
 HINT=$(_build_hint)

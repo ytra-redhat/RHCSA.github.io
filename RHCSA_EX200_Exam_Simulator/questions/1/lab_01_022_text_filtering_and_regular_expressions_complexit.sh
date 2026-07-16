@@ -8,15 +8,19 @@ LAB_ID="ch01_022_text_filtering_and_regular_expressions_complexit"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="3"
 OBJECTIVE_TAG="archives"
+OBJECTIVE_IDS="1.3"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Text filtering and regular expressions - complexity 3"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Run grep '^root:' /etc/passwd and write the complete standard output to /tmp/exam/ch01_22_root.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_1_HINT="Suggested command: grep '^root:' /etc/passwd > /tmp/exam/ch01_22_root.txt. Explanation: > overwrites the destination with standard output. grep selects only records matching the requested expression."
+TASK_1_QUESTION="Write the standard output of \`grep '^root:' /etc/passwd\` to /tmp/exam/ch01_22_root.txt."
+TASK_1_HINT="Use standard-output redirection to the requested path."
 TASK_1_COMMAND_1="grep '^root:' /etc/passwd > /tmp/exam/ch01_22_root.txt"
 
-TASK_2_QUESTION="Run grep -E ':/(bin/)?bash\$' /etc/passwd and write the complete standard output to /tmp/exam/ch01_22_bash.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_2_HINT="Suggested command: grep -E ':/(bin/)?bash\$' /etc/passwd > /tmp/exam/ch01_22_bash.txt. Explanation: > overwrites the destination with standard output. grep selects only records matching the requested expression."
+TASK_2_QUESTION="Write the standard output of \`grep -E ':/(bin/)?bash\$' /etc/passwd\` to /tmp/exam/ch01_22_bash.txt."
+TASK_2_HINT="Use standard-output redirection to the requested path."
 TASK_2_COMMAND_1="grep -E ':/(bin/)?bash\$' /etc/passwd > /tmp/exam/ch01_22_bash.txt"
 
 HINT=$(_build_hint)

@@ -8,15 +8,19 @@ LAB_ID="ch02_013_repository_configuration_and_reporting_complexit"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="2"
 OBJECTIVE_TAG="RPM repositories"
+OBJECTIVE_IDS="2.1,2.2"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Repository configuration and reporting - complexity 2"
 LAB_TASK_COUNT=2
 
 TASK_1_QUESTION="Create or overwrite /tmp/exam/ch02_13.repo with the following exact line(s): \"[lab13]\"; \"name=Lab 13\"; \"baseurl=file:///tmp/repo13\"; \"enabled=1\"; \"gpgcheck=0\"."
-TASK_1_HINT="Suggested command: printf '[lab13]\\nname=Lab 13\\nbaseurl=file:///tmp/repo13\\nenabled=1\\ngpgcheck=0\\n' > /tmp/exam/ch02_13.repo. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
+TASK_1_HINT="Use standard-output redirection to the requested path."
 TASK_1_COMMAND_1="printf '[lab13]\\nname=Lab 13\\nbaseurl=file:///tmp/repo13\\nenabled=1\\ngpgcheck=0\\n' > /tmp/exam/ch02_13.repo"
 
-TASK_2_QUESTION="Run dnf repolist enabled and write both standard output and standard error to /tmp/exam/ch02_13_repos.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_2_HINT="Suggested command: dnf repolist enabled > /tmp/exam/ch02_13_repos.txt 2>&1. Explanation: 2>&1 merges standard error into the standard-output stream before it is written. > overwrites the destination with standard output."
+TASK_2_QUESTION="dnf repolist enabled and write both standard output and standard error to /tmp/exam/ch02_13_repos.txt."
+TASK_2_HINT="Use file descriptor 2 redirection."
 TASK_2_COMMAND_1="dnf repolist enabled > /tmp/exam/ch02_13_repos.txt 2>&1"
 
 HINT=$(_build_hint)

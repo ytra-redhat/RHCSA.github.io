@@ -52,4 +52,4 @@ python3 RHCSA_EX200_Exam_Simulator/scripts/validate_release.py .
 RHCSA_EX200_Exam_Simulator/rhcsa --list-objectives
 ```
 
-The expected result for this release is 12 chapters and 540 labs.
+The expected result for this release is 12 dynamically discovered chapters and 632 labs. The official core consists of chapters 1–10; chapters 11–12 are supplementary.

@@ -8,15 +8,19 @@ LAB_ID="ch01_028_archive_and_compression_tools_complexity_4"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="4"
 OBJECTIVE_TAG="redirection"
+OBJECTIVE_IDS="1.2,1.6"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Archive and compression tools - complexity 4"
 LAB_TASK_COUNT=2
 
 TASK_1_QUESTION="Create archive /tmp/exam/ch01_28.tar.gz using gzip compression and include /etc/hosts."
-TASK_1_HINT="Suggested command: tar -czf /tmp/exam/ch01_28.tar.gz /etc/hosts. Explanation: -c creates the archive, -z enables gzip and -f names the output file."
+TASK_1_HINT="Review the tar manual page and verify the requested final state."
 TASK_1_COMMAND_1="tar -czf /tmp/exam/ch01_28.tar.gz /etc/hosts"
 
 TASK_2_QUESTION="Create archive /tmp/exam/ch01_28.tar.bz2 using bzip2 compression and include /etc/services."
-TASK_2_HINT="Suggested command: tar -cjf /tmp/exam/ch01_28.tar.bz2 /etc/services. Explanation: -c creates the archive, -j enables bzip2 and -f names the output file."
+TASK_2_HINT="Review the tar manual page and verify the requested final state."
 TASK_2_COMMAND_1="tar -cjf /tmp/exam/ch01_28.tar.bz2 /etc/services"
 
 HINT=$(_build_hint)

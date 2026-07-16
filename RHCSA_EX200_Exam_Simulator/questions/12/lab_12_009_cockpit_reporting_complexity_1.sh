@@ -8,15 +8,19 @@ LAB_ID="ch12_009_cockpit_reporting_complexity_1"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="1"
 OBJECTIVE_TAG="Image Builder"
+OBJECTIVE_IDS="12.0"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Cockpit reporting - complexity 1"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Run systemctl status cockpit.socket --no-pager and write both standard output and standard error to /tmp/exam/ch12_09_cockpit.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_1_HINT="Suggested command: systemctl status cockpit.socket --no-pager > /tmp/exam/ch12_09_cockpit.txt 2>&1. Explanation: 2>&1 merges standard error into the standard-output stream before it is written. > overwrites the destination with standard output. systemctl queries systemd's current unit state."
+TASK_1_QUESTION="systemctl status cockpit.socket --no-pager and write both standard output and standard error to /tmp/exam/ch12_09_cockpit.txt."
+TASK_1_HINT="Use file descriptor 2 redirection."
 TASK_1_COMMAND_1="systemctl status cockpit.socket --no-pager > /tmp/exam/ch12_09_cockpit.txt 2>&1"
 
-TASK_2_QUESTION="Run firewall-cmd --query-service=cockpit and write both standard output and standard error to /tmp/exam/ch12_09_firewall.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_2_HINT="Suggested command: firewall-cmd --query-service=cockpit > /tmp/exam/ch12_09_firewall.txt 2>&1. Explanation: 2>&1 merges standard error into the standard-output stream before it is written. > overwrites the destination with standard output. without --permanent, firewall-cmd queries the current runtime configuration."
+TASK_2_QUESTION="firewall-cmd --query-service=cockpit and write both standard output and standard error to /tmp/exam/ch12_09_firewall.txt."
+TASK_2_HINT="Use file descriptor 2 redirection."
 TASK_2_COMMAND_1="firewall-cmd --query-service=cockpit > /tmp/exam/ch12_09_firewall.txt 2>&1"
 
 HINT=$(_build_hint)

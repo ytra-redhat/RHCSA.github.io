@@ -8,15 +8,19 @@ LAB_ID="ch10_011_selinux_mode_and_context_complexity_2"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="2"
 OBJECTIVE_TAG="SSH keys"
+OBJECTIVE_IDS="10.3,10.4,10.5"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="SELinux mode and context - complexity 2"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Run getenforce and write the complete standard output to /tmp/exam/ch10_11_mode.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_1_HINT="Suggested command: getenforce > /tmp/exam/ch10_11_mode.txt. Explanation: > overwrites the destination with standard output."
+TASK_1_QUESTION="Write the standard output of \`getenforce\` to /tmp/exam/ch10_11_mode.txt."
+TASK_1_HINT="Use standard-output redirection to the requested path."
 TASK_1_COMMAND_1="getenforce > /tmp/exam/ch10_11_mode.txt"
 
-TASK_2_QUESTION="Run ls -Z /etc/passwd and write the complete standard output to /tmp/exam/ch10_11_ctx.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_2_HINT="Suggested command: ls -Z /etc/passwd > /tmp/exam/ch10_11_ctx.txt. Explanation: > overwrites the destination with standard output."
+TASK_2_QUESTION="Write the standard output of \`ls -Z /etc/passwd\` to /tmp/exam/ch10_11_ctx.txt."
+TASK_2_HINT="Use standard-output redirection to the requested path."
 TASK_2_COMMAND_1="ls -Z /etc/passwd > /tmp/exam/ch10_11_ctx.txt"
 
 HINT=$(_build_hint)

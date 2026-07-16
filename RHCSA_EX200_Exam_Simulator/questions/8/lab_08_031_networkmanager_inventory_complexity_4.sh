@@ -8,15 +8,19 @@ LAB_ID="ch08_031_networkmanager_inventory_complexity_4"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="4"
 OBJECTIVE_TAG="hostname resolution"
+OBJECTIVE_IDS="8.1,8.2"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="NetworkManager inventory - complexity 4"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Run nmcli -t connection show and write the complete standard output to /tmp/exam/ch08_31_connections.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_1_HINT="Suggested command: nmcli -t connection show > /tmp/exam/ch08_31_connections.txt. Explanation: > overwrites the destination with standard output. nmcli reads NetworkManager's connection and device state."
+TASK_1_QUESTION="Write the standard output of \`nmcli -t connection show\` to /tmp/exam/ch08_31_connections.txt."
+TASK_1_HINT="Review the nmcli manual page and verify the requested final state."
 TASK_1_COMMAND_1="nmcli -t connection show > /tmp/exam/ch08_31_connections.txt"
 
-TASK_2_QUESTION="Run nmcli device status and write the complete standard output to /tmp/exam/ch08_31_devices.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_2_HINT="Suggested command: nmcli device status > /tmp/exam/ch08_31_devices.txt. Explanation: > overwrites the destination with standard output. nmcli reads NetworkManager's connection and device state."
+TASK_2_QUESTION="Write the standard output of \`nmcli device status\` to /tmp/exam/ch08_31_devices.txt."
+TASK_2_HINT="Review the nmcli manual page and verify the requested final state."
 TASK_2_COMMAND_1="nmcli device status > /tmp/exam/ch08_31_devices.txt"
 
 HINT=$(_build_hint)

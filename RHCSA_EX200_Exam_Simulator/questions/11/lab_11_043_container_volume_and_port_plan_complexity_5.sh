@@ -8,15 +8,19 @@ LAB_ID="ch11_043_container_volume_and_port_plan_complexity_5"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="5"
 OBJECTIVE_TAG="registries"
+OBJECTIVE_IDS="11.0"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Container volume and port plan - complexity 5"
 LAB_TASK_COUNT=2
 
 TASK_1_QUESTION="Create directory /tmp/exam/ch11_43_volume, including missing parent directories, and set its numeric mode to exactly 775."
-TASK_1_HINT="Suggested command: install -d -m 775 /tmp/exam/ch11_43_volume. Explanation: install -d creates directories while -m applies the requested mode atomically."
+TASK_1_HINT="Review the install manual page and verify the requested final state."
 TASK_1_COMMAND_1="install -d -m 775 /tmp/exam/ch11_43_volume"
 
 TASK_2_QUESTION="Create or overwrite /tmp/exam/ch11_43_run.txt with the following exact line(s): \"podman run -d -p 8080:80 -v /tmp/exam/ch11_43_volume:/data:Z IMAGE\"."
-TASK_2_HINT="Suggested command: printf 'podman run -d -p 8080:80 -v /tmp/exam/ch11_43_volume:/data:Z IMAGE\\n' > /tmp/exam/ch11_43_run.txt. Explanation: > overwrites the destination with standard output. printf writes deterministic text, including the requested line breaks."
+TASK_2_HINT="Review the printf manual page and verify the requested final state."
 TASK_2_COMMAND_1="printf 'podman run -d -p 8080:80 -v /tmp/exam/ch11_43_volume:/data:Z IMAGE\\n' > /tmp/exam/ch11_43_run.txt"
 
 HINT=$(_build_hint)

@@ -8,15 +8,19 @@ LAB_ID="ch10_025_firewall_runtime_and_permanent_complexity_3"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="3"
 OBJECTIVE_TAG="firewalld"
+OBJECTIVE_IDS="10.1"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Firewall runtime and permanent - complexity 3"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Run firewall-cmd --zone=public --list-services and write both standard output and standard error to /tmp/exam/ch10_25_runtime.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_1_HINT="Suggested command: firewall-cmd --zone=public --list-services > /tmp/exam/ch10_25_runtime.txt 2>&1. Explanation: 2>&1 merges standard error into the standard-output stream before it is written. > overwrites the destination with standard output. without --permanent, firewall-cmd queries the current runtime configuration."
+TASK_1_QUESTION="firewall-cmd --zone=public --list-services and write both standard output and standard error to /tmp/exam/ch10_25_runtime.txt."
+TASK_1_HINT="Use file descriptor 2 redirection."
 TASK_1_COMMAND_1="firewall-cmd --zone=public --list-services > /tmp/exam/ch10_25_runtime.txt 2>&1"
 
-TASK_2_QUESTION="Run firewall-cmd --permanent --zone=public --list-services and write both standard output and standard error to /tmp/exam/ch10_25_permanent.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_2_HINT="Suggested command: firewall-cmd --permanent --zone=public --list-services > /tmp/exam/ch10_25_permanent.txt 2>&1. Explanation: 2>&1 merges standard error into the standard-output stream before it is written. > overwrites the destination with standard output. --permanent reads firewalld's saved configuration rather than the current runtime state."
+TASK_2_QUESTION="firewall-cmd --permanent --zone=public --list-services and write both standard output and standard error to /tmp/exam/ch10_25_permanent.txt."
+TASK_2_HINT="Use file descriptor 2 redirection."
 TASK_2_COMMAND_1="firewall-cmd --permanent --zone=public --list-services > /tmp/exam/ch10_25_permanent.txt 2>&1"
 
 HINT=$(_build_hint)

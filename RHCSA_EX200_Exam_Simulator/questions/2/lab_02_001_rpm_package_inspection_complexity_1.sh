@@ -8,15 +8,19 @@ LAB_ID="ch02_001_rpm_package_inspection_complexity_1"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="1"
 OBJECTIVE_TAG="RPM repositories"
+OBJECTIVE_IDS="2.1,2.2"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="RPM package inspection - complexity 1"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Run rpm -qi bash and write the complete standard output to /tmp/exam/ch02_01_rpm.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_1_HINT="Suggested command: rpm -qi bash > /tmp/exam/ch02_01_rpm.txt. Explanation: > overwrites the destination with standard output. rpm -qi queries installed-package metadata."
+TASK_1_QUESTION="Write the standard output of \`rpm -qi bash\` to /tmp/exam/ch02_01_rpm.txt."
+TASK_1_HINT="Use standard-output redirection to the requested path."
 TASK_1_COMMAND_1="rpm -qi bash > /tmp/exam/ch02_01_rpm.txt"
 
-TASK_2_QUESTION="Run rpm -ql bash and write the complete standard output to /tmp/exam/ch02_01_files.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_2_HINT="Suggested command: rpm -ql bash > /tmp/exam/ch02_01_files.txt. Explanation: > overwrites the destination with standard output. rpm -ql lists files owned by an installed package."
+TASK_2_QUESTION="Write the standard output of \`rpm -ql bash\` to /tmp/exam/ch02_01_files.txt."
+TASK_2_HINT="Use standard-output redirection to the requested path."
 TASK_2_COMMAND_1="rpm -ql bash > /tmp/exam/ch02_01_files.txt"
 
 HINT=$(_build_hint)

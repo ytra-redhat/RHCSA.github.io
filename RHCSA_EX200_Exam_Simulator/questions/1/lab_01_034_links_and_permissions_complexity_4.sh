@@ -8,15 +8,19 @@ LAB_ID="ch01_034_links_and_permissions_complexity_4"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="4"
 OBJECTIVE_TAG="links"
+OBJECTIVE_IDS="1.9,1.10"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Links and permissions - complexity 4"
 LAB_TASK_COUNT=2
 
 TASK_1_QUESTION="Create /tmp/exam/ch01_34_source containing the text data, then create the hard link /tmp/exam/ch01_34_hard to that same inode. Both paths must exist and refer to the same file data."
-TASK_1_HINT="Suggested command: echo data > /tmp/exam/ch01_34_source; ln /tmp/exam/ch01_34_source /tmp/exam/ch01_34_hard. Explanation: > overwrites the destination with standard output."
+TASK_1_HINT="Review the echo manual page and verify the requested final state."
 TASK_1_COMMAND_1="echo data > /tmp/exam/ch01_34_source; ln /tmp/exam/ch01_34_source /tmp/exam/ch01_34_hard"
 
-TASK_2_QUESTION="Create the regular file /tmp/exam/ch01_34_private and set its numeric mode to exactly 640. The file may be empty."
-TASK_2_HINT="Suggested command: install -m 640 /dev/null /tmp/exam/ch01_34_private. Explanation: install creates the file and applies the requested mode in one operation."
+TASK_2_QUESTION="Create the regular file /tmp/exam/ch01_34_private and set its numeric mode to exactly 640."
+TASK_2_HINT="Review the install manual page and verify the requested final state."
 TASK_2_COMMAND_1="install -m 640 /dev/null /tmp/exam/ch01_34_private"
 
 HINT=$(_build_hint)

@@ -8,15 +8,19 @@ LAB_ID="ch06_030_mount_reporting_complexity_4"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="4"
 OBJECTIVE_TAG="autofs"
+OBJECTIVE_IDS="6.1,6.3"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Mount reporting - complexity 4"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Run findmnt and write the complete standard output to /tmp/exam/ch06_30_mounts.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_1_HINT="Suggested command: findmnt > /tmp/exam/ch06_30_mounts.txt. Explanation: > overwrites the destination with standard output. findmnt reports the currently mounted filesystem topology."
+TASK_1_QUESTION="Write the standard output of \`findmnt\` to /tmp/exam/ch06_30_mounts.txt."
+TASK_1_HINT="Review the findmnt manual page and verify the requested final state."
 TASK_1_COMMAND_1="findmnt > /tmp/exam/ch06_30_mounts.txt"
 
-TASK_2_QUESTION="Run (xfs_info / 2>/dev/null || lsblk -f) and write the complete standard output to /tmp/exam/ch06_30_xfs.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_2_HINT="Suggested command: (xfs_info / 2>/dev/null || lsblk -f) > /tmp/exam/ch06_30_xfs.txt. Explanation: 2> redirects only standard error, leaving standard output unchanged. > overwrites the destination with standard output."
+TASK_2_QUESTION="Write the standard output of \`(xfs_info / 2>/dev/null || lsblk -f)\` to /tmp/exam/ch06_30_xfs.txt."
+TASK_2_HINT="Review the (xfs_info manual page and verify the requested final state."
 TASK_2_COMMAND_1="(xfs_info / 2>/dev/null || lsblk -f) > /tmp/exam/ch06_30_xfs.txt"
 
 HINT=$(_build_hint)

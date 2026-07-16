@@ -8,15 +8,19 @@ LAB_ID="ch05_032_storage_inventory_complexity_4"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="4"
 OBJECTIVE_TAG="logical volumes"
+OBJECTIVE_IDS="5.1,5.5"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Storage inventory - complexity 4"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Run lsblk -f and write the complete standard output to /tmp/exam/ch05_32_lsblk.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_1_HINT="Suggested command: lsblk -f > /tmp/exam/ch05_32_lsblk.txt. Explanation: > overwrites the destination with standard output."
+TASK_1_QUESTION="Write the standard output of \`lsblk -f\` to /tmp/exam/ch05_32_lsblk.txt."
+TASK_1_HINT="Review the lsblk manual page and verify the requested final state."
 TASK_1_COMMAND_1="lsblk -f > /tmp/exam/ch05_32_lsblk.txt"
 
-TASK_2_QUESTION="Run blkid and write both standard output and standard error to /tmp/exam/ch05_32_blkid.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_2_HINT="Suggested command: blkid > /tmp/exam/ch05_32_blkid.txt 2>&1. Explanation: 2>&1 merges standard error into the standard-output stream before it is written. > overwrites the destination with standard output."
+TASK_2_QUESTION="blkid and write both standard output and standard error to /tmp/exam/ch05_32_blkid.txt."
+TASK_2_HINT="Review the blkid manual page and verify the requested final state."
 TASK_2_COMMAND_1="blkid > /tmp/exam/ch05_32_blkid.txt 2>&1"
 
 HINT=$(_build_hint)

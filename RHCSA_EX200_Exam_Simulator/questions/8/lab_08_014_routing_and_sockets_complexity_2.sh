@@ -8,15 +8,19 @@ LAB_ID="ch08_014_routing_and_sockets_complexity_2"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="2"
 OBJECTIVE_TAG="firewalld"
+OBJECTIVE_IDS="8.4"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Routing and sockets - complexity 2"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Run ip route show and write the complete standard output to /tmp/exam/ch08_14_routes.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_1_HINT="Suggested command: ip route show > /tmp/exam/ch08_14_routes.txt. Explanation: > overwrites the destination with standard output."
+TASK_1_QUESTION="Write the standard output of \`ip route show\` to /tmp/exam/ch08_14_routes.txt."
+TASK_1_HINT="Use standard-output redirection to the requested path."
 TASK_1_COMMAND_1="ip route show > /tmp/exam/ch08_14_routes.txt"
 
-TASK_2_QUESTION="Run ss -lnt and write the complete standard output to /tmp/exam/ch08_14_sockets.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_2_HINT="Suggested command: ss -lnt > /tmp/exam/ch08_14_sockets.txt. Explanation: > overwrites the destination with standard output."
+TASK_2_QUESTION="Write the standard output of \`ss -lnt\` to /tmp/exam/ch08_14_sockets.txt."
+TASK_2_HINT="Use standard-output redirection to the requested path."
 TASK_2_COMMAND_1="ss -lnt > /tmp/exam/ch08_14_sockets.txt"
 
 HINT=$(_build_hint)

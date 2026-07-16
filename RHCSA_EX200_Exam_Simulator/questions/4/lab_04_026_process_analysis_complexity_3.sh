@@ -8,15 +8,19 @@ LAB_ID="ch04_026_process_analysis_complexity_3"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="3"
 OBJECTIVE_TAG="services"
+OBJECTIVE_IDS="4.4,4.5"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Process analysis - complexity 3"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Run ps -eo pid,ni,comm,%cpu --sort=-%cpu and write the complete standard output to /tmp/exam/ch04_26_ps.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_1_HINT="Suggested command: ps -eo pid,ni,comm,%cpu --sort=-%cpu > /tmp/exam/ch04_26_ps.txt. Explanation: > overwrites the destination with standard output."
+TASK_1_QUESTION="Write the standard output of \`ps -eo pid,ni,comm,%cpu --sort=-%cpu\` to /tmp/exam/ch04_26_ps.txt."
+TASK_1_HINT="Use standard-output redirection to the requested path."
 TASK_1_COMMAND_1="ps -eo pid,ni,comm,%cpu --sort=-%cpu > /tmp/exam/ch04_26_ps.txt"
 
-TASK_2_QUESTION="Run free -h and write the complete standard output to /tmp/exam/ch04_26_mem.txt. Overwrite the destination if it already exists. The task is complete when the destination file exists and contains the requested command output."
-TASK_2_HINT="Suggested command: free -h > /tmp/exam/ch04_26_mem.txt. Explanation: > overwrites the destination with standard output."
+TASK_2_QUESTION="Write the standard output of \`free -h\` to /tmp/exam/ch04_26_mem.txt."
+TASK_2_HINT="Use standard-output redirection to the requested path."
 TASK_2_COMMAND_1="free -h > /tmp/exam/ch04_26_mem.txt"
 
 HINT=$(_build_hint)

@@ -8,15 +8,19 @@ LAB_ID="ch09_018_password_aging_complexity_2"
 LAB_VERSION="2026.07.12-v2.0"
 DIFFICULTY="2"
 OBJECTIVE_TAG="memberships"
+OBJECTIVE_IDS="9.1,9.2"
+LAB_KIND="drill"
+STATE_CHANGING="true"
+PERSISTENCE_REQUIRED="false"
 QUESTION="Password aging - complexity 2"
 LAB_TASK_COUNT=2
 
-TASK_1_QUESTION="Create the local user account rhcsa_u18, create its home directory. The account and its home directory must both be present."
-TASK_1_HINT="Suggested command: useradd -m rhcsa_u18. Explanation: useradd -m creates the account and its home directory."
+TASK_1_QUESTION="Create local user rhcsa_u18 with the options required by the task title."
+TASK_1_HINT="Use the local account-management command and verify the relevant database entry."
 TASK_1_COMMAND_1="useradd -m rhcsa_u18"
 
-TASK_2_QUESTION="Set the maximum password age for user rhcsa_u18 to exactly 45 days. Verify that the account records that value."
-TASK_2_HINT="Suggested command: chage -M 45 rhcsa_u18. Explanation: chage -M sets the maximum password lifetime in days."
+TASK_2_QUESTION="Set the maximum password age for user rhcsa_u18 to exactly 45 days."
+TASK_2_HINT="Use the local account-management command and verify the relevant database entry."
 TASK_2_COMMAND_1="chage -M 45 rhcsa_u18"
 
 HINT=$(_build_hint)
