@@ -123,7 +123,7 @@ OLD_INSTALL_MOVED=false
 restore_previous_systemd_state() {
   local unit path backup enabled active
 
-  for unit in rhcsa-webui.service rhcsa-update.service rhcsa-update.timer; do
+  for unit in rhcsa-webui.service rhcsa-terminal.service rhcsa-update.service rhcsa-update.timer; do
     path="/etc/systemd/system/${unit}"
     rm -rf -- "$path"
     backup="${SYSTEMD_BACKUP_DIR}/${unit}"
@@ -134,7 +134,7 @@ restore_previous_systemd_state() {
 
   systemctl daemon-reload >/dev/null 2>&1 || true
 
-  for unit in rhcsa-webui.service rhcsa-update.timer; do
+  for unit in rhcsa-webui.service rhcsa-terminal.service rhcsa-update.timer; do
     enabled="disabled"
     active="inactive"
     [[ -f "${SYSTEMD_BACKUP_DIR}/${unit}.enabled" ]] &&       enabled="$(cat "${SYSTEMD_BACKUP_DIR}/${unit}.enabled")"
@@ -153,6 +153,7 @@ restore_previous_systemd_state() {
 
 rollback_activation() {
   systemctl stop rhcsa-webui.service >/dev/null 2>&1 || true
+  systemctl stop rhcsa-terminal.service >/dev/null 2>&1 || true
   systemctl stop rhcsa-update.timer >/dev/null 2>&1 || true
 
   if [[ "$INSTALL_ACTIVATED" == "true" && -d "$INSTALL_DIR" ]]; then
@@ -321,14 +322,14 @@ backup_systemd_state() {
   local unit path
   mkdir -p "$SYSTEMD_BACKUP_DIR"
 
-  for unit in rhcsa-webui.service rhcsa-update.service rhcsa-update.timer; do
+  for unit in rhcsa-webui.service rhcsa-terminal.service rhcsa-update.service rhcsa-update.timer; do
     path="/etc/systemd/system/${unit}"
     if [[ -f "$path" || -L "$path" ]]; then
       cp -a -- "$path" "${SYSTEMD_BACKUP_DIR}/${unit}"
     fi
   done
 
-  for unit in rhcsa-webui.service rhcsa-update.timer; do
+  for unit in rhcsa-webui.service rhcsa-terminal.service rhcsa-update.timer; do
     systemctl is-enabled "$unit" 2>/dev/null       > "${SYSTEMD_BACKUP_DIR}/${unit}.enabled" ||       printf 'disabled\n' > "${SYSTEMD_BACKUP_DIR}/${unit}.enabled"
     systemctl is-active "$unit" 2>/dev/null       > "${SYSTEMD_BACKUP_DIR}/${unit}.active" ||       printf 'inactive\n' > "${SYSTEMD_BACKUP_DIR}/${unit}.active"
   done
@@ -368,6 +369,7 @@ activate_installation() {
   log_step "Activating installation..."
   backup_systemd_state
   systemctl stop rhcsa-webui.service >/dev/null 2>&1 || true
+  systemctl stop rhcsa-terminal.service >/dev/null 2>&1 || true
   systemctl stop rhcsa-update.timer >/dev/null 2>&1 || true
 
   rm -rf "$BACKUP_DIR"
@@ -379,17 +381,24 @@ activate_installation() {
   INSTALL_ACTIVATED=true
 
   ln -sfn "${INSTALL_DIR}/rhcsa" "$BIN_LINK"
+  ln -sfn "${INSTALL_DIR}/scripts/rhcsa-diagnostics" /usr/bin/rhcsa-status
 
   # Install systemd units as regular files. The helper explicitly removes stale
   # files, symlinks and directories left by earlier installer versions.
   "${INSTALL_DIR}/scripts/install-systemd-units.sh" --install-only
 
-  systemctl enable rhcsa-webui.service
+  systemctl enable rhcsa-terminal.service rhcsa-webui.service
+  if ! systemctl restart rhcsa-terminal.service; then
+    systemctl --no-pager --full status rhcsa-terminal.service >&2 || true
+    journalctl -u rhcsa-terminal.service -n 80 --no-pager >&2 || true
+    die "rhcsa-terminal.service could not be started."
+  fi
   if ! systemctl restart rhcsa-webui.service; then
     systemctl --no-pager --full status rhcsa-webui.service >&2 || true
     journalctl -u rhcsa-webui.service -n 80 --no-pager >&2 || true
     die "rhcsa-webui.service could not be started."
   fi
+  wait_for_runtime
 
   if [[ "$RHCSA_AUTO_UPDATE" == "true" ]]; then
     systemctl enable rhcsa-update.timer
@@ -402,6 +411,35 @@ activate_installation() {
   OLD_INSTALL_MOVED=false
   INSTALL_ACTIVATED=false
   log_ok "Installation activated"
+}
+
+
+get_server_ips() {
+  ip -4 -o addr show scope global 2>/dev/null | awk '{split($4,a,"/"); print a[1]}' | awk '!seen[$0]++'
+}
+show_access_urls() {
+  local ip found=false
+  printf 'Local Web UI: http://127.0.0.1:8080\n'
+  while IFS= read -r ip; do
+    [[ -n "$ip" ]] || continue
+    printf 'Web UI:       http://%s:8080\n' "$ip"
+    found=true
+  done < <(get_server_ips)
+  [[ "$found" == true ]] || printf 'Web UI: no non-loopback IPv4 address detected; check `ip -4 addr`.\n'
+}
+wait_for_runtime() {
+  local attempt objectives
+  for attempt in $(seq 1 30); do
+    if systemctl is-active --quiet rhcsa-webui.service && systemctl is-active --quiet rhcsa-terminal.service && objectives="$(curl -fsS --max-time 2 http://127.0.0.1:8080/api/objectives 2>/dev/null)" && python3 -c 'import json,sys; d=json.load(sys.stdin); raise SystemExit(0 if isinstance(d,list) and d else 1)' <<<"$objectives" && ss -ltn 2>/dev/null | grep -q ':7682[[:space:]]'; then
+      log_ok "Web UI and terminal are reachable"
+      return 0
+    fi
+    sleep 1
+  done
+  systemctl --no-pager --full status rhcsa-webui.service rhcsa-terminal.service >&2 || true
+  journalctl -u rhcsa-webui.service -u rhcsa-terminal.service -n 120 --no-pager >&2 || true
+  ss -ltnp >&2 || true
+  die "Runtime health check failed; Web UI or terminal is not reachable."
 }
 
 configure_host() {
@@ -436,7 +474,8 @@ main() {
   printf '\n%sInstallation complete%s\n' "$GREEN" "$RESET"
   printf 'Installed commit: %s\n' "${LATEST_COMMIT:0:7}"
   printf 'Chapters installed: %s\n' "${LOCAL_CHAPTERS[*]}"
-  printf 'CLI: rhcsa\nWeb UI: http://<vm-ip>:8080\n'
+  printf 'CLI: rhcsa\nDiagnostics: rhcsa-status\n'
+  show_access_urls
 }
 
 main "$@"

@@ -1,0 +1,18 @@
+[Unit]
+Description=RHCSA Exam Simulator Browser Terminal
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/ttyd -p 7682 -W -t fontSize=16 -t fontFamily=monospace /usr/bin/tmux new-session -A -s rhcsa-terminal -c /tmp
+ExecStop=-/usr/bin/tmux kill-session -t rhcsa-terminal
+Restart=on-failure
+RestartSec=3
+User=root
+WorkingDirectory=/tmp
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

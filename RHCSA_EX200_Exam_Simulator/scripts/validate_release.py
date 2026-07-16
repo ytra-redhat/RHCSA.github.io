@@ -8,6 +8,10 @@ import json
 import py_compile
 import re
 import subprocess
+import os
+import socket
+import time
+import urllib.request
 from pathlib import Path
 
 REQUIRED_FIELDS = ("IS_LAB", "LAB_ID", "LAB_VERSION", "QUESTION", "LAB_TASK_COUNT")
@@ -81,7 +85,10 @@ def main() -> int:
 
     required_runtime_files = {
         simulator / "webui" / "rhcsa-webui.service": (
-            "ExecStart=/usr/local/share/rhcsa/webui/start-webui.sh start"
+            "ExecStart=/usr/bin/python3 /usr/local/share/rhcsa/webui/server.py"
+        ),
+        simulator / "systemd" / "rhcsa-terminal.service": (
+            "ExecStart=/usr/bin/ttyd"
         ),
         simulator / "systemd" / "rhcsa-update.service": (
             "ExecStart=/usr/local/share/rhcsa/scripts/rhcsa-update --auto"
@@ -119,6 +126,12 @@ def main() -> int:
                 "installer must not copy systemd units with cp -a; stale destination "
                 "directories and symlinks must be removed first"
             )
+        if "wait_for_runtime" not in installer_text:
+            errors.append("installer must perform a runtime readiness check")
+        if "show_access_urls" not in installer_text:
+            errors.append("installer must display detected Web UI IP addresses")
+        if "rhcsa-terminal.service" not in installer_text:
+            errors.append("installer must manage the dedicated terminal service")
     else:
         errors.append("top-level installer is missing")
 
@@ -295,6 +308,65 @@ declare -F cleanup_lab >/dev/null
             "RHCSA_GITHUB_REPOSITORY must be assigned only in config/repository.env; "
             f"found: {central_assignments}"
         )
+
+    # Runtime smoke test: start the actual Web UI on an ephemeral port and
+    # verify that it returns the same dynamically discovered chapters.
+    server_py = simulator / "webui" / "server.py"
+    if server_py.is_file() and chapter_dirs:
+        sock = socket.socket()
+        sock.bind(("127.0.0.1", 0))
+        smoke_port = sock.getsockname()[1]
+        sock.close()
+        env = os.environ.copy()
+        env["RHCSA_INSTALL_DIR"] = str(simulator)
+        env["RHCSA_WEBUI_PORT"] = str(smoke_port)
+        process = subprocess.Popen(
+            ["python3", str(server_py)],
+            cwd=str(simulator / "webui"),
+            env=env,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+        try:
+            payload = None
+            last_error = ""
+            for _ in range(50):
+                if process.poll() is not None:
+                    break
+                try:
+                    with urllib.request.urlopen(
+                        f"http://127.0.0.1:{smoke_port}/api/objectives",
+                        timeout=1,
+                    ) as response:
+                        payload = json.load(response)
+                    break
+                except Exception as exc:
+                    last_error = str(exc)
+                    time.sleep(0.1)
+            if not isinstance(payload, list):
+                if process.poll() is None:
+                    process.terminate()
+                stdout, stderr = process.communicate(timeout=3)
+                errors.append(
+                    "Web UI runtime smoke test failed: "
+                    f"{last_error}; stdout={stdout.strip()!r}; stderr={stderr.strip()!r}"
+                )
+            else:
+                returned = [str(item.get("id")) for item in payload]
+                expected = [chapter.name for chapter in chapter_dirs]
+                if returned != expected:
+                    errors.append(
+                        f"Web UI runtime chapter mismatch: expected {expected}, got {returned}"
+                    )
+        finally:
+            if process.poll() is None:
+                process.terminate()
+                try:
+                    process.wait(timeout=3)
+                except subprocess.TimeoutExpired:
+                    process.kill()
+                    process.wait(timeout=3)
 
     summary = {
         "repository": expected_repo,

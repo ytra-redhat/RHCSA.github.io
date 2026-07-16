@@ -1,17 +1,20 @@
 [Unit]
 Description=RHCSA Exam Simulator Web Interface
-After=network.target network-online.target
+After=network-online.target
 Wants=network-online.target
 
 [Service]
 Type=simple
-Environment=SYSTEMD_EXEC=1
-ExecStart=/usr/local/share/rhcsa/webui/start-webui.sh start
-ExecStop=/usr/local/share/rhcsa/webui/start-webui.sh stop
+Environment=PYTHONUNBUFFERED=1
+Environment=RHCSA_INSTALL_DIR=/usr/local/share/rhcsa
+Environment=RHCSA_WEBUI_PORT=8080
+ExecStart=/usr/bin/python3 /usr/local/share/rhcsa/webui/server.py
 Restart=on-failure
-RestartSec=5
+RestartSec=3
 User=root
 WorkingDirectory=/usr/local/share/rhcsa/webui
+StandardOutput=journal
+StandardError=journal
 
 [Install]
 WantedBy=multi-user.target

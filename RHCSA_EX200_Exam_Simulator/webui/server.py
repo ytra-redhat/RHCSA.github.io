@@ -24,7 +24,7 @@ QUESTIONS_DIR = INSTALL_DIR / "questions"
 PROGRESS_FILE = INSTALL_DIR / "progress.json"
 VERSION_FILE = INSTALL_DIR / ".version"
 TMUX_SESSION = "rhcsa-terminal"
-WEBUI_PORT = 8080
+WEBUI_PORT = int(os.environ.get("RHCSA_WEBUI_PORT", "8080"))
 
 sys.path.insert(0, str(INSTALL_DIR))
 from lib.progress import ProgressStore  # noqa: E402

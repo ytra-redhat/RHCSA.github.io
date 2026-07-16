@@ -1556,6 +1556,15 @@ EOF
 
 # Main entry point
 main() {
+    case "${1:-}" in
+        --list-objectives|--validate|--lab-monitor) ;;
+        *)
+            if [[ $EUID -ne 0 ]]; then
+                command -v sudo >/dev/null 2>&1 || { echo "ERROR: root privileges required and sudo is unavailable." >&2; exit 1; }
+                exec sudo -- "$SCRIPT_PATH" "$@"
+            fi
+            ;;
+    esac
     if [[ "${1:-}" == "--list-objectives" ]]; then
         load_objectives
         for ((i=0; i<${#OBJECTIVES[@]}; i++)); do

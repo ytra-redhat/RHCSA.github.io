@@ -40,6 +40,9 @@ install_unit \
   "${INSTALL_DIR}/webui/rhcsa-webui.service" \
   "rhcsa-webui.service"
 install_unit \
+  "${INSTALL_DIR}/systemd/rhcsa-terminal.service" \
+  "rhcsa-terminal.service"
+install_unit \
   "${INSTALL_DIR}/systemd/rhcsa-update.service" \
   "rhcsa-update.service"
 install_unit \
@@ -58,7 +61,7 @@ command -v systemctl >/dev/null 2>&1 || {
 
 systemctl daemon-reload
 
-for unit in rhcsa-webui.service rhcsa-update.service rhcsa-update.timer; do
+for unit in rhcsa-webui.service rhcsa-terminal.service rhcsa-update.service rhcsa-update.timer; do
   if ! systemctl cat "$unit" >/dev/null 2>&1; then
     echo "ERROR: systemd cannot load installed unit: $unit" >&2
     ls -ld "${SYSTEMD_DIR}/${unit}" >&2 || true
@@ -67,8 +70,8 @@ for unit in rhcsa-webui.service rhcsa-update.service rhcsa-update.timer; do
 done
 
 if "$ENABLE_UNITS"; then
-  systemctl enable rhcsa-webui.service
-  systemctl restart rhcsa-webui.service
+  systemctl enable rhcsa-terminal.service rhcsa-webui.service
+  systemctl restart rhcsa-terminal.service rhcsa-webui.service
   systemctl enable rhcsa-update.timer
   systemctl restart rhcsa-update.timer
 fi
