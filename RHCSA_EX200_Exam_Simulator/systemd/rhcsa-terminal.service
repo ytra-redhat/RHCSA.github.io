@@ -5,10 +5,8 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-ExecStartPre=-/usr/bin/tmux kill-session -t rhcsa-terminal
-ExecStartPre=/usr/bin/tmux new-session -d -s rhcsa-terminal -c /tmp
-ExecStart=/usr/bin/ttyd -p 7682 -W -t fontSize=16 -t fontFamily=monospace /usr/bin/tmux attach-session -t rhcsa-terminal
-ExecStop=-/usr/bin/tmux kill-session -t rhcsa-terminal
+ExecStart=/usr/bin/bash /usr/local/share/rhcsa/scripts/rhcsa-terminal-service start
+ExecStop=/usr/bin/bash /usr/local/share/rhcsa/scripts/rhcsa-terminal-service stop
 Restart=on-failure
 RestartSec=3
 User=root

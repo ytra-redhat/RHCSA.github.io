@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+umask 022
+
+SESSION="${RHCSA_TMUX_SESSION:-rhcsa-terminal}"
+PORT="${RHCSA_TERMINAL_PORT:-7682}"
+WORKDIR="${RHCSA_TERMINAL_WORKDIR:-/tmp}"
+
+resolve_executable() {
+  local requested="$1"
+  local resolved
+  resolved="$(command -v -- "$requested" 2>/dev/null || true)"
+  [[ -n "$resolved" && -x "$resolved" ]] || {
+    echo "ERROR: required executable is unavailable or not executable: $requested" >&2
+    return 1
+  }
+  printf '%s\n' "$resolved"
+}
+
+TMUX_BIN="$(resolve_executable "${RHCSA_TMUX_BIN:-tmux}")"
+TTYD_BIN="$(resolve_executable "${RHCSA_TTYD_BIN:-ttyd}")"
+
+stop_terminal() {
+  "$TMUX_BIN" kill-session -t "$SESSION" >/dev/null 2>&1 || true
+}
+
+start_terminal() {
+  # Reproduce the original simulator lifecycle: create one detached shared tmux
+  # session first, then attach ttyd to that already existing session.
+  stop_terminal
+  "$TMUX_BIN" new-session -d -s "$SESSION" -c "$WORKDIR"
+  "$TMUX_BIN" has-session -t "$SESSION"
+
+  exec "$TTYD_BIN" \
+    -p "$PORT" \
+    -W \
+    -t fontSize=16 \
+    -t fontFamily=monospace \
+    "$TMUX_BIN" attach-session -t "$SESSION"
+}
+
+case "${1:-start}" in
+  start) start_terminal ;;
+  stop) stop_terminal ;;
+  status)
+    "$TMUX_BIN" has-session -t "$SESSION"
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|status}" >&2
+    exit 2
+    ;;
+esac

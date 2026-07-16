@@ -98,7 +98,11 @@ def main() -> int:
             "ExecStart=/usr/bin/python3 /usr/local/share/rhcsa/webui/server.py"
         ),
         simulator / "systemd" / "rhcsa-terminal.service": (
-            "ExecStartPre=/usr/bin/tmux new-session -d -s rhcsa-terminal -c /tmp"
+            "ExecStart=/usr/bin/bash /usr/local/share/rhcsa/scripts/"
+            "rhcsa-terminal-service start"
+        ),
+        simulator / "scripts" / "rhcsa-terminal-service": (
+            'new-session -d -s "$SESSION"'
         ),
         simulator / "systemd" / "rhcsa-update.service": (
             "ExecStart=/usr/local/share/rhcsa/scripts/rhcsa-update --auto"
@@ -412,14 +416,34 @@ declare -F cleanup_lab >/dev/null
             errors.append("Web UI must show the concrete lab start error")
 
     terminal_unit = simulator / "systemd" / "rhcsa-terminal.service"
+    terminal_helper = simulator / "scripts" / "rhcsa-terminal-service"
     if terminal_unit.is_file():
         terminal_text = terminal_unit.read_text(encoding="utf-8", errors="replace")
+        required_exec = (
+            "ExecStart=/usr/bin/bash "
+            "/usr/local/share/rhcsa/scripts/rhcsa-terminal-service start"
+        )
+        if required_exec not in terminal_text:
+            errors.append(
+                "terminal service must execute the terminal supervisor through /usr/bin/bash"
+            )
+        if re.search(r"^Exec(?:StartPre|Start|Stop)=.*?/tmux(?:\s|$)", terminal_text, re.MULTILINE):
+            errors.append(
+                "systemd terminal unit must not execute tmux directly; Rocky may return 203/EXEC"
+            )
+    if not terminal_helper.is_file():
+        errors.append("missing scripts/rhcsa-terminal-service")
+    else:
+        helper_text = terminal_helper.read_text(encoding="utf-8", errors="replace")
         for required in (
-            "ExecStartPre=/usr/bin/tmux new-session -d -s rhcsa-terminal -c /tmp",
-            "/usr/bin/tmux attach-session -t rhcsa-terminal",
+            'new-session -d -s "$SESSION"',
+            'attach-session -t "$SESSION"',
+            'command -v -- "$requested"',
         ):
-            if required not in terminal_text:
-                errors.append(f"terminal service missing original tmux lifecycle: {required}")
+            if required not in helper_text:
+                errors.append(
+                    f"terminal supervisor missing original tmux lifecycle: {required}"
+                )
 
     server_file = simulator / "webui" / "server.py"
     if server_file.is_file():

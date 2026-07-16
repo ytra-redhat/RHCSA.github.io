@@ -206,7 +206,29 @@ ensure_dependencies() {
   fi
   command -v ttyd >/dev/null 2>&1 || die \
     "ttyd is unavailable from configured RPM repositories. Install ttyd from an approved RPM repository and rerun."
-  log_ok "Dependencies available"
+
+  TMUX_BIN="$(command -v tmux)"
+  TTYD_BIN="$(command -v ttyd)"
+
+  # Restore RPM-owned executable permissions and SELinux labels. This repairs
+  # VMs where tmux exists but systemd receives 203/EXEC Permission denied.
+  if command -v rpm >/dev/null 2>&1; then
+    rpm -q tmux >/dev/null 2>&1 && {
+      rpm --setperms tmux >/dev/null 2>&1 || true
+      rpm --setugids tmux >/dev/null 2>&1 || true
+    }
+  fi
+  if command -v restorecon >/dev/null 2>&1; then
+    restorecon -v "$TMUX_BIN" "$TTYD_BIN" >/dev/null 2>&1 || true
+  fi
+
+  [[ -x "$TMUX_BIN" ]] || die "tmux is not executable: $TMUX_BIN"
+  [[ -x "$TTYD_BIN" ]] || die "ttyd is not executable: $TTYD_BIN"
+
+  # Test execution now from the same privileged shell that performs the install.
+  "$TMUX_BIN" -V >/dev/null 2>&1 || die "tmux exists but cannot be executed: $TMUX_BIN"
+  "$TTYD_BIN" --version >/dev/null 2>&1 || true
+  log_ok "Dependencies available (tmux: $TMUX_BIN, ttyd: $TTYD_BIN)"
 }
 
 github_get() {
@@ -435,7 +457,7 @@ wait_for_runtime() {
   for attempt in $(seq 1 30); do
     if systemctl is-active --quiet rhcsa-webui.service &&
        systemctl is-active --quiet rhcsa-terminal.service &&
-       tmux has-session -t rhcsa-terminal 2>/dev/null &&
+       "$TMUX_BIN" has-session -t rhcsa-terminal 2>/dev/null &&
        objectives="$(curl -fsS --max-time 2 http://127.0.0.1:8080/api/objectives 2>/dev/null)" &&
        actual_chapters="$(python3 -c 'import json,sys; print(" ".join(str(x["id"]) for x in json.load(sys.stdin)))' <<<"$objectives" 2>/dev/null)" &&
        [[ "$actual_chapters" == "${LOCAL_CHAPTERS[*]}" ]] &&

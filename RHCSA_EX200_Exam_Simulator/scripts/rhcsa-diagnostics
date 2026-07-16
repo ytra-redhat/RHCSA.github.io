@@ -3,6 +3,8 @@ set -u
 WEBUI_PORT="${RHCSA_WEBUI_PORT:-8080}"
 TERMINAL_PORT="${RHCSA_TERMINAL_PORT:-7682}"
 INSTALL_DIR="${RHCSA_INSTALL_DIR:-/usr/local/share/rhcsa}"
+TMUX_BIN="$(command -v tmux 2>/dev/null || true)"
+TTYD_BIN="$(command -v ttyd 2>/dev/null || true)"
 section(){ printf '\n== %s ==\n' "$1"; }
 section Installation
 ls -ld "$INSTALL_DIR" /usr/bin/rhcsa /usr/bin/rhcsa-status 2>&1 || true
